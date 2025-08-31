@@ -1,5 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+   <PropertyGroup>
+      <VersionPrefix>3.7.0</VersionPrefix>
+      <Product>Wangkanai EntityFramework</Product>
+      <PackageTags>wangkanai;domain;ddd;audit;entityframework;dotnet</PackageTags>
+   </PropertyGroup>
+
    <ItemGroup>
       <FrameworkReference Include="Microsoft.AspNetCore.App"/>
    </ItemGroup>
