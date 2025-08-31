@@ -1,4 +1,9 @@
 
+# AI assistant
+
+.serena/
+repomix-output.*
+
 # JetBrains Rider
 
 .idea/
