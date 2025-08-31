@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <ItemGroup>
+      <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+   </ItemGroup>
+
+   <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
+   </ItemGroup>
+
+   <!-- Removed external System dependency for clean migration -->
+
+</Project>

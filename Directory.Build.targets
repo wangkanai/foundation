@@ -1,0 +1,58 @@
+<Project>
+
+  <!-- Shared Targets for All Projects -->
+
+  <!-- Pack settings for libraries -->
+  <Target Name="PackageLibraries" Condition="'$(IsPackable)' == 'true'">
+    <PropertyGroup>
+      <PackageOutputPath>$(RepoRoot)artifacts/packages/</PackageOutputPath>
+      <PublishRepositoryUrl>true</PublishRepositoryUrl>
+      <EmbedUntrackedSources>true</EmbedUntrackedSources>
+      <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
+    </PropertyGroup>
+  </Target>
+
+  <!-- Test settings -->
+  <Target Name="ConfigureTestProjects" Condition="'$(MSBuildProjectName)'.EndsWith('.Tests')">
+    <PropertyGroup>
+      <CollectCoverage>true</CollectCoverage>
+      <CoverletOutputFormat>opencover</CoverletOutputFormat>
+      <CoverletOutput>$(RepoRoot)coverage/</CoverletOutput>
+      <ExcludeFromCodeCoverage>[*.Tests]*</ExcludeFromCodeCoverage>
+    </PropertyGroup>
+  </Target>
+
+  <!-- Benchmark settings -->
+  <Target Name="ConfigureBenchmarkProjects" Condition="'$(MSBuildProjectName)'.EndsWith('.Benchmark')">
+    <PropertyGroup>
+      <PlatformTarget>AnyCPU</PlatformTarget>
+      <DebugType>pdbonly</DebugType>
+      <DebugSymbols>true</DebugSymbols>
+      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <Optimize>true</Optimize>
+    </PropertyGroup>
+  </Target>
+
+  <!-- Copy assets to output on build -->
+  <Target Name="CopyAssets" BeforeTargets="Build" Condition="'$(IsPackable)' == 'true'">
+    <ItemGroup>
+      <AssetFiles Include="$(RepoRoot)Assets/**/*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(AssetFiles)" DestinationFolder="$(OutputPath)Assets/" SkipUnchangedFiles="true" />
+  </Target>
+
+  <!-- Clean artifacts -->
+  <Target Name="CleanArtifacts" BeforeTargets="Clean">
+    <RemoveDir Directories="$(RepoRoot)artifacts/" />
+    <RemoveDir Directories="$(RepoRoot)coverage/" />
+  </Target>
+
+  <!-- Version from Git -->
+  <Target Name="GetVersion" BeforeTargets="GetBuildVersion">
+    <PropertyGroup>
+      <GitVersionMajorMinorPatch Condition="'$(GitVersionMajorMinorPatch)' == ''">$(VersionPrefix)</GitVersionMajorMinorPatch>
+      <GitVersionSemVer Condition="'$(GitVersionSemVer)' == ''">$(VersionPrefix)</GitVersionSemVer>
+    </PropertyGroup>
+  </Target>
+
+</Project>
