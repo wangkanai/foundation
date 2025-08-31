@@ -1,0 +1,64 @@
+# .NET Build Artifacts
+bin/
+obj/
+**/bin/**
+**/obj/**
+
+# Build Output
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+[Oo]ut/
+
+# Test Results & Coverage
+[Tt]est[Rr]esult*/
+TestResults/
+BenchmarkDotNet.Artifacts/
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+*.coveragexml
+
+# NuGet & Package Management
+packages/
+*.nupkg
+*.snupkg
+*.nuget.props
+*.nuget.targets
+
+# Generated Files
+*.AssemblyInfo.cs
+*.GlobalUsings.g.cs
+.NETCoreApp,Version=v*.AssemblyAttributes.cs
+SelfRegisteredExtensions.cs
+
+# Cache Files
+*.cache
+project.nuget.cache
+
+# IDE Files
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# Log Files
+*.log
+*.tlog
+
+# Temporary Files
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+
+# OS Files
+.DS_Store
+Thumbs.db
