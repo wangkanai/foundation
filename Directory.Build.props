@@ -40,8 +40,4 @@
       <None Include="$(RepoRoot)\README.md" Pack="true" PackagePath="/"/>
    </ItemGroup>
 
-   <ItemGroup>
-      <None Remove="**\Wangkanai.Audit.csproj.DotSettings"/>
-   </ItemGroup>
-
 </Project>
