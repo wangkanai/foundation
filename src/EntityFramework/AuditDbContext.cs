@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Wangkanai.Domain.EntityFramework;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>Represents an abstract database context that supports auditing capabilities. This class extends the standard DbContext and implements the IAuditDbContext interface, providing the necessary functionality to integrate auditing mechanisms in entity framework operations.</summary>
 public abstract class AuditDbContext : DbContext, IAuditDbContext
