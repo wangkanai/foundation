@@ -4,6 +4,6 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore"/>
       <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
       <PackageReference Include="Microsoft.Extensions.Identity.Stores"/>
+      <PackageReference Include="Wangkanai.System"/>
    </ItemGroup>
-   <!-- Removed external System dependency for clean migration -->
 </Project>
