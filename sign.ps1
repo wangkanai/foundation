@@ -1,31 +1,9 @@
 param(
     [Parameter(mandatory=$false)]
-    [bool]$publish=$true,
+    [bool]$publish=$false,
     [Parameter(mandatory=$false)]
-    [bool]$skip=$false,
-    [Parameter(mandatory=$false)]
-    [string]$certicate="Open Source Developer, Sarin Na Wangkanai"
+    [string]$name="Open Source Developer, Sarin Na Wangkanai"
 )
-
-$dirs=[ordered]@{
-#    1="System";
-#    2="Validation";
-#    3="Annotations";
-#    4="Extensions";
-#    5="Testing";
-#    6="Cryptography";
-#    7="Hosting";
-#    8="Tools";
-#    9="Domain";
-#    10="Audit";
-#    11="Mvc";
-#    12="Webserver";
-#    13="Webmaster";
-#    14="Detection";
-#    15="Responsive";
-#    16="EntityFramework";
-#    18="Analytics";
-}
 
 $env:OneDriveConsumer + "\powershell-env.ps1" | out-null
 
@@ -34,91 +12,31 @@ Write-Host "NuGet Certificate: $certicate"  -ForegroundColor Magenta
 $e=[char]27
 $root="D:\Sources\wangkanai\"
 
-Set-Location -Path $root
+remove-item -path .\signed\*.*    -Force -ErrorAction SilentlyContinue
+remove-item -path .\artifacts\*.* -Force -ErrorAction SilentlyContinue
 
-for ($i=0; $i -lt $dirs.count; $i++) {
-    $error.clear()
-    Push-Location $dirs[$i];
-    try
-    {
-        [Xml]$xml=Get-Content -Path .\Directory.Build.props;
-        $version=$xml.Project.PropertyGroup.VersionPrefix;
-        if ($version.GetType().FullName -ne "System.String")
-        {
-            $version=$version[0];
-        }
-        write-host $dirs[$i] ":" $version -ForegroundColor Red;
+new-item -Path artifacts -ItemType Directory -Force | out-null
+new-item -Path signed    -ItemType Directory -Force | out-null
 
-        $namespace=$xml.Project.PropertyGroup.PackageNamespace;
-        $primary=$xml.Project.PropertyGroup.PackagePrimary;
-        $name="Wangkanai." + $dirs[$i];
-        if (-not ([string]::IsNullOrEmpty($primary[0])))
-        {
-            if ($namespace -like "true")
-            {
-                $name=$name + "." + $primary;
-            }
-            else
-            {
-                $name="Wangkanai." + $primary; ;
-            }
-        }
-        $name=$name.Trim();
-        $package=Find-Package -Name $name -ProviderName NuGet -AllVersions
-        $last=$package | Select-Object -First 1
-        $latest=$last.Version;
-
-        if ($latest -ne $version)
-        {
-            Write-Host $latest " < " $version " Update" -ForegroundColor Green;
-            .\sign.ps1 -publish $publish -name $certicate
-        }
-        else
-        {
-            Write-Host $latest " = " $version " Skip" -ForegroundColor DarkGray;
-        }
-    }
-    catch
-    {
-        Write-Host "New " $latest -ForegroundColor Blue;
-        .\sign.ps1 -publish $publish -name $certicate
-    }
-
-    Pop-Location;
+dotnet --version
+dotnet clean   .\src\ -c Release -tl
+dotnet restore .\src\
+dotnet build   .\src\ -c Release -tl
+Get-ChildItem  .\src\ -Recurse Wangkanai.*.dll | where { $_.Directory -like "*Release*" } | foreach {
+    signtool sign /fd SHA256 /t http://timestamp.digicert.com /n $name $_.FullName
 }
 
-if ($skip)
+dotnet pack .\src\ -c Release -tl -o .\artifacts --include-symbols -p:SymbolPackageFormat=snupkg
+
+dotnet nuget sign .\artifacts\*.nupkg  -v normal --timestamper http://timestamp.digicert.com --certificate-subject-name $name -o .\signed
+dotnet nuget sign .\artifacts\*.snupkg -v normal --timestamper http://timestamp.digicert.com --certificate-subject-name $name -o .\signed
+
+if (!$publish)
 {
-    write-host "Skip version update" -ForegroundColor Yellow;
+    write-host "Skip update: Domain" -ForegroundColor Yellow;
     exit;
 }
 
-$result=@()
-Set-Location -Path $root
+dotnet nuget push .\signed\*.nupkg --skip-duplicate -k $env:NUGET_API_KEY  -s https://api.nuget.org/v3/index.json
+dotnet nuget push .\signed\*.nupkg --skip-duplicate -k $env:GITHUB_API_PAT -s https://nuget.pkg.github.com/wangkanai/index.json
 
-for ($i=0; $i -lt $dirs.count; $i++){
-    $error.clear()
-    Push-Location $dirs[$i];
-
-    try
-    {
-        $path=$root + $dirs[$i] + "\Directory.Build.props";
-        $xml=New-Object System.Xml.XmlDocument
-        $xml.PreserveWhitespace=$true
-        $xml.Load($path);
-        $node=$xml.SelectSingleNode("/Project/PropertyGroup/VersionPrefix");
-        $old=[System.Version]$node.InnerText;
-        $new=[System.Version]::new($old.Major, $old.Minor + 1, 0); #, $old.Build + 1); #0);
-        $node.InnerText=$new.ToString();
-        $xml.Save($path);
-
-        $result+=[PSCustomObject]@{ NuGet="$e[36m" + $dirs[$i] + "$e[0m"; Version="$e[32m$old => $new $e[0m" }
-    }
-    catch
-    {
-        $result+=[PSCustomObject]@{ NuGet="$e[31m" + $dirs[$i] + "$e[0m"; Version="$e[31mError $e[0m" }
-    }
-
-    Pop-Location
-}
-$result

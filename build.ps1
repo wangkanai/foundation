@@ -1,27 +1,8 @@
-$dirs=[ordered]@{
-    1="System";
-    2="Validation";
-    3="Annotations";
-    4="Extensions";
-    5="Testing";
-    6="Cryptography";
-    7="Hosting";
-    8="Tools";
-    9="Domain";
-    10="Mvc";
-    11="Webserver";
-    12="Webmaster";
-    13="Detection";
-    14="Responsive";
-    15="EntityFramework";
-    17="Analytics";
-}
+dotnet --version
+dotnet clean   .\src\ -c Release -tl
+dotnet restore .\src\
+dotnet build   .\src\ -c Release -tl
 
-for ($i=0; $i -lt $dirs.count; $i++) {
-    Push-Location $dirs[$i];
-    $build=".\" + $dirs[$i] + "\build.ps1";
-    write-host $dirs[$i] -ForegroundColor Red;
-    write-host $build    -ForegroundColor Green;
-    .\build.ps1
-    Pop-Location;
-}
+dotnet clean   .\tests\ -c Release -tl
+dotnet restore .\tests\
+dotnet build   .\tests\ -c Release -tl
