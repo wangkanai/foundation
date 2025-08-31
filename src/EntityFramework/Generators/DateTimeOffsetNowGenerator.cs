@@ -11,7 +11,7 @@ public sealed class DateTimeOffsetNowGenerator : ValueGenerator<DateTimeOffset>
 
    public override DateTimeOffset Next(EntityEntry entry)
    {
-      ArgumentNullException.ThrowIfNull(entry);
+      entry.ThrowIfNull();
       return DateTimeOffset.Now;
    }
 }

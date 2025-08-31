@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain.Events;
+namespace Wangkanai.Domain;
 
 /// <summary>Represents a contract for publishing domain events within the application. This interface is responsible for dispatching events to all applicable subscribers, enabling asynchronous handling of domain-related concerns.</summary>
 public interface IDomainEventPublisher

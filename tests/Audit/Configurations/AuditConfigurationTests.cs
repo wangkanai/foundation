@@ -98,7 +98,7 @@ public class AuditConfigurationTests
       var trailTypeProperty = entityType.FindProperty("TrailType");
       Assert.NotNull(trailTypeProperty);
       //Assert.Equal(typeof(string), trailTypeProperty.ClrType);
-      Assert.True(trailTypeProperty.ClrType == typeof(string) || trailTypeProperty.ClrType == typeof(TrailType));
+      Assert.True(trailTypeProperty.ClrType == typeof(string) || trailTypeProperty.ClrType == typeof(AuditTrailType));
    }
 
    [Fact]

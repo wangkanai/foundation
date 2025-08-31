@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain.Events;
+namespace Wangkanai.Domain;
 
 /// <summary>Represents a domain event with a default identifier type of int. This class serves as a specialization of the generic DomainEvent class with int as the identifier type.</summary>
 public class DomainEvent : DomainEvent<int>;

@@ -12,4 +12,5 @@
    <ItemGroup>
       <ProjectReference Include="..\Domain\Wangkanai.Domain.csproj"/>
    </ItemGroup>
+
 </Project>

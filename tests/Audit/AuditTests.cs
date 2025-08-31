@@ -45,11 +45,11 @@ public class AuditTests
       // Arrange
       var audit = new Audit<int, IdentityUser<int>, int>
                   {
-                     TrailType = TrailType.Create
+                     TrailType = AuditTrailType.Create
                   };
 
       // Act & Assert
-      Assert.Equal(TrailType.Create, audit.TrailType);
+      Assert.Equal(AuditTrailType.Create, audit.TrailType);
    }
 
    [Fact]

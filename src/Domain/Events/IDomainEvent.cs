@@ -1,8 +1,6 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Wangkanai.Domain.Messages;
-
-namespace Wangkanai.Domain.Events;
+namespace Wangkanai.Domain;
 
 /// <summary>Represents a domain event that contains key information and is part of the domain-driven design framework. This interface serves as a base for all domain events with an integer key type.</summary>
 public interface IDomainEvent : IKeyIntEntity, IDomainEvent<int>;

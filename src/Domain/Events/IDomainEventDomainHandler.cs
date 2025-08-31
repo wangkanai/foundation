@@ -1,8 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Wangkanai.Domain.Messages;
-
-namespace Wangkanai.Domain.Events;
+namespace Wangkanai.Domain;
 
 /// <summary>Represents a domain handler interface designed to process domain events that implement the <see cref="IGuidDomainEvent"/>
 /// interface. This is a contract for defining event-specific handlers within a domain-driven design framework.</summary>

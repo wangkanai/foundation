@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain.Messages;
+namespace Wangkanai.Domain;
 
 /// <summary>Defines a contract for handling domain messages of a specified type. This interface is designed to process domain-specific messages within a system.</summary>
 /// <typeparam name="T">The type of domain message being handled. This type must implement <see cref="IDomainMessage"/>.</typeparam>

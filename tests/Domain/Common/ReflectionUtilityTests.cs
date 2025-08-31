@@ -3,8 +3,6 @@
 using System.Collections;
 using System.Linq.Expressions;
 
-using Wangkanai.Domain.Common;
-
 namespace Wangkanai.Domain.Tests.Common;
 
 public class ReflectionUtilityTests

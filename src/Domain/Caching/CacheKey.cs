@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain.Caching;
+namespace Wangkanai.Domain;
 
 /// <summary>Extension methods for generating cache keys from types.</summary>
 internal static class TypeCacheKeyExtensions

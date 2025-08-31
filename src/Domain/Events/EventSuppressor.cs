@@ -1,6 +1,6 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain.Events;
+namespace Wangkanai.Domain;
 
 /// <summary>Represents a utility class designed to manage the suppression of events in the domain. Specifically, used to temporarily disable or suppress event handling to prevent unintended processing within a given context or operation.</summary>
 public static class EventSuppressor
