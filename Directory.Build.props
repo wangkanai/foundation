@@ -41,7 +41,7 @@
    </ItemGroup>
 
    <ItemGroup>
-      <Content Include="**/*.csproj.DotSettings" />
+      <None Remove="**\Wangkanai.Audit.csproj.DotSettings"/>
    </ItemGroup>
 
 </Project>
