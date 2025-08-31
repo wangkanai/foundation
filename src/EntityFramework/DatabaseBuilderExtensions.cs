@@ -14,7 +14,7 @@ public static class DatabaseBuilderExtensions
       using var scope   = app.ApplicationServices.CreateScope();
       using var context = scope.ServiceProvider.GetRequiredService<T>();
 
-      ArgumentNullException.ThrowIfNull(context);
+      context.ThrowIfNull();
 
       context.Database.EnsureCreated();
 
@@ -27,7 +27,7 @@ public static class DatabaseBuilderExtensions
       await using var scope   = app.ApplicationServices.CreateAsyncScope();
       await using var context = scope.ServiceProvider.GetRequiredService<T>();
 
-      ArgumentNullException.ThrowIfNull(context);
+      context.ThrowIfNull();
 
       await context.Database.EnsureCreatedAsync();
 
@@ -40,7 +40,7 @@ public static class DatabaseBuilderExtensions
       using var scope   = app.ApplicationServices.CreateScope();
       using var context = scope.ServiceProvider.GetRequiredService<T>();
 
-      ArgumentNullException.ThrowIfNull(context);
+      context.ThrowIfNull();
 
       context.Database.Migrate();
 
@@ -53,7 +53,7 @@ public static class DatabaseBuilderExtensions
       await using var scope   = app.ApplicationServices.CreateAsyncScope();
       await using var context = scope.ServiceProvider.GetRequiredService<T>();
 
-      ArgumentNullException.ThrowIfNull(context);
+      context.ThrowIfNull();
 
       await context.Database.MigrateAsync();
 

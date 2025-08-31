@@ -40,4 +40,8 @@
       <None Include="$(RepoRoot)\README.md" Pack="true" PackagePath="/"/>
    </ItemGroup>
 
+   <ItemGroup>
+      <Content Include="**/*.csproj.DotSettings" />
+   </ItemGroup>
+
 </Project>

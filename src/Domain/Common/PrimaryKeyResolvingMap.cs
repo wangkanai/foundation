@@ -1,6 +1,6 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain.Common;
+namespace Wangkanai.Domain;
 
 /// <summary>Represents a mapping mechanism to resolve the primary key of transient entities and update them with the corresponding persistent entities during the persistence process.</summary>
 public class PrimaryKeyResolvingMap

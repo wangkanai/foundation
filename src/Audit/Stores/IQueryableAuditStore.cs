@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Audit.Stores;
+namespace Wangkanai.Audit;
 
 /// <summary>Represents an abstraction for a queryable audit trail store, providing access to audit trail records for tracking changes in the system.</summary>
 /// <typeparam name="TKey">The type of the unique identifier for the audit trail. It must implement <see cref="IEquatable{T}"/> and

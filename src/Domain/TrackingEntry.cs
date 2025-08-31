@@ -14,8 +14,8 @@ public class TrackingEntry
    /// <summary>Determines whether the entity associated with the tracking entry is subscribed to change notifications or events within the context.</summary>
    internal bool IsSubscribed { get; set; }
 
-   /// <summary>Returns a string that represents the current TrackingEntry instance, including its entity and state.</summary>
-   /// <returns>A string representation of the TrackingEntry in the format "Entity EntryState".</returns>
+   /// <summary>Returns a string that represents the current <see cref="TrackingEntry"/> instance, including its entity and state.</summary>
+   /// <returns>A string representation of the <see cref="TrackingEntry"/> in the format "Entity EntryState".</returns>
    public override string ToString()
       => $"{Entity ?? "null"} {EntryState}";
 }

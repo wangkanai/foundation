@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Wangkanai.Domain.Primitives;
 
-namespace Wangkanai.Audit.Stores;
+namespace Wangkanai.Audit;
 
 /// <summary>Provides an implementation for managing audit trails within a database context.</summary>
 /// <typeparam name="TContext">The type of the database context, which must derive from <see cref="DbContext"/>.</typeparam>

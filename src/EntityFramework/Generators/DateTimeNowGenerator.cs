@@ -11,7 +11,7 @@ public sealed class DateTimeNowGenerator : ValueGenerator<DateTime>
 
    public override DateTime Next(EntityEntry entry)
    {
-      ArgumentNullException.ThrowIfNull(entry);
+      entry.ThrowIfNull();
       return DateTime.Now;
    }
 }

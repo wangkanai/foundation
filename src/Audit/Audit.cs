@@ -13,7 +13,7 @@ public class Audit<TKey, TUserType, TUserKey> : Entity<TKey>
 {
    /// <summary>Gets or sets the type of trail associated with an audit action.</summary>
    /// <remarks>The <see cref="TrailType"/> property indicates the nature of the change that occurred in an entity. It reflects whether the entity was created, updated, or deleted, or if no changes were made.</remarks>
-   public TrailType TrailType { get; set; }
+   public AuditTrailType TrailType { get; set; }
 
    /// <summary>Gets or sets the unique identifier of the user associated with the audit action.</summary>
    /// <remarks>The <see cref="UserId"/> property records the primary key of the user who performed the action being tracked. This property may be null if the action was performed in a context where a user is not available or applicable.</remarks>

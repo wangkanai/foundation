@@ -1,8 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Wangkanai.Domain.Messages;
-
-namespace Wangkanai.Domain.Events;
+namespace Wangkanai.Domain;
 
 /// <summary>Represents an event handler interface for handling cancellable domain events.</summary>
 /// <typeparam name="T">The type of the domain message being handled, which must implement the <see cref="IDomainMessage"/> interface.</typeparam>

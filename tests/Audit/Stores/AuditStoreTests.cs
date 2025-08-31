@@ -115,13 +115,13 @@ public class AuditStoreTests
       context.ChangeTracker.Clear();
 
       // Act
-      audit.TrailType = TrailType.Create;
+      audit.TrailType = AuditTrailType.Create;
       var result = await store.UpdateAsync(audit, CancellationToken.None);
 
       // Assert
       Assert.True(result.IsSuccess);
       var updatedAudit = await context.Audits.FindAsync(new object?[] { audit.Id }, TestContext.Current.CancellationToken);
-      Assert.Equal(TrailType.Create, updatedAudit?.TrailType);
+      Assert.Equal(AuditTrailType.Create, updatedAudit?.TrailType);
    }
 
    [Fact]
