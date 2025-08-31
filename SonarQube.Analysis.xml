@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SonarQubeAnalysisProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/integration/2015/1">
+  <Property Name="sonar.host.url">https://sonarcloud.io</Property>
+  <Property Name="sonar.organization">wangkanai</Property>
+  <Property Name="sonar.projectKey">wangkanai_domain</Property>
+  <Property Name="sonar.projectName">Wangkanai Domain</Property>
+  <Property Name="sonar.projectVersion">1.0.0</Property>
+  
+  <!-- Language and Framework Settings -->
+  <Property Name="sonar.language">cs</Property>
+  <Property Name="sonar.sourceEncoding">UTF-8</Property>
+  
+  <!-- Source and Test Directories -->
+  <Property Name="sonar.sources">src</Property>
+  <Property Name="sonar.tests">tests,benchmark</Property>
+  
+  <!-- Exclusions -->
+  <Property Name="sonar.exclusions">**/wwwroot/**,**/obj/**,**/bin/**,**/*.Designer.cs,**/*.generated.cs,**/AssemblyInfo.cs</Property>
+  <Property Name="sonar.test.exclusions">**/Mocks/**,**/TestData/**</Property>
+  <Property Name="sonar.coverage.exclusions">**/Tests/**,**/benchmark/**,**/Mocks/**,**/*Tests.cs,**/*Test.cs</Property>
+  <Property Name="sonar.cpd.exclusions">**/Tests/**,**/benchmark/**,**/Mocks/**</Property>
+  
+  <!-- Code Coverage -->
+  <Property Name="sonar.cs.opencover.reportsPaths">coverage/coverage.opencover.xml</Property>
+  <Property Name="sonar.dotnet.excludeTestProjects">true</Property>
+  
+  <!-- Analysis Settings -->
+  <Property Name="sonar.scm.provider">git</Property>
+  <Property Name="sonar.scm.disabled">false</Property>
+  <Property Name="sonar.scanner.skipJreProvisioning">true</Property>
+  <Property Name="sonar.verbose">false</Property>
+  
+  <!-- Quality Gate Settings -->
+  <Property Name="sonar.qualitygate.wait">true</Property>
+  <Property Name="sonar.qualitygate.timeout">300</Property>
+  
+  <!-- Branch and PR Analysis -->
+  <Property Name="sonar.branch.name">main</Property>
+  
+  <!-- Project Specific Settings -->
+  <Property Name="sonar.projectDescription">Wangkanai Domain - Domain-Driven Design, Audit, and EntityFramework utilities for .NET</Property>
+  <Property Name="sonar.links.homepage">https://github.com/wangkanai/domain</Property>
+  <Property Name="sonar.links.ci">https://github.com/wangkanai/domain/actions</Property>
+  <Property Name="sonar.links.scm">https://github.com/wangkanai/domain</Property>
+  <Property Name="sonar.links.issue">https://github.com/wangkanai/domain/issues</Property>
+</SonarQubeAnalysisProperties>
