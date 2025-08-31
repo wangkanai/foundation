@@ -8,5 +8,8 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer"/>
    </ItemGroup>
 
+   <ItemGroup>
+     <ProjectReference Include="..\Audit\Wangkanai.Audit.csproj" />
+   </ItemGroup>
 
 </Project>
