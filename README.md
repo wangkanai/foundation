@@ -2,14 +2,6 @@
 
 ## Domain: Breathtakingly Simple Domain-Driven Design for .NET
 
-[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.domain)](https://www.nuget.org/packages/wangkanai.domain)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.domain)](https://www.nuget.org/packages/wangkanai.domain)
-
-[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
-
-[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
 
 [![.NET](https://github.com/wangkanai/wangkanai/actions/workflows/dotnet.yml/badge.svg)](https://github.com/wangkanai/domain/actions/workflows/dotnet.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=wangkanai_domain&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=wangkanai_domain)
@@ -26,7 +18,8 @@ This repository produces three NuGet packages:
 
 ### Wangkanai.Domain
 
-[![NuGet](https://img.shields.io/nuget/v/Wangkanai.Domain.svg)](https://www.nuget.org/packages/Wangkanai.Domain)
+[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.domain)](https://www.nuget.org/packages/wangkanai.domain)
+[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.domain)](https://www.nuget.org/packages/wangkanai.domain)
 
 Core domain-driven design patterns and building blocks for .NET applications. Provides base classes, interfaces, and utilities for implementing clean domain models.
 
@@ -40,7 +33,8 @@ Core domain-driven design patterns and building blocks for .NET applications. Pr
 
 ### Wangkanai.Audit
 
-[![NuGet](https://img.shields.io/nuget/v/Wangkanai.Audit.svg)](https://www.nuget.org/packages/Wangkanai.Audit)
+[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
+[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
 
 Comprehensive auditing capabilities for tracking changes and maintaining data history in your applications.
 
@@ -54,7 +48,8 @@ Comprehensive auditing capabilities for tracking changes and maintaining data hi
 
 ### Wangkanai.EntityFramework
 
-[![NuGet](https://img.shields.io/nuget/v/Wangkanai.EntityFramework.svg)](https://www.nuget.org/packages/Wangkanai.EntityFramework)
+[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
+[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
 
 Entity Framework Core utilities and extensions to enhance database operations and development productivity.
 
