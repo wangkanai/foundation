@@ -9,7 +9,7 @@
    </ItemGroup>
 
    <ItemGroup>
-     <ProjectReference Include="..\Audit\Wangkanai.Audit.csproj" />
+      <ProjectReference Include="..\Audit\Wangkanai.Audit.csproj"/>
    </ItemGroup>
 
 </Project>
