@@ -108,6 +108,13 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
                        .OrderBy(p => p.Name)
                        .ToList();
 
+   /// <summary>
+   /// Retrieves the collection of components that define the equality of this value object.
+   /// This method returns an enumerable sequence of objects that represent the essential properties
+   /// used to determine whether two instances of the value object are equal.
+   /// The returned components are used in the implementation of the Equals method and the GetHashCode method.
+   /// </summary>
+   /// <returns>An enumerable collection of objects that constitute the equality components of the value object.</returns>
    protected virtual IEnumerable<object> GetEqualityComponents()
    {
       foreach (var property in GetProperties())
@@ -132,6 +139,13 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
       }
    }
 
+   /// <summary>
+   /// Creates a shallow copy of the current value object.
+   /// This method uses the MemberwiseClone technique to produce a new instance of the same type,
+   /// with all fields copied directly. For value objects, this results in a distinct object that
+   /// maintains the same property values as the original.
+   /// </summary>
+   /// <returns>A new instance of the value object with the same property values as the current instance.</returns>
    public object Clone()
       => MemberwiseClone();
 }
