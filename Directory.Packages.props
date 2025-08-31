@@ -1,69 +1,37 @@
 <Project>
 
-  <PropertyGroup>
-    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
-  </PropertyGroup>
+    <PropertyGroup>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
+    </PropertyGroup>
 
-  <!-- Core .NET Packages -->
-  <ItemGroup>
-    <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
-  </ItemGroup>
-
-  <!-- Entity Framework Core -->
-  <ItemGroup>
-    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0" />
-    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0" />
-  </ItemGroup>
-
-  <!-- Testing Packages -->
-  <ItemGroup>
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
-    <PackageVersion Include="xunit" Version="2.9.2" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
-    <PackageVersion Include="FluentAssertions" Version="6.12.1" />
-    <PackageVersion Include="Moq" Version="4.20.72" />
-    <PackageVersion Include="AutoFixture" Version="4.18.1" />
-    <PackageVersion Include="AutoFixture.Xunit2" Version="4.18.1" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.2" />
-    <PackageVersion Include="coverlet.msbuild" Version="6.0.2" />
-  </ItemGroup>
-
-  <!-- Benchmarking -->
-  <ItemGroup>
-    <PackageVersion Include="BenchmarkDotNet" Version="0.14.0" />
-    <PackageVersion Include="BenchmarkDotNet.Diagnostics.Windows" Version="0.14.0" />
-  </ItemGroup>
-
-  <!-- Code Analysis -->
-  <ItemGroup>
-    <PackageVersion Include="Microsoft.CodeAnalysis.Analyzers" Version="3.11.0" />
-    <PackageVersion Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0" />
-    <PackageVersion Include="SonarAnalyzer.CSharp" Version="10.3.0.106239" />
-  </ItemGroup>
-
-  <!-- Build and Pack -->
-  <ItemGroup>
-    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
-    <PackageVersion Include="MinVer" Version="6.0.0" />
-  </ItemGroup>
-
-  <!-- Additional Dependencies -->
-  <ItemGroup>
-    <PackageVersion Include="JetBrains.Annotations" Version="2023.3.0" />
-    <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="9.0.0" />
-  </ItemGroup>
-
-  <!-- Documentation -->
-  <ItemGroup>
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.ApiExplorer" Version="2.2.0" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0"/>
+        <!--extensions-->
+        <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="9.0.0"/>
+        <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0"/>
+        <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.0"/>
+        <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.0"/>
+        <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.0"/>
+        <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
+        <!--entityframework-->
+        <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.0"/>
+        <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0"/>
+        <!--testing-->
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0"/>
+        <PackageVersion Include="xunit" Version="2.9.2"/>
+        <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2"/>
+        <PackageVersion Include="FluentAssertions" Version="6.12.1"/>
+        <PackageVersion Include="Moq" Version="4.20.72"/>
+        <PackageVersion Include="AutoFixture" Version="4.18.1"/>
+        <PackageVersion Include="AutoFixture.Xunit2" Version="4.18.1"/>
+        <PackageVersion Include="coverlet.collector" Version="6.0.2"/>
+        <PackageVersion Include="coverlet.msbuild" Version="6.0.2"/>
+        <!--benchmarking-->
+        <PackageVersion Include="BenchmarkDotNet" Version="0.15.2"/>
+    </ItemGroup>
 
 </Project>

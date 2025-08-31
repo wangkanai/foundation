@@ -1,58 +1,54 @@
 <Project>
+   <ItemGroup>
+      <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all"/>
+   </ItemGroup>
 
-  <!-- Shared Targets for All Projects -->
-
-  <!-- Pack settings for libraries -->
-  <Target Name="PackageLibraries" Condition="'$(IsPackable)' == 'true'">
-    <PropertyGroup>
-      <PackageOutputPath>$(RepoRoot)artifacts/packages/</PackageOutputPath>
-      <PublishRepositoryUrl>true</PublishRepositoryUrl>
-      <EmbedUntrackedSources>true</EmbedUntrackedSources>
-      <IncludeSourceRevisionInInformationalVersion>true</IncludeSourceRevisionInInformationalVersion>
-    </PropertyGroup>
-  </Target>
-
-  <!-- Test settings -->
-  <Target Name="ConfigureTestProjects" Condition="'$(MSBuildProjectName)'.EndsWith('.Tests')">
-    <PropertyGroup>
-      <CollectCoverage>true</CollectCoverage>
-      <CoverletOutputFormat>opencover</CoverletOutputFormat>
-      <CoverletOutput>$(RepoRoot)coverage/</CoverletOutput>
-      <ExcludeFromCodeCoverage>[*.Tests]*</ExcludeFromCodeCoverage>
-    </PropertyGroup>
-  </Target>
-
-  <!-- Benchmark settings -->
-  <Target Name="ConfigureBenchmarkProjects" Condition="'$(MSBuildProjectName)'.EndsWith('.Benchmark')">
-    <PropertyGroup>
-      <PlatformTarget>AnyCPU</PlatformTarget>
-      <DebugType>pdbonly</DebugType>
-      <DebugSymbols>true</DebugSymbols>
-      <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+   <PropertyGroup Condition="$(MSBuildProjectName.Contains('Benchmark'))">
+      <OutputType>Exe</OutputType>
       <Optimize>true</Optimize>
-    </PropertyGroup>
-  </Target>
+      <IsPackable>false</IsPackable>
+      <SonarQubeExclude>true</SonarQubeExclude>
+   </PropertyGroup>
 
-  <!-- Copy assets to output on build -->
-  <Target Name="CopyAssets" BeforeTargets="Build" Condition="'$(IsPackable)' == 'true'">
-    <ItemGroup>
-      <AssetFiles Include="$(RepoRoot)Assets/**/*" />
-    </ItemGroup>
-    <Copy SourceFiles="@(AssetFiles)" DestinationFolder="$(OutputPath)Assets/" SkipUnchangedFiles="true" />
-  </Target>
+   <ItemGroup Condition="$(MSBuildProjectName.Contains('Benchmark'))">
+      <PackageReference Include="BenchmarkDotNet"/>
+   </ItemGroup>
 
-  <!-- Clean artifacts -->
-  <Target Name="CleanArtifacts" BeforeTargets="Clean">
-    <RemoveDir Directories="$(RepoRoot)artifacts/" />
-    <RemoveDir Directories="$(RepoRoot)coverage/" />
-  </Target>
+   <PropertyGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+      <OutputType>Exe</OutputType>
+      <IsPackable>false</IsPackable>
+      <IsTestProject>true</IsTestProject>
+      <!-- Microsoft Testing Platform -->
+      <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+      <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
+      <!-- Code Coverage -->
+      <CollectCoverage Condition="'$(CollectCoverage)' == ''">false</CollectCoverage>
+      <CoverletOutputFormat Condition="'$(CoverletOutputFormat)' == ''">opencover</CoverletOutputFormat>
+      <CoverletOutput Condition="'$(CoverletOutput)' == '' and '$(GITHUB_WORKSPACE)' != ''">$(GITHUB_WORKSPACE)/coverage/</CoverletOutput>
+      <CoverletOutput Condition="'$(CoverletOutput)' == ''">$(MSBuildProjectDirectory)/coverage/</CoverletOutput>
+      <ExcludeByFile>**/*.Designer.cs,**/*.g.cs</ExcludeByFile>
+      <ExcludeByAttribute>GeneratedCodeAttribute,CompilerGeneratedAttribute</ExcludeByAttribute>
+      <IncludeTestAssembly>false</IncludeTestAssembly>
+   </PropertyGroup>
 
-  <!-- Version from Git -->
-  <Target Name="GetVersion" BeforeTargets="GetBuildVersion">
-    <PropertyGroup>
-      <GitVersionMajorMinorPatch Condition="'$(GitVersionMajorMinorPatch)' == ''">$(VersionPrefix)</GitVersionMajorMinorPatch>
-      <GitVersionSemVer Condition="'$(GitVersionSemVer)' == ''">$(VersionPrefix)</GitVersionSemVer>
-    </PropertyGroup>
-  </Target>
+   <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+      <Using Include="Xunit"/>
+   </ItemGroup>
+
+   <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+      <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+   </ItemGroup>
+
+   <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
+      <PackageReference Include="Microsoft.TestPlatform.TestHost"/>
+      <PackageReference Include="Microsoft.AspNetCore.TestHost"/>
+      <PackageReference Include="Microsoft.NET.Test.Sdk"/>
+      <PackageReference Include="Moq"/>
+      <PackageReference Include="xunit.v3"/>
+      <PackageReference Include="xunit.runner.visualstudio"/>
+      <PackageReference Include="xunit.analyzers"/>
+      <PackageReference Include="coverlet.msbuild"/>
+      <PackageReference Include="FluentAssertions"/>
+   </ItemGroup>
 
 </Project>

@@ -1,9 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-   <PropertyGroup>
-      <OutputType>Exe</OutputType>
-   </PropertyGroup>
-
    <ItemGroup>
       <ProjectReference Include="..\..\src\Audit\Wangkanai.Audit.csproj"/>
    </ItemGroup>
