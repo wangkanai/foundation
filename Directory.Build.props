@@ -1,0 +1,47 @@
+<Project>
+
+   <PropertyGroup>
+      <VersionPrefix>1.0.0</VersionPrefix>
+      <Product>Wangkanai Domain</Product>
+      <PackageTags>wangkanai;domain;ddd;audit;entityframework;dotnet</PackageTags>
+
+      <Company>Wangkanai</Company>
+      <Authors>Sarin Na Wangkanai</Authors>
+      <Copyright>Copyright © 2024 Sarin Na Wangkanai</Copyright>
+
+      <PackageProjectUrl>https://github.com/wangkanai/domain</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/wangkanai/domain.git</RepositoryUrl>
+      <RepositoryType>git</RepositoryType>
+      <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+   </PropertyGroup>
+
+   <PropertyGroup>
+      <TargetFramework>net9.0</TargetFramework>
+      <ImplicitUsings>enable</ImplicitUsings>
+      <Nullable>enable</Nullable>
+   </PropertyGroup>
+
+   <PropertyGroup>
+      <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
+      <PublishRepositoryUrl>true</PublishRepositoryUrl>
+      <EmbedUntrackedSources>true</EmbedUntrackedSources>
+      <IncludeSymbols>true</IncludeSymbols>
+      <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+      <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+   </PropertyGroup>
+
+   <PropertyGroup>
+      <RepoRoot Condition=" '$(RepoRoot)' == '' OR !HasTrailingSlash('$(RepoRoot)') ">$(MSBuildThisFileDirectory)</RepoRoot>
+   </PropertyGroup>
+
+   <PropertyGroup Condition="$(MSBuildProjectDirectory.Contains('src'))">
+      <PackageIcon>wangkanai-logo.png</PackageIcon>
+      <PackageReadmeFile>README.md</PackageReadmeFile>
+   </PropertyGroup>
+
+   <ItemGroup Condition="$(MSBuildProjectDirectory.Contains('src'))">
+      <None Include="$(RepoRoot)\Assets/wangkanai-logo.png" Pack="true" PackagePath="/"/>
+      <None Include="$(RepoRoot)\README.md" Pack="true" PackagePath="/"/>
+   </ItemGroup>
+
+</Project>
