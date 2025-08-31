@@ -64,7 +64,11 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
    /// <summary>
    /// Calculates and returns the hash code for the current value object.
    /// The hash code is computed based on the equality components of the object,
-   /// ensuring that objects with identical property values produce the same hash code
+   /// ensuring that objects with identical property values produce the same hash code.
+   /// This implementation uses a combination of prime numbers (17 and 23) to reduce collision probability
+   /// when hashing the equality components. If an equality component is null, its contribution to the hash code is zero.
+   /// </summary>
+   /// <returns>The hash code as an integer value.</returns>
    public override int GetHashCode()
    {
       unchecked
@@ -74,9 +78,25 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
       }
    }
 
+   /// <summary>
+   /// Compares two value object instances for equality.
+   /// This operator provides a convenient way to check if two value objects are equal based on their state.
+   /// </summary>
+   /// <param name="left">The first value object to compare.</param>
+   /// <param name="right">The second value object to compare.</param>
+   /// <returns>true if the specified value objects are equal; otherwise, false.</returns>
    public static bool operator ==(ValueObject left, ValueObject right)
       => Equals(left, right);
 
+   /// <summary>
+   /// Compares two value objects for inequality.
+   /// This operator provides a concise way to determine whether two value object instances are not equal.
+   /// The comparison is based on the objects' equality components, ensuring that two value objects
+   /// with different property values are correctly identified as unequal.
+   /// </summary>
+   /// <param name="left">The first value object to compare.</param>
+   /// <param name="right">The second value object to compare.</param>
+   /// <returns>true if the specified value objects are not equal; otherwise, false.</returns>
    public static bool operator !=(ValueObject left, ValueObject right)
       => !Equals(left, right);
 
