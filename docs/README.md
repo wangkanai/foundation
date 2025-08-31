@@ -5,11 +5,13 @@ This directory contains comprehensive documentation for the Wangkanai Domain pro
 ## Documentation Index
 
 ### 📋 Project Information
+
 - **[Project Overview](project_overview.md)** - Project purpose, packages, and architecture overview
 - **[Project Structure](project_structure.md)** - Directory organization and key components
 - **[Tech Stack](tech_stack.md)** - Framework, dependencies, and development tools
 
-### 🎯 Development Guidelines  
+### 🎯 Development Guidelines
+
 - **[Code Style Conventions](code_style_conventions.md)** - Coding standards, naming conventions, and formatting rules
 - **[Suggested Commands](suggested_commands.md)** - Essential commands for building, testing, and development
 - **[Task Completion Checklist](task_completion_checklist.md)** - Quality gates and verification steps

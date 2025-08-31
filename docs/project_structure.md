@@ -1,11 +1,12 @@
 # Project Structure
 
 ## Root Directory Structure
+
 ```
 /
 ├── src/                    # Source code for the three main packages
 │   ├── Domain/            # Wangkanai.Domain - Core DDD patterns
-│   ├── Audit/             # Wangkanai.Audit - Auditing capabilities  
+│   ├── Audit/             # Wangkanai.Audit - Auditing capabilities
 │   └── EntityFramework/   # Wangkanai.EntityFramework - EF utilities
 ├── tests/                 # Unit tests mirroring src structure
 │   ├── Domain/            # Tests for Domain package
@@ -21,6 +22,7 @@
 ```
 
 ## Domain Module Structure (src/Domain/)
+
 ```
 Domain/
 ├── Common/                # Common utilities
@@ -38,6 +40,7 @@ Domain/
 ```
 
 ## Key Interfaces
+
 - **IEntity<T>**: Base entity contract with strongly-typed ID
 - **IAggregateRoot**: Domain aggregate root marker
 - **IRepository**: Repository pattern interface
@@ -46,6 +49,7 @@ Domain/
 - **IValueObject**: Value object marker
 
 ## Configuration Files
+
 - **Domain.slnx**: Solution file (new format)
 - **Directory.Build.props**: Common MSBuild properties
 - **Directory.Packages.props**: Centralized package management
@@ -53,6 +57,7 @@ Domain/
 - **.editorconfig**: Code style enforcement
 
 ## Special Files
+
 - **CLAUDE.md**: Claude Code guidance (project-specific)
 - **build.ps1**: PowerShell build script
 - **sign.ps1**: Package signing script
