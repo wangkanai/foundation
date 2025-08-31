@@ -3,7 +3,7 @@
    <PropertyGroup>
       <VersionPrefix>3.7.0</VersionPrefix>
       <Product>Wangkanai EntityFramework</Product>
-      <PackageTags>wangkanai;domain;ddd;audit;entityframework;dotnet</PackageTags>
+      <PackageTags>wangkanai;entityframework;orm;ddd;dotnet</PackageTags>
    </PropertyGroup>
 
    <ItemGroup>
