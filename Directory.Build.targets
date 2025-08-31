@@ -45,10 +45,11 @@
       <PackageReference Include="Microsoft.NET.Test.Sdk"/>
       <PackageReference Include="Moq"/>
       <PackageReference Include="xunit.v3"/>
-      <PackageReference Include="xunit.runner.visualstudio"/>
-      <PackageReference Include="xunit.analyzers"/>
+      <PackageReference Include="xunit.runner.visualstudio" PrivateAssets="all"/>
+      <PackageReference Include="xunit.analyzers" PrivateAssets="all"/>
       <PackageReference Include="coverlet.msbuild"/>
       <PackageReference Include="FluentAssertions"/>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory"/>
    </ItemGroup>
 
 </Project>
