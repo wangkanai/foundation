@@ -1,5 +1,7 @@
 <Solution>
-  <Folder Name="/.claude/" />
+  <Folder Name="/.claude/">
+    <File Path="CLAUDE.md" />
+  </Folder>
   <Folder Name="/.github/">
     <File Path=".github\FUNDING.yml" />
     <File Path=".github\RELEASE.yml" />
