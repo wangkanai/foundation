@@ -11,13 +11,8 @@ env:
   DOTNET_VERSION: '9.0.x'
 
 jobs:
-  # Main .NET build job for Domain repository
   build-dotnet:
     runs-on: ubuntu-latest
-
-    env:
-      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
-      DOTNET_ROOT: ${{ github.workspace }}/dotnet
 
     steps:
       - name: Checkout code
@@ -71,7 +66,7 @@ jobs:
 
       - name: Test
         run: |
-          dotnet test Federation.slnx --configuration Release --no-build --verbosity normal \
+          dotnet test Domain.slnx --configuration Release --no-build --verbosity normal \
             --collect:"XPlat Code Coverage" \
             --results-directory ./TestResults/ \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
