@@ -1,5 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
+using Microsoft.EntityFrameworkCore;
+
 namespace Wangkanai.Domain.EntityFramework;
 
 /// <summary>Defines the contract for an audit-aware database context. Provides access to the underlying database context for audit-related operations.</summary>

@@ -8,12 +8,12 @@
    <ItemGroup>
       <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0"/>
       <!--extensions-->
-      <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
+      <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="9.0.0"/>
       <!--entityframework-->
       <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0"/>
