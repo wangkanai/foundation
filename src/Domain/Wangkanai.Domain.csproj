@@ -9,5 +9,6 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore.Relational"/>
       <PackageReference Include="Microsoft.Extensions.Identity.Stores"/>
       <PackageReference Include="Wangkanai.System"/>
+      <PackageReference Include="Wangkanai.Validation" />
    </ItemGroup>
 </Project>

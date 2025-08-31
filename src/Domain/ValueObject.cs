@@ -6,14 +6,27 @@ using System.Reflection;
 
 namespace Wangkanai.Domain;
 
-/// <summary>Represents an abstract base class for value objects in the domain-driven design context. A value object is an immutable conceptual object that is compared based on its property values rather than a unique identity.</summary>
-/// <remarks>Value objects provide a way to encapsulate and model domain concepts with specific attributes, ensuring immutability and equality based on their state. The class implements
-/// <see cref="IValueObject"/> for domain definition, <see cref="ICacheKey"/> to enable caching based on object states, and
-/// <see cref="ICloneable"/> to support shallow copying of the object.</remarks>
+/// <summary>
+/// Represents an abstract base class for value objects in the domain-driven design context.
+/// A value object is an immutable conceptual object that is compared based on its property values rather than a unique identity.
+/// </summary>
+/// <remarks>
+/// Value objects provide a way to encapsulate and model domain concepts with specific attributes, ensuring immutability and
+/// equality based on their state. The class implements <see cref="IValueObject"/> for domain definition, <see cref="ICacheKey"/>
+/// to enable caching based on object states, and <see cref="ICloneable"/> to support shallow copying of the object.
+/// </remarks>
 public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
 {
-   private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<PropertyInfo>> TypeProperties = new();
+   private static readonly ConcurrentDictionary<Type, IReadOnlyCollection<PropertyInfo>> _typeProperties = new();
 
+   /// <summary>
+   /// Generates a cache key string that uniquely represents the state of the value object.
+   /// The cache key is constructed by concatenating the string representations of the object's equality components,
+   /// separated by a pipe ('|') character. If a component is a string, it is enclosed in single quotes.
+   /// If a component implements <see cref="ICacheKey"/>, its own cache key is used instead of its string representation.
+   /// This method ensures that the cache key reflects the value object's properties, allowing for effective caching strategies.
+   /// </summary>
+   /// <returns>The cache key as a string.</returns>
    public virtual string GetCacheKey()
    {
       var keyValues = GetEqualityComponents()
@@ -23,30 +36,35 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
       return string.Join("|", keyValues);
    }
 
-   public object Clone()
-      => MemberwiseClone();
-
+   /// <summary>
+   /// Determines whether the specified object is equal to the current value object.
+   /// Equality is based on the values of the properties defined in the value object.
+   /// Two value objects are considered equal if they are of the same type and their equality components
+   /// (as defined by the <see cref="GetEqualityComponents"/> method) are equal.
+   /// This method overrides the default <see cref="object.Equals(object?)"/> implementation to provide
+   /// value-based equality comparison.
+   /// </summary>
+   /// <param name="obj">The object to compare with the current value object.</param>
+   /// <returns>true if the specified object is equal to the current value object; otherwise, false.</returns>
    public override bool Equals(object? obj)
    {
       if (ReferenceEquals(this, obj))
-      {
          return true;
-      }
 
       if (ReferenceEquals(null, obj))
-      {
          return false;
-      }
 
       if (GetType() != obj.GetType())
-      {
          return false;
-      }
 
       var other = obj as ValueObject;
       return other is not null && GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
    }
 
+   /// <summary>
+   /// Calculates and returns the hash code for the current value object.
+   /// The hash code is computed based on the equality components of the object,
+   /// ensuring that objects with identical property values produce the same hash code
    public override int GetHashCode()
    {
       unchecked
@@ -66,7 +84,7 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
       => $"{{{string.Join(", ", GetProperties().Select(f => $"{f.Name}: {f.GetValue(this)}"))}}}";
 
    public virtual IEnumerable<PropertyInfo> GetProperties()
-      => TypeProperties.GetOrAdd(GetType(), t => t.GetTypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+      => _typeProperties.GetOrAdd(GetType(), t => t.GetTypeInfo().GetProperties(BindingFlags.Instance | BindingFlags.Public))
                        .OrderBy(p => p.Name)
                        .ToList();
 
@@ -76,9 +94,7 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
       {
          var value = property.GetValue(this);
          if (value is null)
-         {
             yield return null!;
-         }
          else
          {
             var valueType = value.GetType();
@@ -91,10 +107,11 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
                yield return ']';
             }
             else
-            {
                yield return value;
-            }
          }
       }
    }
+
+   public object Clone()
+      => MemberwiseClone();
 }
