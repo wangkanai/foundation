@@ -3,13 +3,11 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Wangkanai.Audit;
-using Wangkanai.Audit.Configurations;
+using Wangkanai.Audit.Configurations.Cases;
+using Wangkanai.Audit.Mocks;
 using Wangkanai.Audit.Models;
-using Wangkanai.Domain.Configurations;
-using Wangkanai.Domain.Models;
 
-namespace Wangkanai.Domain.Extensions;
+namespace Wangkanai.Audit.Extensions;
 
 public class EntityTypeBuilderTests
 {

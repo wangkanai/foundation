@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain.Models;
+namespace Wangkanai.Audit.Models;
 
 public class AuditEntity : KeyGuidEntity, ICreatedEntity, IUpdatedEntity
 {

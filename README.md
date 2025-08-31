@@ -2,7 +2,6 @@
 
 ## Domain: Breathtakingly Simple Domain-Driven Design for .NET
 
-
 [![.NET](https://github.com/wangkanai/wangkanai/actions/workflows/dotnet.yml/badge.svg)](https://github.com/wangkanai/domain/actions/workflows/dotnet.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=wangkanai_domain&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=wangkanai_domain)
 

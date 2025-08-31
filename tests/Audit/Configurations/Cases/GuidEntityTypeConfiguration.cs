@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Wangkanai.Audit.Models;
 
-namespace Wangkanai.Audit.Configurations;
+namespace Wangkanai.Audit.Configurations.Cases;
 
 public class GuidEntityTypeConfiguration : IEntityTypeConfiguration<GuidEntity>
 {

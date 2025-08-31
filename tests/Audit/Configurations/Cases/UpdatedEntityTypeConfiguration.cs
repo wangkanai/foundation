@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Wangkanai.Audit.Models;
 
-namespace Wangkanai.Domain.Configurations;
+namespace Wangkanai.Audit.Configurations.Cases;
 
 public class UpdatedEntityTypeConfiguration : IEntityTypeConfiguration<UpdatedEntity>
 {
