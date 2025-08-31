@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Wangkanai.Audit.Models;
 
-namespace Wangkanai.Audit;
+namespace Wangkanai.Audit.Mocks;
 
 public class MockContext(DbContextOptions<MockContext> options) : DbContext(options)
 {
