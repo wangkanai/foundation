@@ -3,6 +3,7 @@
   <Folder Name="/.github/">
     <File Path=".github\FUNDING.yml" />
     <File Path=".github\RELEASE.yml" />
+    <File Path=".github\workflows\dotnet.yml" />
   </Folder>
   <Folder Name="/.solutions/">
     <File Path="Directory.Build.props" />
