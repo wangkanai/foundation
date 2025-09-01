@@ -59,9 +59,7 @@ public class ValueObjectGenerator : IIncrementalGenerator
          {
             var properties = classSymbol.GetMembers()
                                         .OfType<IPropertySymbol>()
-                                        .Where(p => p.DeclaredAccessibility == Accessibility.Public &&
-                                                    !p.IsStatic                                     &&
-                                                    p.GetMethod != null)
+                                        .Where(p => p is { DeclaredAccessibility: Accessibility.Public, IsStatic: false, GetMethod: not null })
                                         .Select(p => new PropertyInfo(p.Name, p.Type.ToDisplayString()))
                                         .ToList();
 
