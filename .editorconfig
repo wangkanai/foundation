@@ -55,7 +55,7 @@ resharper_enforce_do_while_statement_braces_highlighting                        
 resharper_enforce_fixed_statement_braces_highlighting                            = none
 resharper_enforce_for_statement_braces_highlighting                              = none
 resharper_enforce_foreach_statement_braces_highlighting                          = none
-resharper_enforce_if_statement_braces_highlighting                               = none
+# resharper_enforce_if_statement_braces_highlighting                               = none
 resharper_enforce_lock_statement_braces_highlighting                             = none
 resharper_enforce_using_statement_braces_highlighting                            = none
 resharper_enforce_while_statement_braces_highlighting                            = none
@@ -155,10 +155,17 @@ csharp_prefer_static_local_function                                             
 csharp_preferred_modifier_order                                                  = public, private, protected, internal, file, new, static, abstract, virtual, sealed, readonly, override, extern, unsafe, volatile, async, required: suggestion
 
 # Code-block preferences
-csharp_prefer_braces                                                             = false: none
+csharp_prefer_braces                                                             = when_multiline: suggestion
 csharp_prefer_simple_using_statement                                             = true: suggestion
 csharp_prefer_simple_default_expression                                          = true: suggestion
-csharp_braces_for_ifelse                                                         = required_for_multiline_statement
+
+# Brace preferences
+csharp_braces_for_ifelse                                                         = required_for_multiline
+csharp_braces_for_dowhile                                                        = required_for_multiline
+csharp_braces_for_foreach                                                        = required_for_multiline
+csharp_braces_for_for                                                            = required_for_multiline
+csharp_braces_for_lock                                                           = required_for_multiline
+csharp_braces_for_while                                                          = required_for_multiline
 
 # Expression-level preferences
 csharp_style_deconstructed_variable_declaration                                  = true: suggestion
@@ -197,7 +204,7 @@ resharper_xmldoc_format_leading_spaces_decl                                     
 resharper_xmldoc_format_tags                                                     = remove_spaces_inside_tags
 resharper_xmldoc_indent_child_elements                                           = remove_indent
 resharper_xmldoc_indent_text                                                     = remove_indent
-resharper_xmldoc_keep_user_linebreaks                                            = false
+resharper_xmldoc_keep_user_linebreaks                                            = true
 resharper_xmldoc_linebreak_before_multiline_elements                             = false
 resharper_xmldoc_linebreaks_inside_tags                                          = remove_all
 resharper_xmldoc_linebreaks_inside_tags_for_elements_with_child_elements         = false
@@ -226,7 +233,7 @@ csharp_new_line_before_else                                                     
 csharp_new_line_before_finally                                                   = true
 csharp_new_line_before_members_in_anonymous_types                                = true
 csharp_new_line_before_members_in_object_initializers                            = true
-csharp_new_line_before_open_brace                                                = all
+csharp_new_line_before_open_brace                                                = control_blocks
 csharp_new_line_between_query_expression_clauses                                 = true
 
 # Places preferences
@@ -425,6 +432,8 @@ dotnet_diagnostic.DOTNET_DIAGNOSTIC.severity                                    
 dotnet_diagnostic.IDE0003.severity                                               = error # Remove unnecessary 'this' or 'Me' qualification
 dotnet_diagnostic.IDE0004.severity                                               = warning # Remove unnecessary cast
 dotnet_diagnostic.IDE0005.severity                                               = none # Remove unnecessary imports/using directives
+dotnet_diagnostic.IDE0011.severity                                               = warning # Remove unnecessary braces
+dotnet_diagnostic.IDE0012.severity                                               = error # Add braces for multiline
 dotnet_diagnostic.IDE0055.severity                                               = silent # Formatting rule violations
 dotnet_diagnostic.IDE0161.severity                                               = warning # Use file-scoped namespace
 dotnet_diagnostic.IDE1006.severity                                               = silent # Naming rule violations
