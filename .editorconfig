@@ -55,7 +55,7 @@ resharper_enforce_do_while_statement_braces_highlighting                        
 resharper_enforce_fixed_statement_braces_highlighting                            = none
 resharper_enforce_for_statement_braces_highlighting                              = none
 resharper_enforce_foreach_statement_braces_highlighting                          = none
-resharper_enforce_if_statement_braces_highlighting                               = none
+# resharper_enforce_if_statement_braces_highlighting                               = none
 resharper_enforce_lock_statement_braces_highlighting                             = none
 resharper_enforce_using_statement_braces_highlighting                            = none
 resharper_enforce_while_statement_braces_highlighting                            = none
@@ -156,9 +156,16 @@ csharp_preferred_modifier_order                                                 
 
 # Code-block preferences
 csharp_prefer_braces                                                             = when_multiline: suggestion
-csharp_braces_for_ifelse                                                         = required_for_multiline_statement
 csharp_prefer_simple_using_statement                                             = true: suggestion
 csharp_prefer_simple_default_expression                                          = true: suggestion
+
+# Brace preferences
+csharp_braces_for_ifelse                                                         = required_for_multiline
+csharp_braces_for_dowhile                                                        = required_for_multiline
+csharp_braces_for_foreach                                                        = required_for_multiline
+csharp_braces_for_for                                                            = required_for_multiline
+csharp_braces_for_lock                                                           = required_for_multiline
+csharp_braces_for_while                                                          = required_for_multiline
 
 # Expression-level preferences
 csharp_style_deconstructed_variable_declaration                                  = true: suggestion

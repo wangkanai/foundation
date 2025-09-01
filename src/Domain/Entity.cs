@@ -61,9 +61,7 @@ public abstract class Entity<T>
       var retValue = obj.GetType();
       // because can be compared two object with same id and 'types' but own of it is EF dynamics proxy type)
       if (retValue.BaseType != null && retValue.Namespace == "System.Data.Entity.DynamicProxies")
-      {
          retValue = retValue.BaseType;
-      }
 
       return retValue;
    }
@@ -90,19 +88,13 @@ public abstract class Entity<T>
    public override bool Equals(object? obj)
    {
       if (ReferenceEquals(this, obj))
-      {
          return true;
-      }
 
       if (ReferenceEquals(null, obj))
-      {
          return false;
-      }
 
       if (GetRealObjectType(this) != GetRealObjectType(obj))
-      {
          return false;
-      }
 
       var other = obj as Entity<T>;
 
