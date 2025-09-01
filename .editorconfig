@@ -155,7 +155,7 @@ csharp_prefer_static_local_function                                             
 csharp_preferred_modifier_order                                                  = public, private, protected, internal, file, new, static, abstract, virtual, sealed, readonly, override, extern, unsafe, volatile, async, required: suggestion
 
 # Code-block preferences
-csharp_prefer_braces                                                             = false: none
+csharp_prefer_braces                                                             = when_multiline: suggestion
 csharp_prefer_simple_using_statement                                             = true: suggestion
 csharp_prefer_simple_default_expression                                          = true: suggestion
 csharp_braces_for_ifelse                                                         = required_for_multiline_statement
@@ -226,7 +226,7 @@ csharp_new_line_before_else                                                     
 csharp_new_line_before_finally                                                   = true
 csharp_new_line_before_members_in_anonymous_types                                = true
 csharp_new_line_before_members_in_object_initializers                            = true
-csharp_new_line_before_open_brace                                                = all
+csharp_new_line_before_open_brace                                                = control_blocks
 csharp_new_line_between_query_expression_clauses                                 = true
 
 # Places preferences
@@ -425,6 +425,8 @@ dotnet_diagnostic.DOTNET_DIAGNOSTIC.severity                                    
 dotnet_diagnostic.IDE0003.severity                                               = error # Remove unnecessary 'this' or 'Me' qualification
 dotnet_diagnostic.IDE0004.severity                                               = warning # Remove unnecessary cast
 dotnet_diagnostic.IDE0005.severity                                               = none # Remove unnecessary imports/using directives
+dotnet_diagnostic.IDE0011.severity                                               = suggestion # Remove unnecessary braces
+dotnet_diagnostic.IDE0012.severity                                               = warning # Add braces for multiline
 dotnet_diagnostic.IDE0055.severity                                               = silent # Formatting rule violations
 dotnet_diagnostic.IDE0161.severity                                               = warning # Use file-scoped namespace
 dotnet_diagnostic.IDE1006.severity                                               = silent # Naming rule violations
