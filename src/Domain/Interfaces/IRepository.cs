@@ -2,12 +2,22 @@
 
 namespace Wangkanai.Domain;
 
-/// <summary>Represents a generic repository interface for managing entities of type <typeparamref name="T"/>. Provides basic operations such as attaching, adding, updating, and deleting entities, and supporting transactional unit-of-work patterns.</summary>
+/// <summary>
+/// Represents a generic repository interface for managing entities of type <typeparamref name="T"/>.
+/// Provides basic operations such as attaching, adding, updating, and deleting entities,
+/// and supporting transactional unit-of-work patterns.
+/// </summary>
 /// <typeparam name="T">The type of entity that the repository will manage. Must be a reference type.</typeparam>
 public interface IRepository<in T> : IDisposable where T : class
 {
-   /// <summary>Represents a transactional unit-of-work property that is associated with the repository instance. It is used to coordinate changes to multiple objects and persist them as a single transaction.</summary>
-   /// <remarks>The UnitOfWork property provides access to an implementation of the <see cref="IUnitOfWork"/> interface, which encapsulates the responsibility of committing changes made during a transaction.</remarks>
+   /// <summary>
+   /// Represents a transactional unit-of-work property that is associated with the repository instance.
+   /// It is used to coordinate changes to multiple objects and persist them as a single transaction.
+   /// </summary>
+   /// <remarks>
+   /// The UnitOfWork property provides access to an implementation of the <see cref="IUnitOfWork"/> interface,
+   /// which encapsulates the responsibility of committing changes made during a transaction.
+   /// </remarks>
    IUnitOfWork UnitOfWork { get; }
 
    /// <summary>Attaches the specified entity to the repository context. This method is commonly used when the entity is already present and needs to be tracked or associated with the repository.</summary>
