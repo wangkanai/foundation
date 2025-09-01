@@ -26,21 +26,12 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    private DbSet<Audit<TKey, TUserType, TUserKey>> AuditsSet
       => _context.Set<Audit<TKey, TUserType, TUserKey>>();
 
-   /// <summary>
-   /// Indicates whether changes to the context are automatically persisted to the database upon certain operations.
-   /// </summary>
-   /// <remarks>
-   /// When set to true, any modifications to the underlying data store resulting from method calls such as
-   /// creation, update, or delete will automatically trigger a call to save changes on the database context.
-   /// If set to false, changes must be explicitly saved manually by invoking the appropriate context method.
-   /// </remarks>
+   /// <summary>Indicates whether changes to the context are automatically persisted to the database upon certain operations.</summary>
+   /// <remarks>When set to true, any modifications to the underlying data store resulting from method calls such as creation, update, or delete will automatically trigger a call to save changes on the database context. If set to false, changes must be explicitly saved manually by invoking the appropriate context method.</remarks>
    public bool AutoSaveChanges { get; set; } = true;
 
-   /// <summary>
-   /// Provides a queryable collection of audit trails associated with the specified identity user and key types.
-   /// </summary>
-   /// <remarks>
-   /// This property acts as an interface to the underlying entity set of audit trails, allowing for LINQ-based querying and manipulation of audit trail data. </remarks>
+   /// <summary>Provides a queryable collection of audit trails associated with the specified identity user and key types.</summary>
+   /// <remarks>This property acts as an interface to the underlying entity set of audit trails, allowing for LINQ-based querying and manipulation of audit trail data. </remarks>
    public IQueryable<Audit<TKey, TUserType, TUserKey>> Audits
       => AuditsSet;
 
