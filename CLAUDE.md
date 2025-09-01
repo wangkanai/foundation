@@ -11,6 +11,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **src/EntityFramework/**: EF Core utilities and extensions
 - **tests/**: Unit tests mirroring the src structure
 - **benchmark/**: Performance benchmarks for each module
+- **docs/**: Documentation and analysis reports (all *.md files created by Claude)
 
 ### Key Components
 
@@ -50,3 +51,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Generic Constraints**: IEquatable<T> and IComparable<T> for all entity keys
 - **Nullable Reference Types**: Enabled throughout the solution
 - **Implicit Usings**: Simplified namespace management
+
+## Documentation Guidelines
+
+- **Location**: All documentation files (*.md) created by Claude must be saved in the `docs/` folder
+- **Organization**: Keep documentation organized and properly categorized within docs/
+- **Naming**: Use descriptive names for documentation files

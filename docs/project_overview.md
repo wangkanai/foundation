@@ -2,7 +2,8 @@
 
 ## Purpose
 
-Comprehensive collection of domain-driven design patterns, auditing capabilities, and Entity Framework utilities for .NET applications. The project provides core building blocks for implementing clean
+Comprehensive collection of domain-driven design patterns, auditing capabilities, and Entity Framework utilities for .NET
+applications. The project provides core building blocks for implementing clean
 domain models with proper domain-driven design principles.
 
 ## Packages

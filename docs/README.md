@@ -1,6 +1,7 @@
 # Wangkanai Domain Documentation
 
-This directory contains comprehensive documentation for the Wangkanai Domain project, providing essential information for developers working with this domain-driven design library.
+This directory contains comprehensive documentation for the Wangkanai Domain project, providing essential information for
+developers working with this domain-driven design library.
 
 ## Documentation Index
 

@@ -1,68 +1,68 @@
 {
-  "$schema": "https://repomix.com/schemas/latest/schema.json",
-  "input": {
-    "maxFileSize": 52428800
-  },
-  "output": {
-    "filePath": "repomix-output.xml",
-    "style": "xml",
-    "parsableStyle": false,
-    "fileSummary": true,
-    "directoryStructure": true,
-    "files": true,
-    "removeComments": false,
-    "removeEmptyLines": true,
-    "compress": false,
-    "topFilesLength": 10,
-    "showLineNumbers": true,
-    "truncateBase64": true,
-    "copyToClipboard": false,
-    "tokenCountTree": true,
-    "git": {
-      "sortByChanges": true,
-      "sortByChangesMaxCommits": 50,
-      "includeDiffs": true,
-      "includeLogs": true,
-      "includeLogsCount": 25
-    }
-  },
-  "include": [
-    "src/**/*.cs",
-    "tests/**/*.cs",
-    "benchmark/**/*.cs",
-    "*.csproj",
-    "*.sln",
-    "*.slnx",
-    "*.props",
-    "*.targets",
-    "*.md",
-    "*.yml",
-    "*.yaml",
-    "*.json",
-    "*.xml",
-    "*.config"
-  ],
-  "ignore": {
-    "useGitignore": true,
-    "useDefaultPatterns": true,
-    "customPatterns": [
-      "**/bin/**",
-      "**/obj/**",
-      "**/*.AssemblyInfo.cs",
-      "**/*.GlobalUsings.g.cs",
-      "**/TestResults/**",
-      "**/.vs/**",
-      "**/.idea/**",
-      "**/coverage*",
-      "**/*.cache",
-      "**/*.log",
-      "**/*.tmp"
-    ]
-  },
-  "security": {
-    "enableSecurityCheck": true
-  },
-  "tokenCount": {
-    "encoding": "o200k_base"
-  }
+   "$schema": "https://repomix.com/schemas/latest/schema.json",
+   "input": {
+      "maxFileSize": 52428800
+   },
+   "output": {
+      "filePath": "repomix-output.xml",
+      "style": "xml",
+      "parsableStyle": false,
+      "fileSummary": true,
+      "directoryStructure": true,
+      "files": true,
+      "removeComments": false,
+      "removeEmptyLines": true,
+      "compress": false,
+      "topFilesLength": 10,
+      "showLineNumbers": true,
+      "truncateBase64": true,
+      "copyToClipboard": false,
+      "tokenCountTree": true,
+      "git": {
+         "sortByChanges": true,
+         "sortByChangesMaxCommits": 50,
+         "includeDiffs": true,
+         "includeLogs": true,
+         "includeLogsCount": 25
+      }
+   },
+   "include": [
+      "src/**/*.cs",
+      "tests/**/*.cs",
+      "benchmark/**/*.cs",
+      "*.csproj",
+      "*.sln",
+      "*.slnx",
+      "*.props",
+      "*.targets",
+      "*.md",
+      "*.yml",
+      "*.yaml",
+      "*.json",
+      "*.xml",
+      "*.config"
+   ],
+   "ignore": {
+      "useGitignore": true,
+      "useDefaultPatterns": true,
+      "customPatterns": [
+         "**/bin/**",
+         "**/obj/**",
+         "**/*.AssemblyInfo.cs",
+         "**/*.GlobalUsings.g.cs",
+         "**/TestResults/**",
+         "**/.vs/**",
+         "**/.idea/**",
+         "**/coverage*",
+         "**/*.cache",
+         "**/*.log",
+         "**/*.tmp"
+      ]
+   },
+   "security": {
+      "enableSecurityCheck": true
+   },
+   "tokenCount": {
+      "encoding": "o200k_base"
+   }
 }
