@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain.Primitives;
+namespace Wangkanai.Domain;
 
 /// <summary>Represents a result of some operation, with status information and possibly an error.</summary>
 public class Result
