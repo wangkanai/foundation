@@ -1,7 +1,5 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Wangkanai.Domain.Primitives;
-
 namespace Wangkanai.Audit;
 
 /// <summary>Defines the contract for an audit trail store, capable of managing audit trail entities, including creation operations.</summary>

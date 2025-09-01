@@ -2,8 +2,6 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Wangkanai.Domain.Primitives;
-
 namespace Wangkanai.Audit;
 
 /// <summary>Provides an implementation for managing audit trails within a database context.</summary>
