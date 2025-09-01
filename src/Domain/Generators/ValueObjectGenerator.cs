@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+
 using System.Text;
 
 namespace Wangkanai.Domain.Generators;
@@ -15,169 +16,174 @@ namespace Wangkanai.Domain.Generators;
 [Generator]
 public class ValueObjectGenerator : IIncrementalGenerator
 {
-    public void Initialize(IncrementalGeneratorInitializationContext context)
-    {
-        // Register for syntax notifications for classes that inherit from ValueObject
-        var classDeclarations = context.SyntaxProvider
-            .CreateSyntaxProvider(
-                predicate: static (s, _) => IsValueObjectCandidate(s),
-                transform: static (ctx, _) => GetClassInfo(ctx))
-            .Where(static m => m is not null);
+   /// <summary>
+   /// Initializes the incremental source generator with the provided context,
+   /// enabling the setup of source generation logic, including syntax notifications
+   /// and source output registration.
+   /// </summary>
+   /// <param name="context">
+   /// The incremental generator initialization context used to register syntax
+   /// providers and output pipelines for source generation.
+   /// </param>
+   public void Initialize(IncrementalGeneratorInitializationContext context)
+   {
+      // Register for syntax notifications for classes that inherit from ValueObject
+      var classDeclarations = context.SyntaxProvider
+                                     .CreateSyntaxProvider(predicate: static (s,   _) => IsValueObjectCandidate(s),
+                                                           transform: static (ctx, _) => GetClassInfo(ctx))
+                                     .Where(static m => m is not null);
 
-        // Generate code for each ValueObject class
-        context.RegisterSourceOutput(classDeclarations, static (spc, source) => Execute(spc, source!));
-    }
+      // Generate code for each ValueObject class
+      context.RegisterSourceOutput(classDeclarations, static (spc, source) => Execute(spc, source!));
+   }
 
-    private static bool IsValueObjectCandidate(SyntaxNode node)
-    {
-        return node is ClassDeclarationSyntax { BaseList: not null } classDecl &&
-               classDecl.BaseList.Types.Any(baseType => 
-                   baseType.Type.ToString().Contains("ValueObject"));
-    }
+   private static bool IsValueObjectCandidate(SyntaxNode node)
+      => node is ClassDeclarationSyntax { BaseList: not null } classDecl &&
+         classDecl.BaseList.Types.Any(baseType =>
+                                         baseType.Type.ToString().Contains("ValueObject"));
 
-    private static ClassInfo? GetClassInfo(GeneratorSyntaxContext context)
-    {
-        var classDeclaration = (ClassDeclarationSyntax)context.Node;
-        var semanticModel = context.SemanticModel;
-        
-        var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration) as INamedTypeSymbol;
-        if (classSymbol == null) return null;
+   private static ClassInfo? GetClassInfo(GeneratorSyntaxContext context)
+   {
+      var classDeclaration = (ClassDeclarationSyntax)context.Node;
+      var semanticModel    = context.SemanticModel;
 
-        // Check if it inherits from ValueObject
-        var baseType = classSymbol.BaseType;
-        while (baseType != null)
-        {
-            if (baseType.Name == "ValueObject")
-            {
-                var properties = classSymbol.GetMembers()
-                    .OfType<IPropertySymbol>()
-                    .Where(p => p.DeclaredAccessibility == Accessibility.Public && 
-                               !p.IsStatic && 
-                               p.GetMethod != null)
-                    .Select(p => new PropertyInfo(p.Name, p.Type.ToDisplayString()))
-                    .ToList();
+      var classSymbol = semanticModel.GetDeclaredSymbol(classDeclaration) as INamedTypeSymbol;
+      if (classSymbol == null)
+         return null;
 
-                return new ClassInfo(
-                    classSymbol.Name,
-                    classSymbol.ContainingNamespace.ToDisplayString(),
-                    properties);
-            }
-            baseType = baseType.BaseType;
-        }
+      // Check if it inherits from ValueObject
+      var baseType = classSymbol.BaseType;
+      while (baseType != null)
+      {
+         if (baseType.Name == "ValueObject")
+         {
+            var properties = classSymbol.GetMembers()
+                                        .OfType<IPropertySymbol>()
+                                        .Where(p => p.DeclaredAccessibility == Accessibility.Public &&
+                                                    !p.IsStatic                                     &&
+                                                    p.GetMethod != null)
+                                        .Select(p => new PropertyInfo(p.Name, p.Type.ToDisplayString()))
+                                        .ToList();
 
-        return null;
-    }
+            return new(classSymbol.Name, classSymbol.ContainingNamespace.ToDisplayString(), properties);
+         }
 
-    private static void Execute(SourceProductionContext context, ClassInfo classInfo)
-    {
-        var sourceBuilder = new StringBuilder();
-        
-        sourceBuilder.AppendLine($@"// <auto-generated />
-// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
+         baseType = baseType.BaseType;
+      }
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
+      return null;
+   }
 
-namespace {classInfo.Namespace};
+   private static void Execute(SourceProductionContext context, ClassInfo classInfo)
+   {
+      var sourceBuilder = new StringBuilder();
 
-partial class {classInfo.ClassName}
-{{
-    /// <summary>
-    /// Generated optimized equality components method.
-    /// This eliminates reflection overhead for {classInfo.Properties.Count} properties.
-    /// </summary>
-    protected override IEnumerable<object?> GetEqualityComponents()
-    {{");
+      sourceBuilder.AppendLine($@"// <auto-generated />
+         // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-        // Generate direct property access for each property
-        foreach (var property in classInfo.Properties.OrderBy(p => p.Name))
-        {
-            if (IsEnumerableType(property.TypeName))
-            {
-                sourceBuilder.AppendLine($@"
-        // Handle enumerable property: {property.Name}
-        if ({property.Name} is null)
-        {{
-            yield return null;
-        }}
-        else
-        {{
-            yield return '[';
-            foreach (var item in {property.Name})
-                yield return item;
-            yield return ']';
-        }}");
-            }
-            else
-            {
-                sourceBuilder.AppendLine($@"        yield return {property.Name};");
-            }
-        }
+         using System;
+         using System.Collections.Generic;
+         using System.Linq;
 
-        sourceBuilder.AppendLine(@"    }
+         namespace {classInfo.Namespace};
 
-    /// <summary>
-    /// Generated optimized GetHashCode method for maximum performance.
-    /// </summary>
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            var hash = 17;");
+         partial class {classInfo.ClassName}
+         {{
+             /// <summary>
+             /// Generated optimized equality components method.
+             /// This eliminates reflection overhead for {classInfo.Properties.Count} properties.
+             /// </summary>
+             protected override IEnumerable<object?> GetEqualityComponents()
+             {{");
 
-        foreach (var property in classInfo.Properties.OrderBy(p => p.Name))
-        {
-            sourceBuilder.AppendLine($@"            hash = hash * 23 + ({property.Name}?.GetHashCode() ?? 0);");
-        }
+      // Generate direct property access for each property
+      foreach (var property in classInfo.Properties.OrderBy(p => p.Name))
+      {
+         if (IsEnumerableType(property.TypeName))
+         {
+            sourceBuilder.AppendLine($@"
+              // Handle enumerable property: {property.Name}
+              if ({property.Name} is null)
+              {{
+                  yield return null;
+              }}
+              else
+              {{
+                  yield return '[';
+                  foreach (var item in {property.Name})
+                      yield return item;
+                  yield return ']';
+              }}");
+         }
+         else
+         {
+            sourceBuilder.AppendLine($@"        yield return {property.Name};");
+         }
+      }
 
-        sourceBuilder.AppendLine(@"            return hash;
-        }
-    }
+      sourceBuilder.AppendLine(@"    }
 
-    /// <summary>
-    /// Generated optimized Equals method with direct property comparison.
-    /// </summary>
-    public override bool Equals(object? obj)
-    {
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj is null || GetType() != obj.GetType()) return false;
-        
-        var other = ({classInfo.ClassName})obj;");
+          /// <summary>
+          /// Generated optimized GetHashCode method for maximum performance.
+          /// </summary>
+          public override int GetHashCode()
+          {
+              unchecked
+              {
+                  var hash = 17;");
 
-        foreach (var property in classInfo.Properties.OrderBy(p => p.Name))
-        {
-            if (IsEnumerableType(property.TypeName))
-            {
-                sourceBuilder.AppendLine($@"        
-        if (!EqualityComparer<{property.TypeName}>.Default.Equals({property.Name}, other.{property.Name}))
-            return false;");
-            }
-            else
-            {
-                sourceBuilder.AppendLine($@"        
-        if (!EqualityComparer<{property.TypeName}>.Default.Equals({property.Name}, other.{property.Name}))
-            return false;");
-            }
-        }
+      foreach (var property in classInfo.Properties.OrderBy(p => p.Name))
+      {
+         sourceBuilder.AppendLine($@"            hash = hash * 23 + ({property.Name}?.GetHashCode() ?? 0);");
+      }
 
-        sourceBuilder.AppendLine(@"        
-        return true;
-    }
-}");
+      sourceBuilder.AppendLine(@"            return hash;
+              }
+          }
 
-        context.AddSource($"{classInfo.ClassName}.ValueObject.g.cs", 
-            SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
-    }
+          /// <summary>
+          /// Generated optimized Equals method with direct property comparison.
+          /// </summary>
+          public override bool Equals(object? obj)
+          {
+              if (ReferenceEquals(this, obj)) return true;
+              if (obj is null || GetType() != obj.GetType()) return false;
 
-    private static bool IsEnumerableType(string typeName)
-    {
-        return typeName.Contains("IEnumerable") || 
-               typeName.Contains("List") || 
-               typeName.Contains("[]") ||
-               typeName.StartsWith("System.Collections");
-    }
+              var other = ({classInfo.ClassName})obj;");
 
-    private record ClassInfo(string ClassName, string Namespace, List<PropertyInfo> Properties);
-    private record PropertyInfo(string Name, string TypeName);
+      foreach (var property in classInfo.Properties.OrderBy(p => p.Name))
+      {
+         if (IsEnumerableType(property.TypeName))
+         {
+            sourceBuilder.AppendLine($@"
+              if (!EqualityComparer<{property.TypeName}>.Default.Equals({property.Name}, other.{property.Name}))
+                  return false;");
+         }
+         else
+         {
+            sourceBuilder.AppendLine($@"
+              if (!EqualityComparer<{property.TypeName}>.Default.Equals({property.Name}, other.{property.Name}))
+                  return false;");
+         }
+      }
+
+      sourceBuilder.AppendLine(@"
+                 return true;
+             }
+         }");
+
+      context.AddSource($"{classInfo.ClassName}.ValueObject.g.cs",
+                        SourceText.From(sourceBuilder.ToString(), Encoding.UTF8));
+   }
+
+
+   private static bool IsEnumerableType(string typeName)
+      => typeName.Contains("IEnumerable") ||
+         typeName.Contains("List")        ||
+         typeName.Contains("[]")          ||
+         typeName.StartsWith("System.Collections");
+
+   private record ClassInfo(string ClassName, string Namespace, List<PropertyInfo> Properties);
+
+   private record PropertyInfo(string Name, string TypeName);
 }
