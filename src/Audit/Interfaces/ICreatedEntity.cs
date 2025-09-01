@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Audit;
 
 /// <summary>Represents an entity that tracks the creation date and time.</summary>
 /// <remarks>The <see cref="ICreatedEntity"/> interface defines a contract for entities that require the ability to capture and store the timestamp of their creation.</remarks>

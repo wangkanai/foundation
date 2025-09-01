@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Audit;
 
 /// <summary>Defines an entity that tracks the timestamp of its last update.</summary>
 /// <remarks>This interface is typically implemented by entities that require an updated audit field, allowing tracking of changes over time. The `Updated` property stores the date and time of the most recent modification.</remarks>

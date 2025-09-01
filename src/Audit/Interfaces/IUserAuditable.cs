@@ -1,10 +1,11 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Audit;
 
 /// <summary>Represents an auditable entity that includes information about the user responsible for creation and updates.</summary>
 /// <remarks>This interface extends the <see cref="ICreatedEntity"/> and <see cref="IUpdatedEntity"/> interfaces to include properties for tracking the user who created and last updated the entity. It is intended for use in ensuring accountability and auditing in systems where user actions need to be recorded.</remarks>
-public interface IUserAuditable : ICreatedEntity, IUpdatedEntity
+public interface IUserAuditable
+   : ICreatedEntity, IUpdatedEntity
 {
    /// <summary>Gets or sets the identifier of the user who created the entity.</summary>
    /// <remarks>The <c>CreatedBy</c> property is used to track the user responsible for creating this entity. This is useful for audit purposes and ensuring accountability in systems where user actions are monitored.</remarks>
