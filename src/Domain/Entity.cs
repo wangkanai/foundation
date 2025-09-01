@@ -2,12 +2,20 @@
 
 namespace Wangkanai.Domain;
 
-/// <summary>Abstract base class representing an entity with a unique identifier. Provides functionality to check if the entity is transient (not yet persisted). Supports equality operations based on the ID and overrides equality-related methods. Entities inheriting from this class must specify a generic type parameter
-/// <typeparamref name="T"/>, which represents the type of the unique identifier. The identifier should implement the
-/// <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/> interfaces.</summary>
-/// <typeparam name="T">The type of the unique identifier for the entity. Must implement <see cref="IEquatable{T}"/> and
-/// <see cref="IComparable{T}"/>.</typeparam>
-public abstract class Entity<T> : IEntity<T> where T : IEquatable<T>, IComparable<T>
+/// <summary>
+/// Abstract base class representing an entity with a unique identifier.
+/// Provides functionality to check if the entity is transient (not yet persisted).
+/// Supports equality operations based on the ID and overrides equality-related methods.
+/// Entities inheriting from this class must specify a generic type parameter
+/// <typeparamref name="T"/>, which represents the type of the unique identifier.
+/// The identifier should implement the <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/> interfaces.
+/// </summary>
+/// <typeparam name="T">
+/// The type of the unique identifier for the entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
+/// </typeparam>
+public abstract class Entity<T>
+   : IEntity<T>
+   where T : IEquatable<T>, IComparable<T>
 {
    /// <summary>Gets or sets the unique identifier for the entity. This property is used to uniquely identify an instance of the entity within the domain. The type of the identifier is defined by the generic type parameter of the entity.</summary>
    public T Id { get; set; }

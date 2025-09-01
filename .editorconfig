@@ -197,7 +197,7 @@ resharper_xmldoc_format_leading_spaces_decl                                     
 resharper_xmldoc_format_tags                                                     = remove_spaces_inside_tags
 resharper_xmldoc_indent_child_elements                                           = remove_indent
 resharper_xmldoc_indent_text                                                     = remove_indent
-resharper_xmldoc_keep_user_linebreaks                                            = false
+resharper_xmldoc_keep_user_linebreaks                                            = true
 resharper_xmldoc_linebreak_before_multiline_elements                             = false
 resharper_xmldoc_linebreaks_inside_tags                                          = remove_all
 resharper_xmldoc_linebreaks_inside_tags_for_elements_with_child_elements         = false
