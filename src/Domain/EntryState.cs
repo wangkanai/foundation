@@ -2,6 +2,7 @@
 
 namespace Wangkanai.Domain;
 
+/// <summary>Enumeration representing the state of an entity in the context of a data store.</summary>
 [Flags]
 public enum EntryState
 {
