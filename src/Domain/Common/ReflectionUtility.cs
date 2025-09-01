@@ -29,9 +29,7 @@ public static class ReflectionUtility
    public static string GetPropertyName<T>(Expression<Func<T, object>>? propertyExpression)
    {
       if (propertyExpression is null)
-      {
          return null!;
-      }
 
       var lambda = (LambdaExpression)propertyExpression;
 
