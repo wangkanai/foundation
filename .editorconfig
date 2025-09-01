@@ -156,9 +156,9 @@ csharp_preferred_modifier_order                                                 
 
 # Code-block preferences
 csharp_prefer_braces                                                             = when_multiline: suggestion
+csharp_braces_for_ifelse                                                         = required_for_multiline_statement
 csharp_prefer_simple_using_statement                                             = true: suggestion
 csharp_prefer_simple_default_expression                                          = true: suggestion
-csharp_braces_for_ifelse                                                         = required_for_multiline_statement
 
 # Expression-level preferences
 csharp_style_deconstructed_variable_declaration                                  = true: suggestion
@@ -425,8 +425,8 @@ dotnet_diagnostic.DOTNET_DIAGNOSTIC.severity                                    
 dotnet_diagnostic.IDE0003.severity                                               = error # Remove unnecessary 'this' or 'Me' qualification
 dotnet_diagnostic.IDE0004.severity                                               = warning # Remove unnecessary cast
 dotnet_diagnostic.IDE0005.severity                                               = none # Remove unnecessary imports/using directives
-dotnet_diagnostic.IDE0011.severity                                               = suggestion # Remove unnecessary braces
-dotnet_diagnostic.IDE0012.severity                                               = warning # Add braces for multiline
+dotnet_diagnostic.IDE0011.severity                                               = warning # Remove unnecessary braces
+dotnet_diagnostic.IDE0012.severity                                               = error # Add braces for multiline
 dotnet_diagnostic.IDE0055.severity                                               = silent # Formatting rule violations
 dotnet_diagnostic.IDE0161.severity                                               = warning # Use file-scoped namespace
 dotnet_diagnostic.IDE1006.severity                                               = silent # Naming rule violations
