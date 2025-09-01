@@ -2,8 +2,5 @@
 
 namespace Wangkanai.Domain;
 
-/// <summary>
-/// Represents a marker interface for domain messages, serving as a base contract for domain events or
-/// other message types within the domain-driven design context.
-/// </summary>
+/// <summary>Represents a marker interface for domain messages, serving as a base contract for domain events or other message types within the domain-driven design context.</summary>
 public interface IDomainMessage;

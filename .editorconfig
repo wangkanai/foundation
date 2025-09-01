@@ -1,5 +1,5 @@
 root = true
-# All files
+
 [*]
 charset                                                                          = utf-8
 
@@ -494,4 +494,7 @@ indent_size = 2
 
 [*.{yml, yaml}]
 indent_size = 2
+
+[*.md]
+max_line_length = 130
 

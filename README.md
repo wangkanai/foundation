@@ -9,7 +9,8 @@
 [![Patreon](https://img.shields.io/badge/patreon-support%20me-d9643a.svg)](https://www.patreon.com/wangkanai)
 [![GitHub](https://img.shields.io/github/license/wangkanai/wangkanai)](https://github.com/wangkanai/wangkanai/blob/main/LICENSE)
 
-Welcome to the **Wangkanai Domain** repository - a comprehensive collection of domain-driven design patterns, auditing capabilities, and Entity Framework utilities for .NET applications.
+Welcome to the **Wangkanai Domain** repository - a comprehensive collection of domain-driven design patterns, auditing
+capabilities, and Entity Framework utilities for .NET applications.
 
 ## 📦 Packages
 
@@ -20,7 +21,8 @@ This repository produces three NuGet packages:
 [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.domain)](https://www.nuget.org/packages/wangkanai.domain)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.domain)](https://www.nuget.org/packages/wangkanai.domain)
 
-Core domain-driven design patterns and building blocks for .NET applications. Provides base classes, interfaces, and utilities for implementing clean domain models.
+Core domain-driven design patterns and building blocks for .NET applications. Provides base classes, interfaces, and utilities for
+implementing clean domain models.
 
 **Features:**
 

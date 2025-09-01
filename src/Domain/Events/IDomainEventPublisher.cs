@@ -2,11 +2,7 @@
 
 namespace Wangkanai.Domain;
 
-/// <summary>
-/// Represents a contract for publishing domain events within the application.
-/// This interface is responsible for dispatching events to all applicable subscribers,
-/// enabling asynchronous handling of domain-related concerns.
-/// </summary>
+/// <summary>Represents a contract for publishing domain events within the application. This interface is responsible for dispatching events to all applicable subscribers, enabling asynchronous handling of domain-related concerns.</summary>
 public interface IDomainEventPublisher
 {
    /// <summary>Publishes a domain event of a specified type, allowing subscribers to handle it asynchronously.</summary>

@@ -20,6 +20,8 @@
     <File Path="md-styles.css" />
     <File Path="README.md" />
     <File Path="SonarQube.Analysis.xml" />
+    <File Path=".editorconfig" />
+    <File Path=".resharper-cleanup.config" />
   </Folder>
   <Folder Name="/benchmark/">
     <Project Path="benchmark\Audit\Wangkanai.Audit.Benchmark.csproj" Type="Classic C#" />
