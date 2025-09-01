@@ -1,10 +1,5 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-// ReSharper disable BaseObjectGetHashCodeCallInGetHashCode
-// ReSharper disable NonReadonlyMemberInGetHashCode
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
 namespace Wangkanai.Domain;
 
 /// <summary>Abstract base class representing an entity with a unique identifier. Provides functionality to check if the entity is transient (not yet persisted). Supports equality operations based on the ID and overrides equality-related methods. Entities inheriting from this class must specify a generic type parameter
@@ -15,7 +10,7 @@ namespace Wangkanai.Domain;
 public abstract class Entity<T> : IEntity<T> where T : IEquatable<T>, IComparable<T>
 {
    /// <summary>Gets or sets the unique identifier for the entity. This property is used to uniquely identify an instance of the entity within the domain. The type of the identifier is defined by the generic type parameter of the entity.</summary>
-   public T Id { get; set; }
+   public required T Id { get; set; }
 
    /// <summary>Determines whether the entity is transient, meaning it has not been assigned a valid identifier. An entity is considered transient if its identifier equals the default value for its type.</summary>
    /// <returns>true if the entity is transient; otherwise, false.</returns>
