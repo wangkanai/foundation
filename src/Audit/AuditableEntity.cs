@@ -4,7 +4,9 @@ namespace Wangkanai.Audit;
 
 /// <summary>Represents an auditable entity with properties for tracking creation and modification timestamps.</summary>
 /// <typeparam name="T">The type of the identifier for the entity. Must implement <see cref="IComparable{T}"/> and <see cref="IEquatable{T}"/>.</typeparam>
-public abstract class AuditableEntity<T> : Entity<T>, IAuditable where T : IComparable<T>, IEquatable<T>
+public abstract class AuditableEntity<T>
+   : Entity<T>, IAuditable
+   where T : IComparable<T>, IEquatable<T>
 {
    /// <summary>Determines whether the auditable properties of the entity should be serialized.</summary>
    /// <remarks>This property acts as a central flag to control the serialization of all auditable timestamp properties, such as creation and modification dates. It can be overridden in derived classes to customize the serialization behavior based on specific requirements.</remarks>
