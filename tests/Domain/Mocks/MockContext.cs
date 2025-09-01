@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Wangkanai.Domain.Models;
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Domain.Mocks;
 
 public class MockContext(DbContextOptions<MockContext> options) : DbContext(options)
 {

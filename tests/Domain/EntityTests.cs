@@ -2,7 +2,7 @@
 
 using Wangkanai.Domain.Models;
 
-namespace Wangkanai.Domain.Tests;
+namespace Wangkanai.Domain;
 
 public class EntityTests
 {
