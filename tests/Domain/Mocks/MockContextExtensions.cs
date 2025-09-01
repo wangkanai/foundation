@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Domain.Mocks;
 
 public static class MockExtensions
 {

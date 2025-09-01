@@ -1,10 +1,5 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-// ReSharper disable BaseObjectGetHashCodeCallInGetHashCode
-// ReSharper disable NonReadonlyMemberInGetHashCode
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
 namespace Wangkanai.Domain;
 
 /// <summary>Abstract base class representing an entity with a unique identifier. Provides functionality to check if the entity is transient (not yet persisted). Supports equality operations based on the ID and overrides equality-related methods. Entities inheriting from this class must specify a generic type parameter

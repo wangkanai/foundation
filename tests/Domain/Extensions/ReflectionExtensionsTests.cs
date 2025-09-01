@@ -3,9 +3,9 @@
 using System.Collections;
 using System.Linq.Expressions;
 
-namespace Wangkanai.Domain.Tests.Common;
+namespace Wangkanai.Domain.Extensions;
 
-public class ReflectionUtilityTests
+public class ReflectionExtensionsTests
 {
    [Fact]
    public void GetPropertyName_WithValidExpression_ReturnsPropertyName()
@@ -14,7 +14,7 @@ public class ReflectionUtilityTests
       Expression<Func<TestClass, object>> expression = x => x.Name;
 
       // Act
-      var result = ReflectionUtility.GetPropertyName(expression);
+      var result = ReflectionExtensions.GetPropertyName(expression);
 
       // Assert
       Assert.Equal("Name", result);
@@ -27,7 +27,7 @@ public class ReflectionUtilityTests
       Expression<Func<TestClass, object>> expression = x => x.Id;
 
       // Act
-      var result = ReflectionUtility.GetPropertyName(expression);
+      var result = ReflectionExtensions.GetPropertyName(expression);
 
       // Assert
       Assert.Equal("Id", result);
@@ -40,7 +40,7 @@ public class ReflectionUtilityTests
       Expression<Func<TestClass, object>>? expression = null;
 
       // Act
-      var result = ReflectionUtility.GetPropertyName(expression);
+      var result = ReflectionExtensions.GetPropertyName(expression);
 
       // Assert
       Assert.Null(result);
@@ -55,7 +55,7 @@ public class ReflectionUtilityTests
       Expression<Func<TestClass, object>> expression3 = x => x.CreatedDate;
 
       // Act
-      var result = ReflectionUtility.GetPropertyNames(expression1, expression2, expression3);
+      var result = ReflectionExtensions.GetPropertyNames(expression1, expression2, expression3);
 
       // Assert
       Assert.Equal(3, result.Count());
@@ -68,7 +68,7 @@ public class ReflectionUtilityTests
    public void GetPropertyNames_WithNoExpressions_ReturnsEmptyCollection()
    {
       // Act
-      var result = ReflectionUtility.GetPropertyNames<TestClass>();
+      var result = ReflectionExtensions.GetPropertyNames<TestClass>();
 
       // Assert
       Assert.Empty(result);

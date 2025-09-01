@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain.Tests.Primitives;
+namespace Wangkanai.Domain.Primitives;
 
 public class ResultTests
 {

@@ -2,10 +2,10 @@
 
 using System.Linq.Expressions;
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Domain.Extensions;
 
 /// <summary>Provides utility methods for working with reflection in C#.</summary>
-public static class ReflectionUtility
+public static class ReflectionExtensions
 {
    private static readonly ObjectReferenceComparer Comparer = new();
 
@@ -29,9 +29,7 @@ public static class ReflectionUtility
    public static string GetPropertyName<T>(Expression<Func<T, object>>? propertyExpression)
    {
       if (propertyExpression is null)
-      {
          return null!;
-      }
 
       var lambda = (LambdaExpression)propertyExpression;
 
@@ -56,7 +54,7 @@ public static class ReflectionUtility
 
       public int GetHashCode(object obj)
       {
-         ArgumentNullException.ThrowIfNull(obj);
+         obj.ThrowIfNull();
          return obj.GetHashCode();
       }
    }
