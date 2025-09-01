@@ -1,5 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
+using Wangkanai.Audit.Reflections;
+
 namespace Wangkanai.Domain;
 
 /// <summary>Represents an interface for entities that can convert to and from models, and allows for the patching of entity instances. This interface is commonly used to manage bidirectional transformations between entity and model representations in a domain.</summary>

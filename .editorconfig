@@ -173,7 +173,7 @@ csharp_style_unused_value_expression_statement_preference                       
 # XML Documentation preferences (Multi-tool support)
 xmldoc_spaces_inside_tags                                                        = false
 xmldoc_indent_size                                                               = 0
-xmldoc_keep_blank_lines                                                          = false
+xmldoc_keep_blank_lines                                                          = true
 xmldoc_wrap_comments                                                             = false
 resharper_csharp_keep_existing_xmldoc_arrangement                                = false
 resharper_csharp_place_comments_at_first_column                                  = false
