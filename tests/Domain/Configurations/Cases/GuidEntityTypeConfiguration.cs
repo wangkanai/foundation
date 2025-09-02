@@ -9,5 +9,6 @@ namespace Wangkanai.Domain.Configurations.Cases;
 
 public class GuidEntityTypeConfiguration : IEntityTypeConfiguration<GuidEntity>
 {
-   public void Configure(EntityTypeBuilder<GuidEntity> builder) => builder.HasKey(c => c.Id);
+   public void Configure(EntityTypeBuilder<GuidEntity> builder)
+      => builder.HasKey(c => c.Id);
 }
