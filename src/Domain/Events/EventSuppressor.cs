@@ -21,7 +21,8 @@ public static class EventSuppressor
       /// Indicates whether events are currently suppressed within the context of the event suppressor.
       /// When this property is set to true, event handling is temporarily disabled to prevent unintended processing.
       /// </summary>
-      public static bool EventsSuppressed => EventsSuppressedStorage.Value;
+      public static bool EventsSuppressed
+         => EventsSuppressedStorage.Value;
 
       /// <summary>
       /// Performs application-defined tasks associated with freeing, releasing, or
