@@ -248,38 +248,26 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
             yield return ']';
          }
          else
-         {
             yield return component;
-         }
       }
    }
 
-   /// <summary>
-   /// Determines if optimization should be attempted for this type.
-   /// </summary>
+   /// <summary> Determines if optimization should be attempted for this type. </summary>
    private static bool IsOptimizationEnabled(Type type)
-   {
-      return _optimizationEnabled.GetOrAdd(type, _ => true);
-   }
+      => _optimizationEnabled.GetOrAdd(type, _ => true);
 
-   /// <summary>
-   /// Disables optimization for types that failed compilation.
-   /// </summary>
+   /// <summary>Disables optimization for types that failed compilation. </summary>
    private static void DisableOptimization(Type type)
       => _optimizationEnabled.TryUpdate(type, false, true);
 
-   /// <summary>
-   /// Checks if a property type should skip optimization.
-   /// </summary>
+   /// <summary> Checks if a property type should skip optimization. </summary>
    private static bool ShouldSkipOptimization(Type propertyType)
       // Skip for complex enumerables or custom types that might have complex equality
       => propertyType.IsInterface       &&
          propertyType != typeof(string) &&
          typeof(IEnumerable).IsAssignableFrom(propertyType);
 
-   /// <summary>
-   /// Cached property information to avoid repeated reflection.
-   /// </summary>
+   /// <summary> Cached property information to avoid repeated reflection. </summary>
    private static PropertyInfo[] GetCachedProperties(Type type)
       => _typeProperties.GetOrAdd(type, x => x.GetProperties(BindingFlags.Instance | BindingFlags.Public)
                                               .Where(p => p.CanRead)
