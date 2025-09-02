@@ -10,6 +10,14 @@ public abstract class UserSoftDeleteAuditableEntity<T>
    : SoftDeleteAuditableEntity<T>, IUserSoftDeleteAuditable
    where T : IComparable<T>, IEquatable<T>
 {
+   /// <summary>Determines whether the CreatedBy property should be serialized.</summary>
+   /// <returns>A boolean value indicating whether the CreatedBy property should be included in serialization.</returns>
+   public virtual bool ShouldSerializeCreatedBy() => ShouldSerializeAuditableProperties;
+
+   /// <summary>Determines whether the UpdatedBy property should be serialized.</summary>
+   /// <returns>A boolean value indicating whether the UpdatedBy property should be included in serialization.</returns>
+   public virtual bool ShouldSerializeUpdatedBy() => ShouldSerializeAuditableProperties;
+
    /// <summary>Determines whether the DeletedBy property should be serialized.</summary>
    /// <returns>A boolean value indicating whether the DeletedBy property should be included in serialization.</returns>
    public virtual bool ShouldSerializeDeletedBy() => ShouldSerializeSoftDeleteProperties;
