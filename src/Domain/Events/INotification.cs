@@ -2,5 +2,8 @@
 
 namespace Wangkanai.Domain;
 
-/// <summary>Represents a contract for notifications within the domain, providing a standardized mechanism for handling notification-related operations.</summary>
+/// <summary>
+/// Represents a contract for notifications within the domain,
+/// providing a standardized mechanism for handling notification-related operations.
+/// </summary>
 public interface INotification;
