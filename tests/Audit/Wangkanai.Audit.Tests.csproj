@@ -6,6 +6,7 @@
 
    <ItemGroup>
       <ProjectReference Include="..\..\src\Audit\Wangkanai.Audit.csproj" />
+      <ProjectReference Include="..\Domain\Wangkanai.Domain.Tests.csproj" />
    </ItemGroup>
 
 </Project>
