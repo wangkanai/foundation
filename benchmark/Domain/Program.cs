@@ -3,15 +3,29 @@
 using BenchmarkDotNet.Running;
 using Wangkanai.Benchmark;
 
-Console.WriteLine("Running Wangkanai Domain Benchmarks...");
-Console.WriteLine();
+Console.WriteLine("Choose benchmark mode:");
+Console.WriteLine("1. Quick Performance Validation (recommended)");
+Console.WriteLine("2. Full BenchmarkDotNet Suite");
+Console.Write("Enter choice (1 or 2): ");
 
-// Run ValueObject benchmarks
-var valueObjectSummary = BenchmarkRunner.Run<ValueObjectPerformanceBenchmark>();
-Console.WriteLine();
+var choice = Console.ReadLine();
 
-// Run Domain benchmarks
-var domainSummary = BenchmarkRunner.Run<DomainBenchmark>();
-Console.WriteLine();
+if (choice == "1")
+{
+    QuickPerformanceValidation.RunValidation();
+}
+else
+{
+    Console.WriteLine("Running Full Wangkanai Domain Benchmarks...");
+    Console.WriteLine();
 
-Console.WriteLine("All benchmarks completed successfully!");
+    // Run ValueObject benchmarks
+    var valueObjectSummary = BenchmarkRunner.Run<ValueObjectPerformanceBenchmark>();
+    Console.WriteLine();
+
+    // Run Domain benchmarks
+    var domainSummary = BenchmarkRunner.Run<DomainBenchmark>();
+    Console.WriteLine();
+
+    Console.WriteLine("All benchmarks completed successfully!");
+}
