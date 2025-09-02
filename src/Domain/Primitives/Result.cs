@@ -68,16 +68,17 @@ public class Result
       where TValue : class
       => value is null ? Failure<TValue>(error) : Success(value);
 
-   /// <summary>Returns the first failure result from the specified <paramref name="results"/>. If there is no failure, a success is returned.</summary>
+   /// <summary>
+   /// Returns the first failure result from the specified <paramref name="results"/>.
+   /// If there is no failure, success is returned.
+   /// </summary>
    /// <param name="results">the result array.</param>
    /// <returns>The first failure from the specified <paramref name="results"/> array, or a success it does not exist.</returns>
    public static Result FirstFailureOrSuccess(params Result[] results)
    {
       foreach (var result in results)
          if (result.IsFailure)
-         {
             return result;
-         }
 
       return Success();
    }
