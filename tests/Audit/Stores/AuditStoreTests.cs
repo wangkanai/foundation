@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Moq;
 
+using Wangkanai.Audit.Extensions;
+
 namespace Wangkanai.Audit.Stores;
 
 public class AuditStoreTests

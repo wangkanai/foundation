@@ -1,8 +1,9 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Wangkanai.Audit;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Microsoft.EntityFrameworkCore.Metadata.Builders;
+namespace Wangkanai.Audit;
 
 public static class EntityTypeBuilderExtensions
 {
@@ -45,5 +46,59 @@ public static class EntityTypeBuilderExtensions
       builder.Property(x => x.Updated)
              .HasDefaultValue(DateTime.Now)
              .ValueGeneratedOnAddOrUpdate();
+   }
+
+   /// <summary>
+   /// Configures the entity type to set a default value of false for the IsDeleted property.
+   /// This method is intended for entities implementing the <see cref="ISoftDeletable"/> interface.
+   /// </summary>
+   /// <typeparam name="T">The type of the entity being configured. Must implement <see cref="ISoftDeletable"/>.</typeparam>
+   /// <param name="builder">The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type.</param>
+   public static void HasDefaultSoftDelete<T>(this EntityTypeBuilder<T> builder)
+      where T : class, ISoftDeletable
+      => builder.Property(x => x.IsDeleted)
+                .IsRequired()
+                .HasDefaultValue(false);
+
+   /// <summary>
+   /// Configures the entity type for comprehensive soft delete audit functionality.
+   /// Sets up the IsDeleted property with a default value of false and configures the Deleted timestamp property.
+   /// This method is intended for entities implementing the <see cref="ISoftDeleteAuditable"/> interface.
+   /// </summary>
+   /// <typeparam name="T">The type of the entity being configured. Must implement <see cref="ISoftDeleteAuditable"/>.</typeparam>
+   /// <param name="builder">The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type.</param>
+   public static void HasSoftDeleteAudit<T>(this EntityTypeBuilder<T> builder)
+      where T : class, ISoftDeleteAuditable
+   {
+      builder.HasDefaultCreatedAndUpdated();
+      builder.HasDefaultSoftDelete();
+
+      builder.Property(x => x.Deleted)
+             .IsRequired(false);
+   }
+
+   /// <summary>
+   /// Configures the entity type for user-tracked soft delete audit functionality.
+   /// Sets up all audit properties including user tracking for creation, updates, and soft deletion.
+   /// This method is intended for entities implementing the <see cref="IUserSoftDeleteAuditable"/> interface.
+   /// </summary>
+   /// <typeparam name="T">The type of the entity being configured. Must implement <see cref="IUserSoftDeleteAuditable"/>.</typeparam>
+   /// <param name="builder">The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type.</param>
+   public static void HasUserSoftDeleteAudit<T>(this EntityTypeBuilder<T> builder)
+      where T : class, IUserSoftDeleteAuditable
+   {
+      builder.HasSoftDeleteAudit();
+
+      builder.Property(x => x.CreatedBy)
+             .HasMaxLength(128)
+             .IsRequired(false);
+
+      builder.Property(x => x.UpdatedBy)
+             .HasMaxLength(128)
+             .IsRequired(false);
+
+      builder.Property(x => x.DeletedBy)
+             .HasMaxLength(128)
+             .IsRequired(false);
    }
 }
