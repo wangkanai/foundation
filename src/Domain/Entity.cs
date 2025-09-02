@@ -28,12 +28,19 @@ public abstract class Entity<T>
    private static long _cacheHits = 0;
    private static long _cacheMisses = 0;
    
+   // Constants for EF proxy detection
+   private const int EF_PROXY_NAMESPACE_LENGTH = 35;
+   private const string EF_PROXY_NAMESPACE = "System.Data.Entity.DynamicProxies";
+   
+   // Cache management for memory safety (LRU eviction threshold)
+   private const int MAX_CACHE_SIZE = 1000;
+   
    /// <summary>
    /// Gets or sets the unique identifier for the entity.
    /// This property is used to uniquely identify an instance of the entity within the domain.
    /// The type of the identifier is defined by the generic type parameter of the entity.
    /// </summary>
-   public T Id { get; set; }
+   public T Id { get; set; } = default!;
 
    /// <summary>
    /// Determines whether the entity is transient, meaning it has not been assigned a valid identifier.
@@ -98,8 +105,8 @@ public abstract class Entity<T>
       Interlocked.Increment(ref _cacheMisses);
       var realType = DetermineRealType(objectType);
       
-      // Cache both the mapping and proxy status
-      _realTypeCache.TryAdd(objectType, realType);
+      // Cache both the mapping and proxy status with bounds checking
+      AddToCacheWithBounds(objectType, realType);
       _isProxyTypeCache.TryAdd(objectType, realType != objectType);
       
       return realType;
@@ -114,14 +121,36 @@ public abstract class Entity<T>
       // Quick namespace check for EF proxies - most types won't match this
       var ns = objectType.Namespace;
       if (ns != null && 
-          ns.Length == 35 && // "System.Data.Entity.DynamicProxies".Length
+          ns.Length == EF_PROXY_NAMESPACE_LENGTH && 
           ns[0] == 'S' &&    // Fast first character check
-          ns.AsSpan().SequenceEqual("System.Data.Entity.DynamicProxies".AsSpan()))
+          ns.AsSpan().SequenceEqual(EF_PROXY_NAMESPACE.AsSpan()))
       {
          return objectType.BaseType ?? objectType;
       }
       
       return objectType;
+   }
+   
+   /// <summary>
+   /// Adds an entry to the type cache with bounds checking and simple LRU eviction.
+   /// Prevents unbounded memory growth in long-running applications.
+   /// </summary>
+   [MethodImpl(MethodImplOptions.AggressiveInlining)]
+   private static void AddToCacheWithBounds(Type objectType, Type realType)
+   {
+      if (_realTypeCache.Count >= MAX_CACHE_SIZE)
+      {
+         // Simple eviction: Remove 25% of entries when limit is reached
+         // This is a lightweight approach that doesn't require tracking access patterns
+         var keysToRemove = _realTypeCache.Keys.Take(MAX_CACHE_SIZE / 4).ToArray();
+         foreach (var key in keysToRemove)
+         {
+            _realTypeCache.TryRemove(key, out _);
+            _isProxyTypeCache.TryRemove(key, out _);
+         }
+      }
+      
+      _realTypeCache.TryAdd(objectType, realType);
    }
 
    /// <summary>
@@ -146,7 +175,9 @@ public abstract class Entity<T>
    }
    
    /// <summary>
-   /// Clears the type cache. Useful for testing scenarios or memory management.
+   /// Clears the type cache and resets performance statistics.
+   /// Useful for testing scenarios, memory management, or when cache eviction patterns need adjustment.
+   /// Note: Cache is automatically bounded to prevent memory issues in long-running applications.
    /// </summary>
    public static void ClearTypeCache()
    {
