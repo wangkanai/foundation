@@ -2,9 +2,12 @@
 
 using Wangkanai.Audit.Reflections;
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Audit;
 
-/// <summary>Represents an interface for entities that can convert to and from models, and allows for the patching of entity instances. This interface is commonly used to manage bidirectional transformations between entity and model representations in a domain.</summary>
+/// <summary>
+/// Represents an interface for entities that can convert to and from models and allows for the patching of entity instances.
+/// This interface is commonly used to manage bidirectional transformations between entity and model representations in a domain.
+/// </summary>
 /// <typeparam name="TEntity">The type of the entity that implements this interface.</typeparam>
 /// <typeparam name="TModel">The type of the model to which the entity can be transformed.</typeparam>
 public interface IDataEntity<TEntity, TModel>

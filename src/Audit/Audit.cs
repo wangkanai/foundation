@@ -41,11 +41,175 @@ public class Audit<TKey, TUserType, TUserKey>
    /// <remarks>The <see cref="ChangedColumns"/> property contains the names of the specific columns in an entity that were modified as part of the audit record. This can be used to identify and track which fields have been updated in a system, providing valuable context for changes made.</remarks>
    public List<string> ChangedColumns { get; set; } = [];
 
-   /// <summary>Gets or sets the collection of old values of the changed entity properties.</summary>
-   /// <remarks>The <see cref="OldValues"/> property contains a dictionary where keys are the names of the entity's properties and values are their respective values before the change occurred. This is used to track the original state of the entity before modifications were applied.</remarks>
-   public Dictionary<string, object> OldValues { get; set; } = [];
+   /// <summary>Gets or sets the serialized JSON representation of old values for changed entity properties.</summary>
+   /// <remarks>The <see cref="OldValuesJson"/> property contains a compact JSON string of the old values, optimized for storage and reducing boxing overhead. This approach significantly reduces memory allocation and improves serialization performance.</remarks>
+   public string? OldValuesJson { get; set; }
 
-   /// <summary>Gets or sets the new values of the changed properties in the audited entity.</summary>
-   /// <remarks>The <see cref="NewValues"/> property stores a collection of key-value pairs where keys represent the names of the changed properties, and values represent their new values after the change. This property is used to capture the state of the entity after modifications during an audit trail.</remarks>
-   public Dictionary<string, object> NewValues { get; set; } = [];
+   /// <summary>Gets or sets the serialized JSON representation of new values for changed entity properties.</summary>
+   /// <remarks>The <see cref="NewValuesJson"/> property contains a compact JSON string of the new values, optimized for storage and reducing boxing overhead. This approach significantly reduces memory allocation and improves serialization performance.</remarks>
+   public string? NewValuesJson { get; set; }
+
+   /// <summary>Gets the old values as a dictionary, deserialized from JSON on demand.</summary>
+   /// <remarks>This property provides backward compatibility by deserializing the JSON representation into a dictionary when accessed. Use sparingly in performance-critical code paths.</remarks>
+   [System.Text.Json.Serialization.JsonIgnore]
+   public Dictionary<string, object> OldValues 
+   {
+      get => string.IsNullOrEmpty(OldValuesJson) 
+         ? new Dictionary<string, object>() 
+         : System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(OldValuesJson) ?? new Dictionary<string, object>();
+      set => OldValuesJson = value.Count == 0 ? null : System.Text.Json.JsonSerializer.Serialize(value);
+   }
+
+   /// <summary>Gets the new values as a dictionary, deserialized from JSON on demand.</summary>
+   /// <remarks>This property provides backward compatibility by deserializing the JSON representation into a dictionary when accessed. Use sparingly in performance-critical code paths.</remarks>
+   [System.Text.Json.Serialization.JsonIgnore]
+   public Dictionary<string, object> NewValues
+   {
+      get => string.IsNullOrEmpty(NewValuesJson) 
+         ? new Dictionary<string, object>() 
+         : System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(NewValuesJson) ?? new Dictionary<string, object>();
+      set => NewValuesJson = value.Count == 0 ? null : System.Text.Json.JsonSerializer.Serialize(value);
+   }
+
+   /// <summary>Sets the old and new values efficiently using pre-serialized JSON strings.</summary>
+   /// <param name="oldValuesJson">The JSON representation of old values.</param>
+   /// <param name="newValuesJson">The JSON representation of new values.</param>
+   /// <remarks>This method bypasses dictionary creation and serialization, providing optimal performance for bulk audit operations.</remarks>
+   public void SetValuesFromJson(string? oldValuesJson, string? newValuesJson)
+   {
+      OldValuesJson = oldValuesJson;
+      NewValuesJson = newValuesJson;
+   }
+
+   /// <summary>Sets audit values from ReadOnlySpan to minimize memory allocations.</summary>
+   /// <typeparam name="T">The type of the values being audited.</typeparam>
+   /// <param name="columnNames">Span of column names that changed.</param>
+   /// <param name="oldValues">Span of old values corresponding to the columns.</param>
+   /// <param name="newValues">Span of new values corresponding to the columns.</param>
+   /// <remarks>This method provides optimal performance for high-throughput audit scenarios by using spans and avoiding dictionary allocations for small change sets.</remarks>
+   public void SetValuesFromSpan<T>(ReadOnlySpan<string> columnNames, ReadOnlySpan<T> oldValues, ReadOnlySpan<T> newValues)
+   {
+      if (columnNames.Length != oldValues.Length || columnNames.Length != newValues.Length)
+         throw new ArgumentException("All spans must have the same length.");
+
+      // For small change sets (<=3 properties), use optimized direct JSON construction
+      if (columnNames.Length <= 3)
+      {
+         var oldJson = BuildJsonFromSpan(columnNames, oldValues);
+         var newJson = BuildJsonFromSpan(columnNames, newValues);
+         SetValuesFromJson(oldJson, newJson);
+         
+         // Update ChangedColumns efficiently
+         ChangedColumns.Clear();
+         for (int i = 0; i < columnNames.Length; i++)
+         {
+            ChangedColumns.Add(columnNames[i]);
+         }
+      }
+      else
+      {
+         // For larger change sets, fall back to dictionary approach
+         var oldDict = new Dictionary<string, object>(columnNames.Length);
+         var newDict = new Dictionary<string, object>(columnNames.Length);
+         
+         for (int i = 0; i < columnNames.Length; i++)
+         {
+            oldDict[columnNames[i]] = oldValues[i]!;
+            newDict[columnNames[i]] = newValues[i]!;
+         }
+         
+         OldValues = oldDict;
+         NewValues = newDict;
+         
+         ChangedColumns.Clear();
+         for (int i = 0; i < columnNames.Length; i++)
+         {
+            ChangedColumns.Add(columnNames[i]);
+         }
+      }
+   }
+
+   /// <summary>Builds JSON directly from spans for optimal performance with small change sets.</summary>
+   private static string BuildJsonFromSpan<T>(ReadOnlySpan<string> columnNames, ReadOnlySpan<T> values)
+   {
+      if (columnNames.Length == 0) return "{}";
+      
+      var json = new System.Text.StringBuilder(128);
+      json.Append('{');
+      
+      for (int i = 0; i < columnNames.Length; i++)
+      {
+         if (i > 0) json.Append(',');
+         json.Append('"').Append(columnNames[i]).Append("\":");
+         
+         var value = values[i];
+         if (value is string str)
+         {
+            json.Append('"').Append(str.Replace("\"", "\\\"")).Append('"');
+         }
+         else if (value is null)
+         {
+            json.Append("null");
+         }
+         else if (value is bool b)
+         {
+            json.Append(b ? "true" : "false");
+         }
+         else if (value is DateTime dt)
+         {
+            json.Append('"').Append(dt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")).Append('"');
+         }
+         else
+         {
+            json.Append('"').Append(value.ToString()).Append('"');
+         }
+      }
+      
+      json.Append('}');
+      return json.ToString();
+   }
+
+   /// <summary>Gets a specific old value by column name without deserializing the entire dictionary.</summary>
+   /// <param name="columnName">The name of the column.</param>
+   /// <returns>The old value if found, null otherwise.</returns>
+   /// <remarks>This method provides efficient access to individual values without full deserialization overhead.</remarks>
+   public object? GetOldValue(string columnName)
+   {
+      if (string.IsNullOrEmpty(OldValuesJson)) return null;
+      
+      // For simple lookups, use JSON parsing instead of full deserialization
+      using var document = System.Text.Json.JsonDocument.Parse(OldValuesJson);
+      return document.RootElement.TryGetProperty(columnName, out var element) 
+         ? GetJsonElementValue(element) 
+         : null;
+   }
+
+   /// <summary>Gets a specific new value by column name without deserializing the entire dictionary.</summary>
+   /// <param name="columnName">The name of the column.</param>
+   /// <returns>The new value if found, null otherwise.</returns>
+   /// <remarks>This method provides efficient access to individual values without full deserialization overhead.</remarks>
+   public object? GetNewValue(string columnName)
+   {
+      if (string.IsNullOrEmpty(NewValuesJson)) return null;
+      
+      // For simple lookups, use JSON parsing instead of full deserialization
+      using var document = System.Text.Json.JsonDocument.Parse(NewValuesJson);
+      return document.RootElement.TryGetProperty(columnName, out var element) 
+         ? GetJsonElementValue(element) 
+         : null;
+   }
+
+   /// <summary>Extracts a value from a JsonElement efficiently.</summary>
+   private static object? GetJsonElementValue(System.Text.Json.JsonElement element)
+   {
+      return element.ValueKind switch
+      {
+         System.Text.Json.JsonValueKind.String => element.GetString(),
+         System.Text.Json.JsonValueKind.Number => element.TryGetInt64(out var longVal) ? longVal : element.GetDouble(),
+         System.Text.Json.JsonValueKind.True => true,
+         System.Text.Json.JsonValueKind.False => false,
+         System.Text.Json.JsonValueKind.Null => null,
+         _ => element.GetRawText()
+      };
+   }
 }
