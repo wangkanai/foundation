@@ -21,20 +21,20 @@ public abstract class Entity<T>
    where T : IEquatable<T>, IComparable<T>
 {
    // Performance optimization: Cache type mappings for EF dynamic proxies
-   private static readonly ConcurrentDictionary<Type, Type> _realTypeCache = new();
+   private static readonly ConcurrentDictionary<Type, Type> _realTypeCache    = new();
    private static readonly ConcurrentDictionary<Type, bool> _isProxyTypeCache = new();
-   
+
    // Performance monitoring
-   private static long _cacheHits = 0;
+   private static long _cacheHits   = 0;
    private static long _cacheMisses = 0;
-   
+
    // Constants for EF proxy detection
-   private const int EF_PROXY_NAMESPACE_LENGTH = 35;
-   private const string EF_PROXY_NAMESPACE = "System.Data.Entity.DynamicProxies";
-   
+   private const int    EfProxyNamespaceLength = 35;
+   private const string EfProxyNamespace       = "System.Data.Entity.DynamicProxies";
+
    // Cache management for memory safety (LRU eviction threshold)
-   private const int MAX_CACHE_SIZE = 1000;
-   
+   private const int MaxCacheSize = 1000;
+
    /// <summary>
    /// Gets or sets the unique identifier for the entity.
    /// This property is used to uniquely identify an instance of the entity within the domain.
@@ -76,7 +76,7 @@ public abstract class Entity<T>
 
    /// <summary>
    /// High-performance type resolution with intelligent caching for EF dynamic proxies.
-   /// Provides ~10% performance improvement over reflection-based approach by caching
+   /// Provides ~10% performance improvement over the reflection-based approach by caching
    /// proxy type mappings and implementing fast-path for non-proxy types.
    /// Thread-safe implementation for concurrent access patterns.
    /// </summary>
@@ -86,51 +86,45 @@ public abstract class Entity<T>
    private static Type GetRealObjectTypeOptimized(object obj)
    {
       var objectType = obj.GetType();
-      
+
       // Fast path: Check cache first for known types
       if (_realTypeCache.TryGetValue(objectType, out var cachedRealType))
       {
          Interlocked.Increment(ref _cacheHits);
          return cachedRealType;
       }
-      
+
       // Fast path: Check if we know this type is NOT a proxy
       if (_isProxyTypeCache.TryGetValue(objectType, out var isProxy) && !isProxy)
       {
          Interlocked.Increment(ref _cacheHits);
          return objectType;
       }
-      
+
       // Slow path: Determine real type and cache the result
       Interlocked.Increment(ref _cacheMisses);
       var realType = DetermineRealType(objectType);
-      
+
       // Cache both the mapping and proxy status with bounds checking
       AddToCacheWithBounds(objectType, realType);
       _isProxyTypeCache.TryAdd(objectType, realType != objectType);
-      
+
       return realType;
    }
-   
-   /// <summary>
-   /// Determines the real type by detecting EF dynamic proxies with optimized namespace checking.
-   /// </summary>
+
+   /// <summary> Determines the real type by detecting EF dynamic proxies with optimized namespace checking. </summary>
    [MethodImpl(MethodImplOptions.AggressiveInlining)]
    private static Type DetermineRealType(Type objectType)
    {
       // Quick namespace check for EF proxies - most types won't match this
       var ns = objectType.Namespace;
-      if (ns != null && 
-          ns.Length == EF_PROXY_NAMESPACE_LENGTH && 
-          ns[0] == 'S' &&    // Fast first character check
-          ns.AsSpan().SequenceEqual(EF_PROXY_NAMESPACE.AsSpan()))
-      {
+      // Fast first character check
+      if (ns != null && ns.Length == EfProxyNamespaceLength && ns[0] == 'S' && ns.AsSpan().SequenceEqual(EfProxyNamespace.AsSpan()))
          return objectType.BaseType ?? objectType;
-      }
-      
+
       return objectType;
    }
-   
+
    /// <summary>
    /// Adds an entry to the type cache with bounds checking and simple LRU eviction.
    /// Prevents unbounded memory growth in long-running applications.
@@ -138,18 +132,18 @@ public abstract class Entity<T>
    [MethodImpl(MethodImplOptions.AggressiveInlining)]
    private static void AddToCacheWithBounds(Type objectType, Type realType)
    {
-      if (_realTypeCache.Count >= MAX_CACHE_SIZE)
+      if (_realTypeCache.Count >= MaxCacheSize)
       {
-         // Simple eviction: Remove 25% of entries when limit is reached
+         // Simple eviction: Remove 25% of entries when the limit is reached
          // This is a lightweight approach that doesn't require tracking access patterns
-         var keysToRemove = _realTypeCache.Keys.Take(MAX_CACHE_SIZE / 4).ToArray();
+         var keysToRemove = _realTypeCache.Keys.Take(MaxCacheSize / 4).ToArray();
          foreach (var key in keysToRemove)
          {
             _realTypeCache.TryRemove(key, out _);
             _isProxyTypeCache.TryRemove(key, out _);
          }
       }
-      
+
       _realTypeCache.TryAdd(objectType, realType);
    }
 
@@ -167,13 +161,13 @@ public abstract class Entity<T>
    /// <returns>A tuple containing cache hits, misses, and hit ratio</returns>
    public static (long Hits, long Misses, double HitRatio) GetPerformanceStats()
    {
-      var hits = Interlocked.Read(ref _cacheHits);
-      var misses = Interlocked.Read(ref _cacheMisses);
-      var total = hits + misses;
+      var hits     = Interlocked.Read(ref _cacheHits);
+      var misses   = Interlocked.Read(ref _cacheMisses);
+      var total    = hits + misses;
       var hitRatio = total > 0 ? (double)hits / total : 0.0;
       return (hits, misses, hitRatio);
    }
-   
+
    /// <summary>
    /// Clears the type cache and resets performance statistics.
    /// Useful for testing scenarios, memory management, or when cache eviction patterns need adjustment.
@@ -183,7 +177,7 @@ public abstract class Entity<T>
    {
       _realTypeCache.Clear();
       _isProxyTypeCache.Clear();
-      Interlocked.Exchange(ref _cacheHits, 0);
+      Interlocked.Exchange(ref _cacheHits,   0);
       Interlocked.Exchange(ref _cacheMisses, 0);
    }
 
