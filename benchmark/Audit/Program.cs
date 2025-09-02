@@ -1,7 +1,8 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
 using BenchmarkDotNet.Running;
-using Wangkanai.Audit.Benchmarks;
+
+using Wangkanai.Audit.Benchmark;
 
 Console.WriteLine("=== Wangkanai.Audit Performance Benchmarks ===");
 Console.WriteLine();

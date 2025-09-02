@@ -1,11 +1,13 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
-using Microsoft.AspNetCore.Identity;
 using System.Text.Json;
 
-namespace Wangkanai.Audit.Benchmarks;
+using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Jobs;
+
+using Microsoft.AspNetCore.Identity;
+
+namespace Wangkanai.Audit.Benchmark;
 
 /// <summary>Performance benchmarks for optimized audit trail storage.</summary>
 [MemoryDiagnoser]
@@ -174,7 +176,7 @@ public class AuditPerformanceBenchmark
    public void BulkAuditCreation_Original(int count)
    {
       var audits = new List<Audit<int, IdentityUser<int>, int>>(count);
-      
+
       for (int i = 0; i < count; i++)
       {
          var audit = new Audit<int, IdentityUser<int>, int>
@@ -193,7 +195,7 @@ public class AuditPerformanceBenchmark
    public void BulkAuditCreation_Optimized(int count)
    {
       var audits = new List<Audit<int, IdentityUser<int>, int>>(count);
-      
+
       for (int i = 0; i < count; i++)
       {
          var audit = new Audit<int, IdentityUser<int>, int>();
