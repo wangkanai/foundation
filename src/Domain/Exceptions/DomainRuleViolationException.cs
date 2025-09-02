@@ -32,4 +32,5 @@ public class DomainRuleViolationException
       : base($"Domain rule '{ruleName}' violated: {message}", innerException) =>
       RuleName = ruleName;
 
+
 }
