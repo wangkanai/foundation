@@ -10,15 +10,17 @@ namespace Wangkanai.Audit.Stores;
 
 public class AuditStoreTests
 {
-   private DbContextOptions<TestAuditDbContext> CreateNewContextOptions() =>
-      new DbContextOptionsBuilder<TestAuditDbContext>()
+   private DbContextOptions<TestAuditDbContext> CreateNewContextOptions()
+      => new DbContextOptionsBuilder<TestAuditDbContext>()
         .UseInMemoryDatabase($"AuditStoreTest_{Guid.NewGuid()}")
         .Options;
 
    [Fact]
-   public void Constructor_WithNullContext_ThrowsException() =>
+   public void Constructor_WithNullContext_ThrowsException()
+   {
       // Arrange & Act & Assert
       Assert.Throws<ArgumentNullException>(() => new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(null!));
+   }
 
    [Fact]
    public void Audits_ReturnsQueryableCollection()

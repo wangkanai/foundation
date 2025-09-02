@@ -19,7 +19,8 @@ public interface IUserAuditable
    string? CreatedBy { get; set; }
 
    /// <summary>Gets or sets the identifier of the user who last updated the entity.</summary>
-   /// <remarks>The <see cref="UpdatedBy"/> property is used to track the user responsible for the most recent update to the entity.
+   /// <remarks>
+   /// The <see cref="UpdatedBy"/> property is used to track the user responsible for the most recent update to the entity.
    /// This is essential for auditing purposes and ensuring traceability in systems that monitor changes to entities.
    /// </remarks>
    string? UpdatedBy { get; set; }

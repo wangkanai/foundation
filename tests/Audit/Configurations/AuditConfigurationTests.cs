@@ -119,11 +119,11 @@ public class AuditConfigurationTests
       Assert.NotNull(changedColumnsProperty);
       //Assert.Equal("jsonb", changedColumnsProperty.GetColumnType());
 
-      var oldValuesProperty = entityType.FindProperty("OldValues");
+      var oldValuesProperty = entityType.FindProperty("OldValuesJson");
       Assert.NotNull(oldValuesProperty);
       //Assert.Equal("jsonb", oldValuesProperty.GetColumnType());
 
-      var newValuesProperty = entityType.FindProperty("NewValues");
+      var newValuesProperty = entityType.FindProperty("NewValuesJson");
       Assert.NotNull(newValuesProperty);
       //Assert.Equal("jsonb", newValuesProperty.GetColumnType());
    }
