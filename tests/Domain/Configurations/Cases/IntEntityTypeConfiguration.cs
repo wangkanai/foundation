@@ -3,9 +3,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Wangkanai.Audit.Models;
+using Wangkanai.Domain.Models;
 
-namespace Wangkanai.Audit.Configurations.Cases;
+namespace Wangkanai.Domain.Configurations.Cases;
 
 public class IntEntityTypeConfiguration : IEntityTypeConfiguration<IntEntity>
 {

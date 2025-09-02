@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Wangkanai.Audit.Configurations.Cases;
 using Wangkanai.Audit.Mocks;
 using Wangkanai.Audit.Models;
+using Wangkanai.Domain.Configurations.Cases;
+using Wangkanai.Domain.Models;
 
 namespace Wangkanai.Audit.Extensions;
 
