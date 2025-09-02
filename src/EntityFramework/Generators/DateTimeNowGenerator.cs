@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore.ValueGeneration;
 
 namespace Wangkanai.EntityFramework.Generators;
 
-public sealed class DateTimeNowGenerator : ValueGenerator<DateTime>
+public sealed class DateTimeNowGenerator
+   : ValueGenerator<DateTime>
 {
    public override bool GeneratesTemporaryValues => false;
 
