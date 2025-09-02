@@ -21,14 +21,14 @@ public class DomainRuleViolationException
    /// This exception is intended for identifying and handling violations of defined domain rules or constraints.
    /// </summary>
    public DomainRuleViolationException(string ruleName, string message)
-      : base($"Domain rule '{ruleName}' violated: {message}") =>
-      RuleName = ruleName;
+      : base($"Domain rule '{ruleName}' violated: {message}")
+      => RuleName = ruleName;
 
    /// <summary>
    /// Represents an exception thrown when a specific domain rule is violated within the application's business logic.
    /// This exception is intended for identifying and handling violations of defined domain rules or constraints.
    /// </summary>
    public DomainRuleViolationException(string ruleName, string message, Exception innerException)
-      : base($"Domain rule '{ruleName}' violated: {message}", innerException) =>
-      RuleName = ruleName;
+      : base($"Domain rule '{ruleName}' violated: {message}", innerException)
+      => RuleName = ruleName;
 }
