@@ -4,4 +4,10 @@
       <ProjectReference Include="..\..\src\Domain\Wangkanai.Domain.csproj" />
    </ItemGroup>
 
+   <ItemGroup>
+      <Compile Include="..\..\tests\Domain\Models\*.cs">
+         <Link>Models\%(Filename)%(Extension)</Link>
+      </Compile>
+   </ItemGroup>
+
 </Project>
