@@ -45,32 +45,27 @@ public class AuditConfiguration<TKey, TUserType, TUserKey>
       builder.Property(x => x.EntityName)
              .IsRequired();
 
-      builder.Ignore(x => x.ChangedColumns)
-             .UsePropertyAccessMode(PropertyAccessMode.Field);
+      // Store ChangedColumns as JSON
       builder.Property(x => x.ChangedColumns)
              .HasColumnType("jsonb")
              .HasConversion(
                             c => JsonSerializer.Serialize(c, (JsonSerializerOptions?)null),
-                            c => JsonSerializer.Deserialize<List<string>>(c, (JsonSerializerOptions?)null)
+                            c => JsonSerializer.Deserialize<List<string>>(c, (JsonSerializerOptions?)null) ?? new List<string>()
                            );
 
-      builder.Ignore(x => x.OldValues)
-             .UsePropertyAccessMode(PropertyAccessMode.Field);
-      builder.Property(x => x.OldValues)
-             .HasColumnType("jsonb")
-             .HasConversion(
-                            c => JsonSerializer.Serialize(c, (JsonSerializerOptions?)null),
-                            c => JsonSerializer.Deserialize<Dictionary<string, object?>>(c, (JsonSerializerOptions?)null)
-                           );
+      // Store OldValuesJson directly as the underlying storage
+      builder.Property(x => x.OldValuesJson)
+             .HasColumnName("OldValues")
+             .HasColumnType("jsonb");
 
-      builder.Ignore(x => x.NewValues)
-             .UsePropertyAccessMode(PropertyAccessMode.Field);
-      builder.Property(x => x.NewValues)
-             .HasColumnType("jsonb")
-             .HasConversion(
-                            c => JsonSerializer.Serialize(c, (JsonSerializerOptions?)null),
-                            c => JsonSerializer.Deserialize<Dictionary<string, object?>>(c, (JsonSerializerOptions?)null)
-                           );
+      // Store NewValuesJson directly as the underlying storage  
+      builder.Property(x => x.NewValuesJson)
+             .HasColumnName("NewValues")
+             .HasColumnType("jsonb");
+
+      // Ignore the computed properties that use JSON deserialization
+      builder.Ignore(x => x.OldValues);
+      builder.Ignore(x => x.NewValues);
 
       builder.Property(x => x.UserId);
       builder.HasOne(x => x.User)

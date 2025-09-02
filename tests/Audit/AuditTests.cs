@@ -147,7 +147,8 @@ public class AuditTests
 
       // Act & Assert
       Assert.NotEmpty(audit.OldValues);
-      Assert.Equal("OldValue1", audit.OldValues["Column1"]);
+      var actualValue = audit.OldValues["Column1"];
+      Assert.Equal("OldValue1", actualValue?.ToString()); // Convert to string for comparison
       Assert.Single(audit.OldValues);
       Assert.NotNull(audit.OldValuesJson);
    }
@@ -163,7 +164,8 @@ public class AuditTests
 
       // Act & Assert
       Assert.NotEmpty(audit.NewValues);
-      Assert.Equal("NewValue1", audit.NewValues["Column1"]);
+      var actualValue = audit.NewValues["Column1"];
+      Assert.Equal("NewValue1", actualValue?.ToString()); // Convert to string for comparison
       Assert.Single(audit.NewValues);
       Assert.NotNull(audit.NewValuesJson);
    }
@@ -292,7 +294,7 @@ public class AuditTests
 
       // Act & Assert
       Assert.Throws<ArgumentException>(() => 
-         audit.SetValuesFromSpan(columnNames.AsSpan(), oldValues.AsSpan(), newValues.AsSpan()));
+         audit.SetValuesFromSpan<object>(columnNames.AsSpan(), oldValues.AsSpan(), newValues.AsSpan()));
    }
 
    [Fact]
