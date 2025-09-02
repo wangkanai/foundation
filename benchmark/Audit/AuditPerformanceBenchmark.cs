@@ -91,7 +91,7 @@ public class AuditPerformanceBenchmark
       ReadOnlySpan<object> oldValues = ["John Doe", 30, true];
       ReadOnlySpan<object> newValues = ["Jane Doe", 31, false];
 
-      audit.SetValuesFromSpan(columnNames, oldValues, newValues);
+      audit.SetValuesFromSpan<object>(columnNames, oldValues, newValues);
 
       // Simulate access patterns
       _ = audit.GetOldValue("Name");
@@ -141,7 +141,7 @@ public class AuditPerformanceBenchmark
          newValues[i] = $"NewValue{i}";
       }
 
-      audit.SetValuesFromSpan(columnNames.AsSpan(), oldValues.AsSpan(), newValues.AsSpan());
+      audit.SetValuesFromSpan<object>(columnNames.AsSpan(), oldValues.AsSpan(), newValues.AsSpan());
 
       // Simulate access patterns
       _ = audit.GetOldValue("Property0");

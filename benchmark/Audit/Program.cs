@@ -13,4 +13,4 @@ Console.WriteLine("Benchmark completed. Results saved to BenchmarkDotNet.Artifac
 Console.WriteLine("Summary:");
 Console.WriteLine($"- Total benchmarks: {summary.Reports.Length}");
 Console.WriteLine($"- Runtime: {summary.HostEnvironmentInfo.DotNetSdkVersion}");
-Console.WriteLine($"- Platform: {summary.HostEnvironmentInfo.OsVersion}");
+Console.WriteLine($"- Platform: {summary.HostEnvironmentInfo.Architecture}");
