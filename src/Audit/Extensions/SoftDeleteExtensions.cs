@@ -42,19 +42,13 @@ public static class SoftDeleteExtensions
    {
       entity.IsDeleted = false;
       entity.Deleted = null;
-      return entity;
-   }
-
-   /// <summary>Restores a soft deleted entity by setting the IsDeleted flag to false and clearing all deletion-related properties including user tracking.</summary>
-   /// <typeparam name="T">The type of the entity that implements <see cref="IUserSoftDeleteAuditable"/>.</typeparam>
-   /// <param name="entity">The entity to restore.</param>
-   /// <returns>The same entity instance for method chaining.</returns>
-   public static T Restore<T>(this T entity)
-      where T : IUserSoftDeleteAuditable
-   {
-      entity.IsDeleted = false;
-      entity.Deleted = null;
-      entity.DeletedBy = null;
+      
+      // Clear user tracking if the entity supports it
+      if (entity is IUserSoftDeleteAuditable userEntity)
+      {
+         userEntity.DeletedBy = null;
+      }
+      
       return entity;
    }
 

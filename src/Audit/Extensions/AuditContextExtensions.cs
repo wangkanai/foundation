@@ -1,9 +1,10 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Wangkanai.Audit;
+using Microsoft.EntityFrameworkCore;
+
 using Wangkanai.Audit.Configurations;
 
-namespace Microsoft.EntityFrameworkCore.Metadata.Builders;
+namespace Wangkanai.Audit;
 
 /// <summary>Provides extension methods for configuring audit-related entity configurations in the Entity Framework model.</summary>
 public static class AuditContextExtensions
