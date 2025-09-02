@@ -12,7 +12,7 @@ namespace Wangkanai.Domain;
 
 /// <summary>
 /// Represents an abstract base class for value objects in the domain-driven design context.
-/// A value object is an immutable conceptual object that is compared based on its property values rather than a unique identity.
+/// A value object is an immutable conceptual object compared based on its property values rather than a unique identity.
 /// </summary>
 /// <remarks>
 /// Value objects provide a way to encapsulate and model domain concepts with specific attributes, ensuring immutability and
@@ -134,7 +134,7 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
    /// <summary>
    /// Retrieves the properties of the current value object type using reflection.
    /// The returned properties are cached for performance optimization, reducing repeated reflection overhead.
-   /// This method is utilized to enable dynamic access to the object's properties, such as during equality
+   /// This method is used to enable dynamic access to the object's properties, such as during equality
    /// comparisons or caching operations.
    /// </summary>
    /// <returns>
