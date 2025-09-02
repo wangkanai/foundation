@@ -6,7 +6,8 @@ namespace Wangkanai.Domain;
 /// <typeparam name="T">
 /// The type of the domain message being handled, which must implement the <see cref="IDomainMessage"/> interface.
 /// </typeparam>
-public interface ICancellableEventHandler<in T> where T : IDomainMessage
+public interface ICancellableEventHandler<in T>
+   where T : IDomainMessage
 {
    /// <summary>Handles a domain message with a potential to cancel the operation.</summary>
    /// <param name="message">The domain message to be handled. Must implement the <see cref="IDomainMessage"/> interface.</param>

@@ -13,7 +13,8 @@ public class DomainEvent
 /// <typeparam name="T">
 /// The type of the identifier for the domain event, which must implement both IComparable and IEquatable interfaces.
 /// </typeparam>
-public class DomainEvent<T> : Entity<T>, IDomainEvent<T>, INotification
+public class DomainEvent<T>
+   : Entity<T>, IDomainEvent<T>, INotification
    where T : IComparable<T>, IEquatable<T>
 {
    /// <summary>

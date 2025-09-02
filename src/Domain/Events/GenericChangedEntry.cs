@@ -7,4 +7,5 @@ namespace Wangkanai.Domain;
 /// This class is a value object and encapsulates the logic for working with domain changes.
 /// </summary>
 /// <typeparam name="T">The type of object that is being tracked or changed.</typeparam>
-public class GenericChangedEntry<T> : IValueObject;
+public class GenericChangedEntry<T>
+   : IValueObject;
