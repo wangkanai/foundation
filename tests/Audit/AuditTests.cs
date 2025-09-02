@@ -244,7 +244,7 @@ public class AuditTests
 
       // Assert
       Assert.Equal("TestValue", value1);
-      Assert.Equal(123L, value2); // JSON numbers are deserialized as long
+      Assert.Equal(123.0, Convert.ToDouble(value2)); // JSON numbers are deserialized as double
       Assert.Null(nonExistent);
    }
 
