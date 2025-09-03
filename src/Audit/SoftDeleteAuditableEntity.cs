@@ -10,15 +10,18 @@ public abstract class SoftDeleteAuditableEntity<T>
 {
    /// <summary>Determines whether the soft delete properties of the entity should be serialized.</summary>
    /// <remarks>This property acts as a central flag to control the serialization of soft delete related properties. It can be overridden in derived classes to customize the serialization behavior based on specific requirements.</remarks>
-   public virtual bool ShouldSerializeSoftDeleteProperties => ShouldSerializeAuditableProperties;
+   public virtual bool ShouldSerializeSoftDeleteProperties
+      => ShouldSerializeAuditableProperties;
 
    /// <summary>Determines whether the IsDeleted flag of the entity should be serialized.</summary>
    /// <returns>A boolean value indicating whether the IsDeleted flag should be included in serialization.</returns>
-   public virtual bool ShouldSerializeIsDeleted() => ShouldSerializeSoftDeleteProperties;
+   public virtual bool ShouldSerializeIsDeleted()
+      => ShouldSerializeSoftDeleteProperties;
 
    /// <summary>Determines whether the Deleted date of the entity should be serialized.</summary>
    /// <returns>A boolean value indicating whether the Deleted date should be included in serialization.</returns>
-   public virtual bool ShouldSerializeDeleted() => ShouldSerializeSoftDeleteProperties;
+   public virtual bool ShouldSerializeDeleted()
+      => ShouldSerializeSoftDeleteProperties;
 
    #region ISoftDeletable Members
 

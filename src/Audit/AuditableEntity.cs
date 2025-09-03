@@ -10,15 +10,18 @@ public abstract class AuditableEntity<T>
 {
    /// <summary>Determines whether the auditable properties of the entity should be serialized.</summary>
    /// <remarks>This property acts as a central flag to control the serialization of all auditable timestamp properties, such as creation and modification dates. It can be overridden in derived classes to customize the serialization behavior based on specific requirements.</remarks>
-   public virtual bool ShouldSerializeAuditableProperties => true;
+   public virtual bool ShouldSerializeAuditableProperties
+      => true;
 
    /// <summary>Determines whether the Created date of the entity should be serialized.</summary>
    /// <returns>A boolean value indicating whether the Created date should be included in serialization.</returns>
-   public virtual bool ShouldSerializeCreatedDate() => ShouldSerializeAuditableProperties;
+   public virtual bool ShouldSerializeCreatedDate()
+      => ShouldSerializeAuditableProperties;
 
    /// <summary>Determines whether the Updated date of the entity should be serialized.</summary>
    /// <returns>A boolean value indicating whether the Updated date should be included in serialization.</returns>
-   public virtual bool ShouldSerializeUpdatedDate() => ShouldSerializeAuditableProperties;
+   public virtual bool ShouldSerializeUpdatedDate()
+      => ShouldSerializeAuditableProperties;
 
    #region IAuditable Members
 
