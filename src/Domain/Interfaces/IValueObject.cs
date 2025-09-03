@@ -13,4 +13,5 @@ public interface IValueObject;
 /// Value objects are inherently immutable, and their equality is determined based on their
 /// constituent properties rather than a unique identifier.
 /// </summary>
-public interface IValueObject<T> where T : class;
+public interface IValueObject<T>
+   where T : class;
