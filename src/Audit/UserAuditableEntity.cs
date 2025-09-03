@@ -11,8 +11,10 @@ public abstract class UserAuditableEntity<T>
    : AuditableEntity<T>, IUserAuditable
    where T : IComparable<T>, IEquatable<T>
 {
-   public virtual bool ShouldSerializeCreatedBy() => ShouldSerializeAuditableProperties;
-   public virtual bool ShouldSerializeUpdatedBy() => ShouldSerializeAuditableProperties;
+   public virtual bool ShouldSerializeCreatedBy()
+      => ShouldSerializeAuditableProperties;
+   public virtual bool ShouldSerializeUpdatedBy()
+      => ShouldSerializeAuditableProperties;
 
    #region IUserAuditable Members
 
