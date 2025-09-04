@@ -13,16 +13,6 @@ public abstract class SoftDeleteAuditableEntity<T>
    public virtual bool ShouldSerializeSoftDeleteProperties
       => ShouldSerializeAuditableProperties;
 
-   /// <summary>Determines whether the IsDeleted flag of the entity should be serialized.</summary>
-   /// <returns>A boolean value indicating whether the IsDeleted flag should be included in serialization.</returns>
-   public virtual bool ShouldSerializeIsDeleted()
-      => ShouldSerializeSoftDeleteProperties;
-
-   /// <summary>Determines whether the Deleted date of the entity should be serialized.</summary>
-   /// <returns>A boolean value indicating whether the Deleted date should be included in serialization.</returns>
-   public virtual bool ShouldSerializeDeleted()
-      => ShouldSerializeSoftDeleteProperties;
-
    #region ISoftDeletable Members
 
    /// <summary>Gets or sets a value indicating whether the entity has been soft deleted.</summary>
@@ -38,4 +28,14 @@ public abstract class SoftDeleteAuditableEntity<T>
    public DateTime? Deleted { get; set; }
 
    #endregion
+
+   /// <summary>Determines whether the IsDeleted flag of the entity should be serialized.</summary>
+   /// <returns>A boolean value indicating whether the IsDeleted flag should be included in serialization.</returns>
+   public virtual bool ShouldSerializeIsDeleted()
+      => ShouldSerializeSoftDeleteProperties;
+
+   /// <summary>Determines whether the Deleted date of the entity should be serialized.</summary>
+   /// <returns>A boolean value indicating whether the Deleted date should be included in serialization.</returns>
+   public virtual bool ShouldSerializeDeleted()
+      => ShouldSerializeSoftDeleteProperties;
 }

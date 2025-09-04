@@ -20,20 +20,20 @@ public abstract class Entity<T>
    : IEntity<T>
    where T : IEquatable<T>, IComparable<T>
 {
-   // Performance optimization: Cache type mappings for EF dynamic proxies
-   private static readonly ConcurrentDictionary<Type, Type> _realTypeCache    = new();
-   private static readonly ConcurrentDictionary<Type, bool> _isProxyTypeCache = new();
-
-   // Performance monitoring
-   private static long _cacheHits   = 0;
-   private static long _cacheMisses = 0;
-
    // Constants for EF proxy detection
    private const int    EfProxyNamespaceLength = 35;
    private const string EfProxyNamespace       = "System.Data.Entity.DynamicProxies";
 
    // Cache management for memory safety (LRU eviction threshold)
    private const int MaxCacheSize = 1000;
+
+   // Performance optimization: Cache type mappings for EF dynamic proxies
+   private static readonly ConcurrentDictionary<Type, Type> _realTypeCache    = new();
+   private static readonly ConcurrentDictionary<Type, bool> _isProxyTypeCache = new();
+
+   // Performance monitoring
+   private static long _cacheHits;
+   private static long _cacheMisses;
 
    /// <summary>
    /// Gets or sets the unique identifier for the entity.

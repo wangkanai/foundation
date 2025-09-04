@@ -138,10 +138,8 @@ public class EntityPerformanceTests
       var entity2 = new IntEntity();
 
       // Act: Perform bulk equality operations
-      for (int i = 0; i < iterations; i++)
-      {
+      for (var i = 0; i < iterations; i++)
          entity1.Equals(entity2);
-      }
 
       // Assert: Hit ratio should improve with more operations
       var (hits, misses, hitRatio) = Entity<int>.GetPerformanceStats();
@@ -165,10 +163,8 @@ public class EntityPerformanceTests
       var entity2 = new IntEntity();
 
       // Act: Multiple calls to force different entities through type checking
-      for (int i = 0; i < 5; i++)
-      {
+      for (var i = 0; i < 5; i++)
          entity1.Equals(entity2); // Different objects, same type
-      }
 
       // Assert: Cache should record operations (hits or misses)
       var (hits, misses, hitRatio) = Entity<int>.GetPerformanceStats();

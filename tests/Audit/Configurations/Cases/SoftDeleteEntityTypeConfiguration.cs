@@ -12,20 +12,20 @@ public class SoftDeleteEntityTypeConfiguration : IEntityTypeConfiguration<SoftDe
    public void Configure(EntityTypeBuilder<SoftDeleteEntity> builder)
    {
       builder.HasKey(x => x.Id);
-      
+
       // Configure audit properties
       builder.Property(x => x.Created)
-         .IsRequired(false);
-      
+             .IsRequired(false);
+
       builder.Property(x => x.Updated)
-         .IsRequired(false);
-      
+             .IsRequired(false);
+
       // Configure soft delete properties
       builder.Property(x => x.IsDeleted)
-         .IsRequired()
-         .HasDefaultValue(false);
-      
+             .IsRequired()
+             .HasDefaultValue(false);
+
       builder.Property(x => x.Deleted)
-         .IsRequired(false);
+             .IsRequired(false);
    }
 }

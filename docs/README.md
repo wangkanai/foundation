@@ -8,6 +8,8 @@ developers working with this domain-driven design library.
 ### 📋 Project Information
 
 - **[Project Overview](project_overview.md)** - Project purpose, packages, and architecture overview
+- **[Project Structure Guide](project-structure-guide.md)** - Comprehensive directory structure and module architecture
+- **[Architecture Diagrams](architecture-diagrams.md)** - Visual representations of modules, dependencies, and workflows
 - **[Project Structure](project_structure.md)** - Directory organization and key components
 - **[Tech Stack](tech_stack.md)** - Framework, dependencies, and development tools
 
@@ -22,10 +24,11 @@ developers working with this domain-driven design library.
 For developers new to the project:
 
 1. Read [Project Overview](project_overview.md) to understand the project's purpose
-2. Review [Tech Stack](tech_stack.md) to understand the technology foundation
-3. Follow [Code Style Conventions](code_style_conventions.md) for consistent coding
-4. Use [Suggested Commands](suggested_commands.md) for common development tasks
-5. Apply [Task Completion Checklist](task_completion_checklist.md) before completing work
+2. Explore [Project Structure Guide](project-structure-guide.md) to understand the complete architecture and organization
+3. Review [Tech Stack](tech_stack.md) to understand the technology foundation
+4. Follow [Code Style Conventions](code_style_conventions.md) for consistent coding
+5. Use [Suggested Commands](suggested_commands.md) for common development tasks
+6. Apply [Task Completion Checklist](task_completion_checklist.md) before completing work
 
 ## Key Characteristics
 

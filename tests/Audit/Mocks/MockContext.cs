@@ -2,7 +2,6 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Wangkanai.Audit.Models;
 using Wangkanai.Domain.Models;
 
 namespace Wangkanai.Audit.Mocks;

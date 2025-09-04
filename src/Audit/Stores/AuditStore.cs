@@ -154,14 +154,10 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    private void Dispose(bool disposing)
    {
       if (_disposed)
-      {
          return;
-      }
 
       if (disposing)
-      {
          _context?.Dispose();
-      }
 
       _disposed = true;
    }

@@ -12,33 +12,33 @@ public class UserSoftDeleteEntityTypeConfiguration : IEntityTypeConfiguration<Us
    public void Configure(EntityTypeBuilder<UserSoftDeleteEntity> builder)
    {
       builder.HasKey(x => x.Id);
-      
+
       // Configure audit properties
       builder.Property(x => x.Created)
-         .IsRequired(false);
-      
+             .IsRequired(false);
+
       builder.Property(x => x.Updated)
-         .IsRequired(false);
-      
+             .IsRequired(false);
+
       // Configure user audit properties
       builder.Property(x => x.CreatedBy)
-         .HasMaxLength(128)
-         .IsRequired(false);
-      
+             .HasMaxLength(128)
+             .IsRequired(false);
+
       builder.Property(x => x.UpdatedBy)
-         .HasMaxLength(128)
-         .IsRequired(false);
-      
+             .HasMaxLength(128)
+             .IsRequired(false);
+
       // Configure soft delete properties
       builder.Property(x => x.IsDeleted)
-         .IsRequired()
-         .HasDefaultValue(false);
-      
+             .IsRequired()
+             .HasDefaultValue(false);
+
       builder.Property(x => x.Deleted)
-         .IsRequired(false);
-      
+             .IsRequired(false);
+
       builder.Property(x => x.DeletedBy)
-         .HasMaxLength(128)
-         .IsRequired(false);
+             .HasMaxLength(128)
+             .IsRequired(false);
    }
 }
