@@ -12,14 +12,10 @@ public class Result
    protected Result(bool isSuccess, Error error)
    {
       if (isSuccess && error != Error.None)
-      {
          throw new InvalidOperationException("Invalid operation for success result.");
-      }
 
       if (!isSuccess && error == Error.None)
-      {
          throw new InvalidOperationException("Invalid operation for failure result.");
-      }
 
       IsSuccess = isSuccess;
       Error     = error;
@@ -77,8 +73,10 @@ public class Result
    public static Result FirstFailureOrSuccess(params Result[] results)
    {
       foreach (var result in results)
+      {
          if (result.IsFailure)
             return result;
+      }
 
       return Success();
    }

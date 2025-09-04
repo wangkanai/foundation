@@ -22,10 +22,10 @@ relationships, best practices, and complete implementation examples.
 ┌─────────────────────────────────────────────────────────────┐
 │                    Application Layer                        │
 ├─────────────────────────────────────────────────────────────┤
-│  Controllers  │  Services   │  Commands  │  Queries        │
+│  Controllers  │  Services   │  Commands  │  Queries         │
 ├─────────────────────────────────────────────────────────────┤
 │                    Domain Layer                             │
-│  ┌─────────────┬─────────────┬─────────────────────────────┐ │
+│  ┌─────────────┬─────────────┬────────────────────────────┐ │
 │  │   Domain    │    Audit    │      EntityFramework       │ │
 │  │   Module    │   Module    │         Module             │ │
 │  │             │             │                            │ │
@@ -33,10 +33,10 @@ relationships, best practices, and complete implementation examples.
 │  │ • Values    │   Entities  │ • Extensions               │ │
 │  │ • Events    │ • Audit     │ • Value Generators         │ │
 │  │ • Results   │   Store     │ • Configurations           │ │
-│  └─────────────┴─────────────┴─────────────────────────────┘ │
+│  └─────────────┴─────────────┴────────────────────────────┘ │
 ├─────────────────────────────────────────────────────────────┤
 │                  Infrastructure Layer                       │
-│  Database  │  External APIs  │  File System  │  Caching   │
+│  Database  │  External APIs  │  File System  │  Caching     │
 └─────────────────────────────────────────────────────────────┘
 ```
 

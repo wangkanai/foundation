@@ -5,8 +5,5 @@ namespace Wangkanai.Audit.Models;
 public class ConcreteUserSoftDeleteAuditableEntity
    : UserSoftDeleteAuditableEntity<Guid>
 {
-   public ConcreteUserSoftDeleteAuditableEntity()
-   {
-      Id = Guid.NewGuid();
-   }
+   public ConcreteUserSoftDeleteAuditableEntity() => Id = Guid.NewGuid();
 }

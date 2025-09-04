@@ -47,7 +47,7 @@ public class SoftDeleteAuditableEntityTests
    public void SoftDeleteEntity_SetDeleted_ShouldRetainValue()
    {
       // Arrange
-      var entity = new SoftDeleteEntity();
+      var entity      = new SoftDeleteEntity();
       var deletedTime = DateTime.UtcNow;
 
       // Act
@@ -61,12 +61,12 @@ public class SoftDeleteAuditableEntityTests
    public void SoftDeleteEntity_MarkAsDeleted_ShouldSetBothProperties()
    {
       // Arrange
-      var entity = new SoftDeleteEntity();
+      var entity      = new SoftDeleteEntity();
       var deletedTime = DateTime.UtcNow;
 
       // Act
       entity.IsDeleted = true;
-      entity.Deleted = deletedTime;
+      entity.Deleted   = deletedTime;
 
       // Assert
       Assert.True(entity.IsDeleted);
@@ -77,7 +77,7 @@ public class SoftDeleteAuditableEntityTests
    public void SoftDeleteEntity_AuditProperties_ShouldBeAvailable()
    {
       // Arrange
-      var entity = new SoftDeleteEntity();
+      var entity      = new SoftDeleteEntity();
       var createdTime = DateTime.UtcNow.AddHours(-1);
       var updatedTime = DateTime.UtcNow;
 
@@ -120,7 +120,7 @@ public class SoftDeleteAuditableEntityTests
    public void UserSoftDeleteEntity_SetDeletedBy_ShouldRetainValue()
    {
       // Arrange
-      var entity = new UserSoftDeleteEntity();
+      var          entity = new UserSoftDeleteEntity();
       const string userId = "user123";
 
       // Act
@@ -134,26 +134,26 @@ public class SoftDeleteAuditableEntityTests
    public void UserSoftDeleteEntity_FullDeleteOperation_ShouldTrackAllProperties()
    {
       // Arrange
-      var entity = new UserSoftDeleteEntity();
-      var deletedTime = DateTime.UtcNow;
-      const string deletedBy = "admin";
+      var          entity      = new UserSoftDeleteEntity();
+      var          deletedTime = DateTime.UtcNow;
+      const string deletedBy   = "admin";
 
       // Act
       entity.IsDeleted = true;
-      entity.Deleted = deletedTime;
+      entity.Deleted   = deletedTime;
       entity.DeletedBy = deletedBy;
 
       // Assert
       Assert.True(entity.IsDeleted);
       Assert.Equal(deletedTime, entity.Deleted);
-      Assert.Equal(deletedBy, entity.DeletedBy);
+      Assert.Equal(deletedBy,   entity.DeletedBy);
    }
 
    [Fact]
    public void UserSoftDeleteEntity_UserAuditProperties_ShouldBeAvailable()
    {
       // Arrange
-      var entity = new UserSoftDeleteEntity();
+      var          entity  = new UserSoftDeleteEntity();
       const string creator = "creator123";
       const string updater = "updater456";
 

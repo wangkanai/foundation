@@ -1,5 +1,9 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace Wangkanai.Audit;
 
 /// <summary>Represents an audit trail record for tracking entity changes in the system.</summary>
@@ -51,24 +55,24 @@ public class Audit<TKey, TUserType, TUserKey>
 
    /// <summary>Gets the old values as a dictionary, deserialized from JSON on demand.</summary>
    /// <remarks>This property provides backward compatibility by deserializing the JSON representation into a dictionary when accessed. Use sparingly in performance-critical code paths.</remarks>
-   [System.Text.Json.Serialization.JsonIgnore]
-   public Dictionary<string, object> OldValues 
+   [JsonIgnore]
+   public Dictionary<string, object> OldValues
    {
-      get => string.IsNullOrEmpty(OldValuesJson) 
-         ? new Dictionary<string, object>() 
-         : System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(OldValuesJson) ?? new Dictionary<string, object>();
-      set => OldValuesJson = value.Count == 0 ? null : System.Text.Json.JsonSerializer.Serialize(value);
+      get => string.IsNullOrEmpty(OldValuesJson)
+         ? new()
+         : JsonSerializer.Deserialize<Dictionary<string, object>>(OldValuesJson) ?? new Dictionary<string, object>();
+      set => OldValuesJson = value.Count == 0 ? null : JsonSerializer.Serialize(value);
    }
 
    /// <summary>Gets the new values as a dictionary, deserialized from JSON on demand.</summary>
    /// <remarks>This property provides backward compatibility by deserializing the JSON representation into a dictionary when accessed. Use sparingly in performance-critical code paths.</remarks>
-   [System.Text.Json.Serialization.JsonIgnore]
+   [JsonIgnore]
    public Dictionary<string, object> NewValues
    {
-      get => string.IsNullOrEmpty(NewValuesJson) 
-         ? new Dictionary<string, object>() 
-         : System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, object>>(NewValuesJson) ?? new Dictionary<string, object>();
-      set => NewValuesJson = value.Count == 0 ? null : System.Text.Json.JsonSerializer.Serialize(value);
+      get => string.IsNullOrEmpty(NewValuesJson)
+         ? new()
+         : JsonSerializer.Deserialize<Dictionary<string, object>>(NewValuesJson) ?? new Dictionary<string, object>();
+      set => NewValuesJson = value.Count == 0 ? null : JsonSerializer.Serialize(value);
    }
 
    /// <summary>Sets the old and new values efficiently using pre-serialized JSON strings.</summary>
@@ -98,73 +102,61 @@ public class Audit<TKey, TUserType, TUserKey>
          var oldJson = BuildJsonFromSpan(columnNames, oldValues);
          var newJson = BuildJsonFromSpan(columnNames, newValues);
          SetValuesFromJson(oldJson, newJson);
-         
+
          // Update ChangedColumns efficiently
          ChangedColumns.Clear();
-         for (int i = 0; i < columnNames.Length; i++)
-         {
+         for (var i = 0; i < columnNames.Length; i++)
             ChangedColumns.Add(columnNames[i]);
-         }
       }
       else
       {
          // For larger change sets, fall back to dictionary approach
          var oldDict = new Dictionary<string, object>(columnNames.Length);
          var newDict = new Dictionary<string, object>(columnNames.Length);
-         
-         for (int i = 0; i < columnNames.Length; i++)
+
+         for (var i = 0; i < columnNames.Length; i++)
          {
             oldDict[columnNames[i]] = oldValues[i]!;
             newDict[columnNames[i]] = newValues[i]!;
          }
-         
+
          OldValues = oldDict;
          NewValues = newDict;
-         
+
          ChangedColumns.Clear();
-         for (int i = 0; i < columnNames.Length; i++)
-         {
+         for (var i = 0; i < columnNames.Length; i++)
             ChangedColumns.Add(columnNames[i]);
-         }
       }
    }
 
    /// <summary>Builds JSON directly from spans for optimal performance with small change sets.</summary>
    private static string BuildJsonFromSpan<T>(ReadOnlySpan<string> columnNames, ReadOnlySpan<T> values)
    {
-      if (columnNames.Length == 0) return "{}";
-      
-      var json = new System.Text.StringBuilder(128);
+      if (columnNames.Length == 0)
+         return "{}";
+
+      var json = new StringBuilder(128);
       json.Append('{');
-      
-      for (int i = 0; i < columnNames.Length; i++)
+
+      for (var i = 0; i < columnNames.Length; i++)
       {
-         if (i > 0) json.Append(',');
+         if (i > 0)
+            json.Append(',');
          json.Append('"').Append(columnNames[i]).Append("\":");
-         
+
          var value = values[i];
          if (value is string str)
-         {
             json.Append('"').Append(str.Replace("\"", "\\\"")).Append('"');
-         }
          else if (value is null)
-         {
             json.Append("null");
-         }
          else if (value is bool b)
-         {
             json.Append(b ? "true" : "false");
-         }
          else if (value is DateTime dt)
-         {
             json.Append('"').Append(dt.ToString("yyyy-MM-ddTHH:mm:ss.fffZ")).Append('"');
-         }
          else
-         {
-            json.Append('"').Append(value.ToString()).Append('"');
-         }
+            json.Append('"').Append(value).Append('"');
       }
-      
+
       json.Append('}');
       return json.ToString();
    }
@@ -175,12 +167,13 @@ public class Audit<TKey, TUserType, TUserKey>
    /// <remarks>This method provides efficient access to individual values without full deserialization overhead.</remarks>
    public object? GetOldValue(string columnName)
    {
-      if (string.IsNullOrEmpty(OldValuesJson)) return null;
-      
+      if (string.IsNullOrEmpty(OldValuesJson))
+         return null;
+
       // For simple lookups, use JSON parsing instead of full deserialization
-      using var document = System.Text.Json.JsonDocument.Parse(OldValuesJson);
-      return document.RootElement.TryGetProperty(columnName, out var element) 
-         ? GetJsonElementValue(element) 
+      using var document = JsonDocument.Parse(OldValuesJson);
+      return document.RootElement.TryGetProperty(columnName, out var element)
+         ? GetJsonElementValue(element)
          : null;
    }
 
@@ -190,26 +183,25 @@ public class Audit<TKey, TUserType, TUserKey>
    /// <remarks>This method provides efficient access to individual values without full deserialization overhead.</remarks>
    public object? GetNewValue(string columnName)
    {
-      if (string.IsNullOrEmpty(NewValuesJson)) return null;
-      
+      if (string.IsNullOrEmpty(NewValuesJson))
+         return null;
+
       // For simple lookups, use JSON parsing instead of full deserialization
-      using var document = System.Text.Json.JsonDocument.Parse(NewValuesJson);
-      return document.RootElement.TryGetProperty(columnName, out var element) 
-         ? GetJsonElementValue(element) 
+      using var document = JsonDocument.Parse(NewValuesJson);
+      return document.RootElement.TryGetProperty(columnName, out var element)
+         ? GetJsonElementValue(element)
          : null;
    }
 
    /// <summary>Extracts a value from a JsonElement efficiently.</summary>
-   private static object? GetJsonElementValue(System.Text.Json.JsonElement element)
-   {
-      return element.ValueKind switch
+   private static object? GetJsonElementValue(JsonElement element) =>
+      element.ValueKind switch
       {
-         System.Text.Json.JsonValueKind.String => element.GetString(),
-         System.Text.Json.JsonValueKind.Number => element.TryGetInt64(out var longVal) ? longVal : element.GetDouble(),
-         System.Text.Json.JsonValueKind.True => true,
-         System.Text.Json.JsonValueKind.False => false,
-         System.Text.Json.JsonValueKind.Null => null,
-         _ => element.GetRawText()
+         JsonValueKind.String => element.GetString(),
+         JsonValueKind.Number => element.TryGetInt64(out var longVal) ? longVal : element.GetDouble(),
+         JsonValueKind.True   => true,
+         JsonValueKind.False  => false,
+         JsonValueKind.Null   => null,
+         _                    => element.GetRawText()
       };
-   }
 }

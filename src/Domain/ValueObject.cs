@@ -226,9 +226,7 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
                yield return ']';
             }
             else
-            {
                yield return value;
-            }
          }
       }
    }

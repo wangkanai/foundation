@@ -2,11 +2,8 @@
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Moq;
-
-using Wangkanai.Audit.Extensions;
 
 namespace Wangkanai.Audit.Stores;
 
@@ -18,11 +15,9 @@ public class AuditStoreTests
         .Options;
 
    [Fact]
-   public void Constructor_WithNullContext_ThrowsException()
-   {
+   public void Constructor_WithNullContext_ThrowsException() =>
       // Arrange & Act & Assert
       Assert.Throws<ArgumentNullException>(() => new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(null!));
-   }
 
    [Fact]
    public void Audits_ReturnsQueryableCollection()

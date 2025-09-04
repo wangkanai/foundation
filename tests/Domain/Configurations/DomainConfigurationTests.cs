@@ -2,7 +2,4 @@
 
 namespace Wangkanai.Domain.Configurations;
 
-public class DomainConfigurationTests
-{
-
-}
+public class DomainConfigurationTests { }

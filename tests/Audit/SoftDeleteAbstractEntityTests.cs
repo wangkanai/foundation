@@ -91,23 +91,23 @@ public class SoftDeleteAbstractEntityTests
    public void UserSoftDeleteAuditableEntity_FullAuditCycle_ShouldWork()
    {
       // Arrange
-      var entity = new ConcreteUserSoftDeleteAuditableEntity();
-      var now = DateTime.UtcNow;
+      var          entity  = new ConcreteUserSoftDeleteAuditableEntity();
+      var          now     = DateTime.UtcNow;
       const string creator = "creator";
       const string updater = "updater";
       const string deleter = "deleter";
 
       // Act - Create
-      entity.Created = now.AddHours(-2);
+      entity.Created   = now.AddHours(-2);
       entity.CreatedBy = creator;
 
       // Act - Update
-      entity.Updated = now.AddHours(-1);
+      entity.Updated   = now.AddHours(-1);
       entity.UpdatedBy = updater;
 
       // Act - Delete
       entity.IsDeleted = true;
-      entity.Deleted = now;
+      entity.Deleted   = now;
       entity.DeletedBy = deleter;
 
       // Assert
@@ -123,12 +123,12 @@ public class SoftDeleteAbstractEntityTests
    public void SoftDeleteAuditableEntity_PropertyAssignment_ShouldWork()
    {
       // Arrange
-      var entity = new ConcreteSoftDeleteAuditableEntity();
+      var entity     = new ConcreteSoftDeleteAuditableEntity();
       var deleteTime = DateTime.UtcNow;
 
       // Act
       entity.IsDeleted = true;
-      entity.Deleted = deleteTime;
+      entity.Deleted   = deleteTime;
 
       // Assert
       Assert.True(entity.IsDeleted);

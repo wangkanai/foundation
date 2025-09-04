@@ -174,7 +174,7 @@ public class AuditTests
    public void Audit_SetValuesFromJson_ShouldStoreJsonDirectly()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>();
+      var audit   = new Audit<int, IdentityUser<int>, int>();
       var oldJson = "{\"Column1\":\"OldValue1\",\"Column2\":42}";
       var newJson = "{\"Column1\":\"NewValue1\",\"Column2\":84}";
 
@@ -182,8 +182,8 @@ public class AuditTests
       audit.SetValuesFromJson(oldJson, newJson);
 
       // Assert
-      Assert.Equal(oldJson, audit.OldValuesJson);
-      Assert.Equal(newJson, audit.NewValuesJson);
+      Assert.Equal(oldJson,     audit.OldValuesJson);
+      Assert.Equal(newJson,     audit.NewValuesJson);
       Assert.Equal("OldValue1", audit.GetOldValue("Column1"));
       Assert.Equal("NewValue1", audit.GetNewValue("Column1"));
    }
@@ -192,10 +192,10 @@ public class AuditTests
    public void Audit_SetValuesFromSpan_SmallChangeSet_ShouldOptimize()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>();
+      var                  audit       = new Audit<int, IdentityUser<int>, int>();
       ReadOnlySpan<string> columnNames = ["Column1", "Column2"];
-      ReadOnlySpan<object> oldValues = ["OldValue1", 42];
-      ReadOnlySpan<object> newValues = ["NewValue1", 84];
+      ReadOnlySpan<object> oldValues   = ["OldValue1", 42];
+      ReadOnlySpan<object> newValues   = ["NewValue1", 84];
 
       // Act
       audit.SetValuesFromSpan(columnNames, oldValues, newValues);
@@ -205,7 +205,7 @@ public class AuditTests
       Assert.NotNull(audit.NewValuesJson);
       Assert.Equal("OldValue1", audit.GetOldValue("Column1"));
       Assert.Equal("NewValue1", audit.GetNewValue("Column1"));
-      Assert.Equal(2, audit.ChangedColumns.Count);
+      Assert.Equal(2,           audit.ChangedColumns.Count);
       Assert.Contains("Column1", audit.ChangedColumns);
       Assert.Contains("Column2", audit.ChangedColumns);
    }
@@ -214,10 +214,10 @@ public class AuditTests
    public void Audit_SetValuesFromSpan_LargeChangeSet_ShouldUseDictionary()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>();
+      var                  audit       = new Audit<int, IdentityUser<int>, int>();
       ReadOnlySpan<string> columnNames = ["Col1", "Col2", "Col3", "Col4", "Col5"];
-      ReadOnlySpan<object> oldValues = ["Old1", "Old2", "Old3", "Old4", "Old5"];
-      ReadOnlySpan<object> newValues = ["New1", "New2", "New3", "New4", "New5"];
+      ReadOnlySpan<object> oldValues   = ["Old1", "Old2", "Old3", "Old4", "Old5"];
+      ReadOnlySpan<object> newValues   = ["New1", "New2", "New3", "New4", "New5"];
 
       // Act
       audit.SetValuesFromSpan(columnNames, oldValues, newValues);
@@ -227,7 +227,7 @@ public class AuditTests
       Assert.NotNull(audit.NewValuesJson);
       Assert.Equal("Old1", audit.GetOldValue("Col1"));
       Assert.Equal("New1", audit.GetNewValue("Col1"));
-      Assert.Equal(5, audit.ChangedColumns.Count);
+      Assert.Equal(5,      audit.ChangedColumns.Count);
    }
 
    [Fact]
@@ -238,13 +238,13 @@ public class AuditTests
       audit.SetValuesFromJson("{\"Column1\":\"TestValue\",\"Column2\":123}", null);
 
       // Act
-      var value1 = audit.GetOldValue("Column1");
-      var value2 = audit.GetOldValue("Column2");
+      var value1      = audit.GetOldValue("Column1");
+      var value2      = audit.GetOldValue("Column2");
       var nonExistent = audit.GetOldValue("NonExistent");
 
       // Assert
       Assert.Equal("TestValue", value1);
-      Assert.Equal(123.0, Convert.ToDouble(value2)); // JSON numbers are deserialized as double
+      Assert.Equal(123.0,       Convert.ToDouble(value2)); // JSON numbers are deserialized as double
       Assert.Null(nonExistent);
    }
 
@@ -256,8 +256,8 @@ public class AuditTests
       audit.SetValuesFromJson(null, "{\"Column1\":\"TestValue\",\"Column2\":true}");
 
       // Act
-      var value1 = audit.GetNewValue("Column1");
-      var value2 = audit.GetNewValue("Column2");
+      var value1      = audit.GetNewValue("Column1");
+      var value2      = audit.GetNewValue("Column2");
       var nonExistent = audit.GetNewValue("NonExistent");
 
       // Assert
@@ -271,10 +271,10 @@ public class AuditTests
    {
       // Arrange
       var audit = new Audit<int, IdentityUser<int>, int>
-      {
-         OldValues = new Dictionary<string, object>(),
-         NewValues = new Dictionary<string, object>()
-      };
+                  {
+                     OldValues = new(),
+                     NewValues = new()
+                  };
 
       // Act & Assert
       Assert.Null(audit.OldValuesJson);
@@ -287,32 +287,32 @@ public class AuditTests
    public void Audit_SetValuesFromSpan_MismatchedLengths_ShouldThrowException()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>();
-      var columnNames = new string[] { "Column1", "Column2" };
-      var oldValues = new object[] { "OldValue1" };
-      var newValues = new object[] { "NewValue1", "NewValue2" };
+      var audit       = new Audit<int, IdentityUser<int>, int>();
+      var columnNames = new[] { "Column1", "Column2" };
+      var oldValues   = new object[] { "OldValue1" };
+      var newValues   = new object[] { "NewValue1", "NewValue2" };
 
       // Act & Assert
-      Assert.Throws<ArgumentException>(() => 
-         audit.SetValuesFromSpan<object>(columnNames.AsSpan(), oldValues.AsSpan(), newValues.AsSpan()));
+      Assert.Throws<ArgumentException>(() =>
+                                          audit.SetValuesFromSpan<object>(columnNames.AsSpan(), oldValues.AsSpan(), newValues.AsSpan()));
    }
 
    [Fact]
    public void Audit_JsonSerialization_ShouldHandleComplexTypes()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>();
-      var dateTime = DateTime.Parse("2025-01-15T10:30:00Z");
+      var                  audit       = new Audit<int, IdentityUser<int>, int>();
+      var                  dateTime    = DateTime.Parse("2025-01-15T10:30:00Z");
       ReadOnlySpan<string> columnNames = ["StringCol", "DateCol", "BoolCol", "NullCol"];
-      ReadOnlySpan<object> oldValues = ["TestString", dateTime, true, null!];
-      ReadOnlySpan<object> newValues = ["NewString", dateTime.AddDays(1), false, "NotNull"];
+      ReadOnlySpan<object> oldValues   = ["TestString", dateTime, true, null!];
+      ReadOnlySpan<object> newValues   = ["NewString", dateTime.AddDays(1), false, "NotNull"];
 
       // Act
       audit.SetValuesFromSpan(columnNames, oldValues, newValues);
 
       // Assert
       Assert.Equal("TestString", audit.GetOldValue("StringCol"));
-      Assert.Equal("NewString", audit.GetNewValue("StringCol"));
+      Assert.Equal("NewString",  audit.GetNewValue("StringCol"));
       Assert.True((bool)audit.GetOldValue("BoolCol")!);
       Assert.False((bool)audit.GetNewValue("BoolCol")!);
       Assert.Null(audit.GetOldValue("NullCol"));

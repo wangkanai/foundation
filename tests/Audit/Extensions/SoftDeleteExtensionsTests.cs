@@ -10,11 +10,11 @@ public class SoftDeleteExtensionsTests
    public void MarkAsDeleted_SoftDeleteEntity_ShouldSetProperties()
    {
       // Arrange
-      var entity = new SoftDeleteEntity();
+      var entity     = new SoftDeleteEntity();
       var beforeTime = DateTime.UtcNow.AddSeconds(-1);
 
       // Act
-      var result = entity.MarkAsDeleted();
+      var result    = entity.MarkAsDeleted();
       var afterTime = DateTime.UtcNow.AddSeconds(1);
 
       // Assert
@@ -28,7 +28,7 @@ public class SoftDeleteExtensionsTests
    public void MarkAsDeleted_WithSpecificTime_ShouldUseProvidedTime()
    {
       // Arrange
-      var entity = new SoftDeleteEntity();
+      var entity       = new SoftDeleteEntity();
       var specificTime = new DateTime(2025, 1, 15, 10, 30, 0, DateTimeKind.Utc);
 
       // Act
@@ -43,12 +43,12 @@ public class SoftDeleteExtensionsTests
    public void MarkAsDeleted_UserSoftDeleteEntity_ShouldSetAllProperties()
    {
       // Arrange
-      var entity = new UserSoftDeleteEntity();
-      const string deletedBy = "admin";
-      var beforeTime = DateTime.UtcNow.AddSeconds(-1);
+      var          entity     = new UserSoftDeleteEntity();
+      const string deletedBy  = "admin";
+      var          beforeTime = DateTime.UtcNow.AddSeconds(-1);
 
       // Act
-      var result = entity.MarkAsDeleted(deletedBy);
+      var result    = entity.MarkAsDeleted(deletedBy);
       var afterTime = DateTime.UtcNow.AddSeconds(1);
 
       // Assert
@@ -63,16 +63,16 @@ public class SoftDeleteExtensionsTests
    public void MarkAsDeleted_UserSoftDeleteEntity_WithSpecificTime_ShouldUseProvidedTime()
    {
       // Arrange
-      var entity = new UserSoftDeleteEntity();
-      const string deletedBy = "admin";
-      var specificTime = new DateTime(2025, 1, 15, 10, 30, 0, DateTimeKind.Utc);
+      var          entity       = new UserSoftDeleteEntity();
+      const string deletedBy    = "admin";
+      var          specificTime = new DateTime(2025, 1, 15, 10, 30, 0, DateTimeKind.Utc);
 
       // Act
       entity.MarkAsDeleted(deletedBy, specificTime);
 
       // Assert
       Assert.True(entity.IsDeleted);
-      Assert.Equal(deletedBy, entity.DeletedBy);
+      Assert.Equal(deletedBy,    entity.DeletedBy);
       Assert.Equal(specificTime, entity.Deleted);
    }
 
@@ -81,10 +81,10 @@ public class SoftDeleteExtensionsTests
    {
       // Arrange
       var entity = new SoftDeleteEntity
-      {
-         IsDeleted = true,
-         Deleted = DateTime.UtcNow
-      };
+                   {
+                      IsDeleted = true,
+                      Deleted   = DateTime.UtcNow
+                   };
 
       // Act
       var result = entity.Restore();
@@ -100,11 +100,11 @@ public class SoftDeleteExtensionsTests
    {
       // Arrange
       var entity = new UserSoftDeleteEntity
-      {
-         IsDeleted = true,
-         Deleted = DateTime.UtcNow,
-         DeletedBy = "admin"
-      };
+                   {
+                      IsDeleted = true,
+                      Deleted   = DateTime.UtcNow,
+                      DeletedBy = "admin"
+                   };
 
       // Act
       var result = entity.Restore();
@@ -160,7 +160,7 @@ public class SoftDeleteExtensionsTests
    public void SoftDeleteWorkflow_FullCycle_ShouldWork()
    {
       // Arrange
-      var entity = new UserSoftDeleteEntity();
+      var          entity    = new UserSoftDeleteEntity();
       const string deletedBy = "user123";
 
       // Act & Assert - Initial state

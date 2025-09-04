@@ -44,6 +44,4 @@ public static class EntityTypeBuilderExtensions
       where TKey : IComparable<TKey>, IEquatable<TKey>
       => builder.Property(x => x.Id)
                 .ValueGeneratedOnAdd();
-
-
 }

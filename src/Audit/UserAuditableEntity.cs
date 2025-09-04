@@ -13,6 +13,7 @@ public abstract class UserAuditableEntity<T>
 {
    public virtual bool ShouldSerializeCreatedBy()
       => ShouldSerializeAuditableProperties;
+
    public virtual bool ShouldSerializeUpdatedBy()
       => ShouldSerializeAuditableProperties;
 

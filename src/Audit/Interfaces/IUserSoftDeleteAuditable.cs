@@ -1,7 +1,5 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using System.ComponentModel.DataAnnotations;
-
 namespace Wangkanai.Audit;
 
 /// <summary>Represents an auditable entity that includes user tracking for soft delete operations.</summary>

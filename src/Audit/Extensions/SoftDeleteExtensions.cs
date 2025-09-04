@@ -14,7 +14,7 @@ public static class SoftDeleteExtensions
       where T : ISoftDeleteAuditable
    {
       entity.IsDeleted = true;
-      entity.Deleted = deletedAt ?? DateTime.UtcNow;
+      entity.Deleted   = deletedAt ?? DateTime.UtcNow;
       return entity;
    }
 
@@ -28,7 +28,7 @@ public static class SoftDeleteExtensions
       where T : IUserSoftDeleteAuditable
    {
       entity.IsDeleted = true;
-      entity.Deleted = deletedAt ?? DateTime.UtcNow;
+      entity.Deleted   = deletedAt ?? DateTime.UtcNow;
       entity.DeletedBy = deletedBy;
       return entity;
    }
@@ -41,14 +41,12 @@ public static class SoftDeleteExtensions
       where T : ISoftDeleteAuditable
    {
       entity.IsDeleted = false;
-      entity.Deleted = null;
-      
+      entity.Deleted   = null;
+
       // Clear user tracking if the entity supports it
       if (entity is IUserSoftDeleteAuditable userEntity)
-      {
          userEntity.DeletedBy = null;
-      }
-      
+
       return entity;
    }
 
