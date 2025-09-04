@@ -3,6 +3,6 @@
       <RootNamespace>Wangkanai.Domain</RootNamespace>
    </PropertyGroup>
    <ItemGroup>
-      <ProjectReference Include="..\..\src\Domain\Wangkanai.Domain.csproj"/>
+      <ProjectReference Include="..\..\src\Domain\Wangkanai.Domain.csproj" />
    </ItemGroup>
 </Project>
