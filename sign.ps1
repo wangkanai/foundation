@@ -1,6 +1,6 @@
 param(
     [Parameter(mandatory=$false)]
-    [bool]$publish=$false,
+    [bool]$publish=$true,
     [Parameter(mandatory=$false)]
     [string]$name="Open Source Developer, Sarin Na Wangkanai"
 )
