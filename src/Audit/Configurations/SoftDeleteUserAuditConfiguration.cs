@@ -13,7 +13,8 @@ namespace Wangkanai.Audit.Configurations;
 /// <typeparam name="TKey">
 /// The type of the primary key for the auditable entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
-public class SoftDeleteUserAuditConfiguration<TKey> : AuditableEntityConfiguration<UserSoftDeleteAuditableEntity<TKey>, TKey>
+public class SoftDeleteUserAuditConfiguration<TKey>
+   : AuditableEntityConfiguration<UserSoftDeleteAuditableEntity<TKey>, TKey>
 	where TKey : IEquatable<TKey>, IComparable<TKey>
 {
 	/// <summary>Configures all properties for the <see cref="UserSoftDeleteAuditableEntity{TKey}"/> class.</summary>
