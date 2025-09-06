@@ -15,48 +15,48 @@ namespace Wangkanai.Audit.Configurations;
 /// </typeparam>
 public class SoftDeleteUserAuditConfiguration<TKey>
    : AuditableEntityConfiguration<UserSoftDeleteAuditableEntity<TKey>, TKey>
-	where TKey : IEquatable<TKey>, IComparable<TKey>
+   where TKey : IEquatable<TKey>, IComparable<TKey>
 {
-	/// <summary>Configures all properties for the <see cref="UserSoftDeleteAuditableEntity{TKey}"/> class.</summary>
-	/// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
-	protected override void ConfigureAdditionalProperties(EntityTypeBuilder<UserSoftDeleteAuditableEntity<TKey>> builder)
-	{
-		// Configure user tracking properties
-		builder.Property(x => x.CreatedBy)
-			   .HasMaxLength(128)
-			   .IsRequired(false);
+   /// <summary>Configures all properties for the <see cref="UserSoftDeleteAuditableEntity{TKey}"/> class.</summary>
+   /// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
+   protected override void ConfigureAdditionalProperties(EntityTypeBuilder<UserSoftDeleteAuditableEntity<TKey>> builder)
+   {
+      // Configure user tracking properties
+      builder.Property(x => x.CreatedBy)
+             .HasMaxLength(128)
+             .IsRequired(false);
 
-		builder.Property(x => x.UpdatedBy)
-			   .HasMaxLength(128)
-			   .IsRequired(false);
+      builder.Property(x => x.UpdatedBy)
+             .HasMaxLength(128)
+             .IsRequired(false);
 
-		// Configure soft delete properties
-		builder.Property(x => x.IsDeleted)
-			   .IsRequired()
-			   .HasDefaultValue(false);
+      // Configure soft delete properties
+      builder.Property(x => x.IsDeleted)
+             .IsRequired()
+             .HasDefaultValue(false);
 
-		builder.Property(x => x.Deleted)
-			   .IsRequired(false);
+      builder.Property(x => x.Deleted)
+             .IsRequired(false);
 
-		builder.Property(x => x.DeletedBy)
-			   .HasMaxLength(128)
-			   .IsRequired(false);
+      builder.Property(x => x.DeletedBy)
+             .HasMaxLength(128)
+             .IsRequired(false);
 
-		// Create indexes for efficient querying
-		builder.HasIndex(x => x.CreatedBy);
-		builder.HasIndex(x => x.UpdatedBy);
-		builder.HasIndex(x => x.DeletedBy);
-		builder.HasIndex(x => x.IsDeleted);
-		builder.HasIndex(x => x.Deleted);
+      // Create indexes for efficient querying
+      builder.HasIndex(x => x.CreatedBy);
+      builder.HasIndex(x => x.UpdatedBy);
+      builder.HasIndex(x => x.DeletedBy);
+      builder.HasIndex(x => x.IsDeleted);
+      builder.HasIndex(x => x.Deleted);
 
-		// Add composite indexes for common query patterns
-		builder.HasIndex(x => new { x.IsDeleted, x.Created });
-		builder.HasIndex(x => new { x.IsDeleted, x.Updated });
-		builder.HasIndex(x => new { x.IsDeleted, x.CreatedBy });
-		builder.HasIndex(x => new { x.IsDeleted, x.UpdatedBy });
-		builder.HasIndex(x => new { x.IsDeleted, x.DeletedBy });
+      // Add composite indexes for common query patterns
+      builder.HasIndex(x => new { x.IsDeleted, x.Created });
+      builder.HasIndex(x => new { x.IsDeleted, x.Updated });
+      builder.HasIndex(x => new { x.IsDeleted, x.CreatedBy });
+      builder.HasIndex(x => new { x.IsDeleted, x.UpdatedBy });
+      builder.HasIndex(x => new { x.IsDeleted, x.DeletedBy });
 
-		// Configure query filter to exclude soft-deleted entities by default
-		builder.HasQueryFilter(x => !x.IsDeleted);
-	}
+      // Configure query filter to exclude soft-deleted entities by default
+      builder.HasQueryFilter(x => !x.IsDeleted);
+   }
 }

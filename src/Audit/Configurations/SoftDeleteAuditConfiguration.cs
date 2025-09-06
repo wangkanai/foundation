@@ -13,30 +13,31 @@ namespace Wangkanai.Audit.Configurations;
 /// <typeparam name="TKey">
 /// The type of the primary key for the auditable entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
-public class SoftDeleteAuditConfiguration<TKey> : AuditableEntityConfiguration<SoftDeleteAuditableEntity<TKey>, TKey>
-	where TKey : IEquatable<TKey>, IComparable<TKey>
+public class SoftDeleteAuditConfiguration<TKey>
+   : AuditableEntityConfiguration<SoftDeleteAuditableEntity<TKey>, TKey>
+   where TKey : IEquatable<TKey>, IComparable<TKey>
 {
-	/// <summary>Configures the additional soft delete properties for the <see cref="SoftDeleteAuditableEntity{TKey}"/> class.</summary>
-	/// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
-	protected override void ConfigureAdditionalProperties(EntityTypeBuilder<SoftDeleteAuditableEntity<TKey>> builder)
-	{
-		// Configure soft delete properties
-		builder.Property(x => x.IsDeleted)
-			   .IsRequired()
-			   .HasDefaultValue(false);
+   /// <summary>Configures the additional soft delete properties for the <see cref="SoftDeleteAuditableEntity{TKey}"/> class.</summary>
+   /// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
+   protected override void ConfigureAdditionalProperties(EntityTypeBuilder<SoftDeleteAuditableEntity<TKey>> builder)
+   {
+      // Configure soft delete properties
+      builder.Property(x => x.IsDeleted)
+             .IsRequired()
+             .HasDefaultValue(false);
 
-		builder.Property(x => x.Deleted)
-			   .IsRequired(false);
+      builder.Property(x => x.Deleted)
+             .IsRequired(false);
 
-		// Create indexes for efficient querying
-		builder.HasIndex(x => x.IsDeleted);
-		builder.HasIndex(x => x.Deleted);
+      // Create indexes for efficient querying
+      builder.HasIndex(x => x.IsDeleted);
+      builder.HasIndex(x => x.Deleted);
 
-		// Add composite index for common query patterns
-		builder.HasIndex(x => new { x.IsDeleted, x.Created });
-		builder.HasIndex(x => new { x.IsDeleted, x.Updated });
+      // Add composite index for common query patterns
+      builder.HasIndex(x => new { x.IsDeleted, x.Created });
+      builder.HasIndex(x => new { x.IsDeleted, x.Updated });
 
-		// Configure query filter to exclude soft-deleted entities by default
-		builder.HasQueryFilter(x => !x.IsDeleted);
-	}
+      // Configure query filter to exclude soft-deleted entities by default
+      builder.HasQueryFilter(x => !x.IsDeleted);
+   }
 }
