@@ -10,14 +10,16 @@ public abstract class UserSoftDeleteAuditableEntity<T>
    : SoftDeleteAuditableEntity<T>, IUserSoftDeleteAuditable
    where T : IComparable<T>, IEquatable<T>
 {
-   #region IUserSoftDeleteAuditable Members
-
    /// <summary>Gets or sets the identifier of the user who soft deleted the entity.</summary>
    /// <remarks>This property tracks the user responsible for soft deleting the entity. It remains null until the entity is marked as deleted and is essential for maintaining audit accountability.</remarks>
    [StringLength(128)]
    public string? DeletedBy { get; set; }
 
-   #endregion
+   [StringLength(128)]
+   public string? CreatedBy { get; set; }
+
+   [StringLength(128)]
+   public string? UpdatedBy { get; set; }
 
    /// <summary>Determines whether the CreatedBy property should be serialized.</summary>
    /// <returns>A boolean value indicating whether the CreatedBy property should be included in serialization.</returns>
@@ -34,13 +36,4 @@ public abstract class UserSoftDeleteAuditableEntity<T>
    public virtual bool ShouldSerializeDeletedBy()
       => ShouldSerializeSoftDeleteProperties;
 
-   #region IUserAuditable Members
-
-   [StringLength(128)]
-   public string? CreatedBy { get; set; }
-
-   [StringLength(128)]
-   public string? UpdatedBy { get; set; }
-
-   #endregion
 }

@@ -10,26 +10,12 @@ public abstract class SoftDeleteAuditableEntity<T>
    : AuditableEntity<T>, ISoftDeleteAuditable
    where T : IComparable<T>, IEquatable<T>
 {
-   /// <summary>Determines whether the soft delete properties of the entity should be serialized.</summary>
-   /// <remarks>
-   /// This property acts as a central flag to control the serialization of soft delete related properties.
-   /// It can be overridden in derived classes to customize the serialization behavior based on specific requirements.
-   /// </remarks>
-   public virtual bool ShouldSerializeSoftDeleteProperties
-      => ShouldSerializeAuditableProperties;
-
-   #region ISoftDeletable Members
-
    /// <summary>Gets or sets a value indicating whether the entity has been softly deleted.</summary>
    /// <remarks>
    /// This property acts as a flag to indicate the deletion state of the entity.
    /// When true, the entity is considered deleted and should typically be excluded from normal query operations.
    /// </remarks>
    public bool IsDeleted { get; set; }
-
-   #endregion
-
-   #region IDeletedEntity Members
 
    /// <summary>Gets or sets the date and time when the entity was soft deleted.</summary>
    /// <remarks>
@@ -38,7 +24,13 @@ public abstract class SoftDeleteAuditableEntity<T>
    /// </remarks>
    public DateTime? Deleted { get; set; }
 
-   #endregion
+   /// <summary>Determines whether the soft delete properties of the entity should be serialized.</summary>
+   /// <remarks>
+   /// This property acts as a central flag to control the serialization of soft delete related properties.
+   /// It can be overridden in derived classes to customize the serialization behavior based on specific requirements.
+   /// </remarks>
+   public virtual bool ShouldSerializeSoftDeleteProperties
+      => ShouldSerializeAuditableProperties;
 
    /// <summary>Determines whether the IsDeleted flag of the entity should be serialized.</summary>
    /// <returns>A boolean value indicating whether the IsDeleted flag should be included in serialization.</returns>
