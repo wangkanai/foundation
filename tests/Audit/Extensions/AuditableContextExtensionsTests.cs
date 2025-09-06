@@ -7,19 +7,19 @@ using Moq;
 
 namespace Wangkanai.Audit.Extensions;
 
-public class AuditContextExtensionsTests
+public class AuditableContextExtensionsTests
 {
    [Fact]
    public void ApplyAuditTrailConfiguration_ShouldApplyConfiguration()
    {
       // Arrange
       var mockBuilder   = new Mock<ModelBuilder>();
-      var configuration = It.IsAny<IEntityTypeConfiguration<Audit<Guid, IdentityUser<Guid>, Guid>>>();
+      var configuration = It.IsAny<IEntityTypeConfiguration<AuditableEntity<Guid, IdentityUser<Guid>, Guid>>>();
       mockBuilder.Setup(x => x.ApplyConfiguration(configuration))
                  .Verifiable();
 
       // Act
-      mockBuilder.Object.ApplyAuditConfiguration<Guid, IdentityUser<Guid>, Guid>();
+      mockBuilder.Object.ApplyAuditableConfiguration<Guid, IdentityUser<Guid>, Guid>();
 
       // Assert
       //mockBuilder.Verify(x => x.ApplyConfiguration(It.IsAny<AuditConfiguration<Guid, IdentityUser<Guid>, Guid>>()), Times.Once);
@@ -30,12 +30,12 @@ public class AuditContextExtensionsTests
    {
       // Arrange
       var mockBuilder   = new Mock<ModelBuilder>();
-      var configuration = It.IsAny<IEntityTypeConfiguration<Audit<int, IdentityUser<int>, int>>>();
+      var configuration = It.IsAny<IEntityTypeConfiguration<AuditableEntity<int, IdentityUser<int>, int>>>();
       mockBuilder.Setup(x => x.ApplyConfiguration(configuration))
                  .Verifiable();
 
       // Act
-      mockBuilder.Object.ApplyAuditConfiguration<int, IdentityUser<int>, int>();
+      mockBuilder.Object.ApplyAuditableConfiguration<int, IdentityUser<int>, int>();
 
       // Assert
       //mockBuilder.Verify(x => x.ApplyConfiguration(It.IsAny<AuditConfiguration<int, IdentityUser<int>, int>>()), Times.Once);
@@ -46,12 +46,12 @@ public class AuditContextExtensionsTests
    {
       // Arrange
       var mockBuilder   = new Mock<ModelBuilder>();
-      var configuration = It.IsAny<IEntityTypeConfiguration<Audit<Guid, IdentityUser<string>, string>>>();
+      var configuration = It.IsAny<IEntityTypeConfiguration<AuditableEntity<Guid, IdentityUser<string>, string>>>();
       mockBuilder.Setup(x => x.ApplyConfiguration(configuration))
                  .Verifiable();
 
       // Act
-      mockBuilder.Object.ApplyAuditConfiguration<Guid, IdentityUser<string>, string>();
+      mockBuilder.Object.ApplyAuditableConfiguration<Guid, IdentityUser<string>, string>();
 
       // Assert
       //mockBuilder.Verify(x => x.ApplyConfiguration(It.IsAny<AuditConfiguration<Guid, IdentityUser<string>, string>>()), Times.Once);

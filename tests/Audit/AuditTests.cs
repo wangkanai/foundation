@@ -10,7 +10,7 @@ public class AuditTests
    public void Audit_ChangedColumns_ShouldBeInitialized()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>();
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>();
 
       // Act & Assert
       Assert.NotNull(audit.ChangedColumns);
@@ -21,7 +21,7 @@ public class AuditTests
    public void Audit_OldValues_ShouldBeInitialized()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>();
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>();
 
       // Act & Assert
       Assert.NotNull(audit.OldValues);
@@ -32,7 +32,7 @@ public class AuditTests
    public void Audit_NewValues_ShouldBeInitialized()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>();
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>();
 
       // Act & Assert
       Assert.NotNull(audit.NewValues);
@@ -43,7 +43,7 @@ public class AuditTests
    public void Audit_SetTrailType_ShouldRetainValue()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>
                   {
                      TrailType = AuditTrailType.Create
                   };
@@ -56,7 +56,7 @@ public class AuditTests
    public void Audit_SetUserId_ShouldRetainValue()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>
                   {
                      UserId = 1
                   };
@@ -70,7 +70,7 @@ public class AuditTests
    {
       // Arrange
       var user = new IdentityUser<int> { Id = 1, UserName = "TestUser" };
-      var audit = new Audit<int, IdentityUser<int>, int>
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>
                   {
                      User = user
                   };
@@ -85,7 +85,7 @@ public class AuditTests
    {
       // Arrange
       var timestamp = DateTime.UtcNow;
-      var audit = new Audit<int, IdentityUser<int>, int>
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>
                   {
                      Timestamp = timestamp
                   };
@@ -98,7 +98,7 @@ public class AuditTests
    public void Audit_SetPrimaryKey_ShouldRetainValue()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>
                   {
                      PrimaryKey = "123"
                   };
@@ -111,7 +111,7 @@ public class AuditTests
    public void Audit_SetEntityName_ShouldRetainValue()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>
                   {
                      EntityName = "TestEntity"
                   };
@@ -124,7 +124,7 @@ public class AuditTests
    public void Audit_SetChangedColumns_ShouldRetainValues()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>
                   {
                      ChangedColumns = ["Column1", "Column2"]
                   };
@@ -140,7 +140,7 @@ public class AuditTests
    public void Audit_SetOldValues_ShouldRetainValues()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>
                   {
                      OldValues = new() { { "Column1", "OldValue1" } }
                   };
@@ -157,7 +157,7 @@ public class AuditTests
    public void Audit_SetNewValues_ShouldRetainValues()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>
                   {
                      NewValues = new() { { "Column1", "NewValue1" } }
                   };
@@ -174,7 +174,7 @@ public class AuditTests
    public void Audit_SetValuesFromJson_ShouldStoreJsonDirectly()
    {
       // Arrange
-      var audit   = new Audit<int, IdentityUser<int>, int>();
+      var audit   = new AuditableEntity<int, IdentityUser<int>, int>();
       var oldJson = "{\"Column1\":\"OldValue1\",\"Column2\":42}";
       var newJson = "{\"Column1\":\"NewValue1\",\"Column2\":84}";
 
@@ -192,7 +192,7 @@ public class AuditTests
    public void Audit_SetValuesFromSpan_SmallChangeSet_ShouldOptimize()
    {
       // Arrange
-      var                  audit       = new Audit<int, IdentityUser<int>, int>();
+      var                  audit       = new AuditableEntity<int, IdentityUser<int>, int>();
       ReadOnlySpan<string> columnNames = ["Column1", "Column2"];
       ReadOnlySpan<object> oldValues   = ["OldValue1", 42];
       ReadOnlySpan<object> newValues   = ["NewValue1", 84];
@@ -214,7 +214,7 @@ public class AuditTests
    public void Audit_SetValuesFromSpan_LargeChangeSet_ShouldUseDictionary()
    {
       // Arrange
-      var                  audit       = new Audit<int, IdentityUser<int>, int>();
+      var                  audit       = new AuditableEntity<int, IdentityUser<int>, int>();
       ReadOnlySpan<string> columnNames = ["Col1", "Col2", "Col3", "Col4", "Col5"];
       ReadOnlySpan<object> oldValues   = ["Old1", "Old2", "Old3", "Old4", "Old5"];
       ReadOnlySpan<object> newValues   = ["New1", "New2", "New3", "New4", "New5"];
@@ -234,7 +234,7 @@ public class AuditTests
    public void Audit_GetOldValue_WithoutFullDeserialization_ShouldReturnCorrectValue()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>();
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>();
       audit.SetValuesFromJson("{\"Column1\":\"TestValue\",\"Column2\":123}", null);
 
       // Act
@@ -252,7 +252,7 @@ public class AuditTests
    public void Audit_GetNewValue_WithoutFullDeserialization_ShouldReturnCorrectValue()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>();
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>();
       audit.SetValuesFromJson(null, "{\"Column1\":\"TestValue\",\"Column2\":true}");
 
       // Act
@@ -270,7 +270,7 @@ public class AuditTests
    public void Audit_EmptyValues_ShouldOptimizeStorage()
    {
       // Arrange
-      var audit = new Audit<int, IdentityUser<int>, int>
+      var audit = new AuditableEntity<int, IdentityUser<int>, int>
                   {
                      OldValues = new(),
                      NewValues = new()
@@ -287,7 +287,7 @@ public class AuditTests
    public void Audit_SetValuesFromSpan_MismatchedLengths_ShouldThrowException()
    {
       // Arrange
-      var audit       = new Audit<int, IdentityUser<int>, int>();
+      var audit       = new AuditableEntity<int, IdentityUser<int>, int>();
       var columnNames = new[] { "Column1", "Column2" };
       var oldValues   = new object[] { "OldValue1" };
       var newValues   = new object[] { "NewValue1", "NewValue2" };
@@ -301,7 +301,7 @@ public class AuditTests
    public void Audit_JsonSerialization_ShouldHandleComplexTypes()
    {
       // Arrange
-      var                  audit       = new Audit<int, IdentityUser<int>, int>();
+      var                  audit       = new AuditableEntity<int, IdentityUser<int>, int>();
       var                  dateTime    = DateTime.Parse("2025-01-15T10:30:00Z");
       ReadOnlySpan<string> columnNames = ["StringCol", "DateCol", "BoolCol", "NullCol"];
       ReadOnlySpan<object> oldValues   = ["TestString", dateTime, true, null!];

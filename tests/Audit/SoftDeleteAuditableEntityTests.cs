@@ -13,7 +13,7 @@ public class SoftDeleteAuditableEntityTests
       var entity = new SoftDeleteEntity();
 
       // Assert
-      Assert.IsAssignableFrom<ISoftDeleteAuditable>(entity);
+      Assert.IsAssignableFrom<ISoftDeleteAuditableEntity>(entity);
       Assert.IsAssignableFrom<ISoftDeletable>(entity);
       Assert.IsAssignableFrom<IDeletedEntity>(entity);
       Assert.IsAssignableFrom<IAuditable>(entity);
@@ -98,7 +98,7 @@ public class SoftDeleteAuditableEntityTests
 
       // Assert
       Assert.IsAssignableFrom<IUserSoftDeleteAuditable>(entity);
-      Assert.IsAssignableFrom<ISoftDeleteAuditable>(entity);
+      Assert.IsAssignableFrom<ISoftDeleteAuditableEntity>(entity);
       Assert.IsAssignableFrom<IUserAuditable>(entity);
    }
 

@@ -3,7 +3,7 @@
 namespace Wangkanai.Audit.Models;
 
 public class SoftDeleteEntity
-   : KeyGuidEntity, ISoftDeleteAuditable
+   : KeyGuidEntity, ISoftDeleteAuditableEntity
 {
    /// <summary>Gets or sets the date and time when the entity was created.</summary>
    public DateTime? Created { get; set; }

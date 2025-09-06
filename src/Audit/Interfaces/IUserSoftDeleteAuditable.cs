@@ -4,12 +4,12 @@ namespace Wangkanai.Audit;
 
 /// <summary>Represents an auditable entity that includes user tracking for soft delete operations.</summary>
 /// <remarks>
-/// This interface extends the <see cref="ISoftDeleteAuditable"/> interface to include properties for
+/// This interface extends the <see cref="ISoftDeleteAuditableEntity"/> interface to include properties for
 /// tracking the user who performed the soft delete operation. It provides complete audit trail functionality
 /// for entities that support soft delete with user accountability.
 /// </remarks>
 public interface IUserSoftDeleteAuditable
-   : ISoftDeleteAuditable, IUserAuditable
+   : ISoftDeleteAuditableEntity, IUserAuditable
 {
    /// <summary>Gets or sets the identifier of the user who soft deleted the entity.</summary>
    /// <remarks>

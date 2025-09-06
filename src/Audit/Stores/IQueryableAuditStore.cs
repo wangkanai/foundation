@@ -21,11 +21,11 @@ public interface IQueryableAuditStore<TKey, TUserType, TUserKey>
    where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
 {
    /// <summary>
-   /// Gets an <see cref="IQueryable"/> collection of <see cref="Audit{TKey,TUserType,TUserKey}"/>.
+   /// Gets an <see cref="IQueryable"/> collection of <see cref="AuditableEntity{TKey,TUserType,TUserKey}"/>.
    /// This property provides access to query audit trail records stored in the underlying data store.
    /// </summary>
-   /// <typeparam name="TKey">The type of the primary key for the <see cref="Audit{TKey,TUserType,TUserKey}"/> entity.</typeparam>
+   /// <typeparam name="TKey">The type of the primary key for the <see cref="AuditableEntity{TKey,TUserType,TUserKey}"/> entity.</typeparam>
    /// <typeparam name="TUserType">The type representing the user associated with the audit trail.</typeparam>
    /// <typeparam name="TUserKey">The type of the primary key for the user entity.</typeparam>
-   IQueryable<Audit<TKey, TUserType, TUserKey>> Audits { get; }
+   IQueryable<AuditableEntity<TKey, TUserType, TUserKey>> Audits { get; }
 }

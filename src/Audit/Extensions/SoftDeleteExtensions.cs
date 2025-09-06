@@ -6,12 +6,12 @@ namespace Wangkanai.Audit;
 public static class SoftDeleteExtensions
 {
    /// <summary>Marks an entity as soft deleted by setting the IsDeleted flag to true and recording the deletion timestamp.</summary>
-   /// <typeparam name="T">The type of the entity that implements <see cref="ISoftDeleteAuditable"/>.</typeparam>
+   /// <typeparam name="T">The type of the entity that implements <see cref="ISoftDeleteAuditableEntity"/>.</typeparam>
    /// <param name="entity">The entity to mark as deleted.</param>
    /// <param name="deletedAt">The optional timestamp when the entity was deleted. If not provided, uses the current UTC time.</param>
    /// <returns>The same entity instance for method chaining.</returns>
    public static T MarkAsDeleted<T>(this T entity, DateTime? deletedAt = null)
-      where T : ISoftDeleteAuditable
+      where T : ISoftDeleteAuditableEntity
    {
       entity.IsDeleted = true;
       entity.Deleted   = deletedAt ?? DateTime.UtcNow;
@@ -39,11 +39,11 @@ public static class SoftDeleteExtensions
    /// <summary>
    /// Restores a soft deleted entity by setting the IsDeleted flag to false and clearing the deletion-related properties.
    /// </summary>
-   /// <typeparam name="T">The type of the entity that implements <see cref="ISoftDeleteAuditable"/>.</typeparam>
+   /// <typeparam name="T">The type of the entity that implements <see cref="ISoftDeleteAuditableEntity"/>.</typeparam>
    /// <param name="entity">The entity to restore.</param>
    /// <returns>The same entity instance for method chaining.</returns>
    public static T Restore<T>(this T entity)
-      where T : ISoftDeleteAuditable
+      where T : ISoftDeleteAuditableEntity
    {
       entity.IsDeleted = false;
       entity.Deleted   = null;

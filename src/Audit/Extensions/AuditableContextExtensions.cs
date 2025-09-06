@@ -9,7 +9,7 @@ namespace Wangkanai.Audit;
 /// <summary>
 /// Provides extension methods for configuring audit-related entity configurations in the Entity Framework model.
 /// </summary>
-public static class AuditContextExtensions
+public static class AuditableContextExtensions
 {
    /// <summary>Applies all auditable entity configurations to the Entity Framework model.</summary>
    /// <typeparam name="TKey">The type of the primary key for the auditable entities.</typeparam>
@@ -18,12 +18,12 @@ public static class AuditContextExtensions
    /// This method applies configurations for UserAuditableEntity, SoftDeleteAuditableEntity,
    /// and UserSoftDeleteAuditableEntity in a single call for convenience.
    /// </remarks>
-   public static void ApplyAuditableConfigurations<TKey, TUserType, TUserKey>(this ModelBuilder builder)
+   public static void ApplyAuditableConfiguration<TKey, TUserType, TUserKey>(this ModelBuilder builder)
       where TKey : IEquatable<TKey>, IComparable<TKey>
       where TUserType : IdentityUser<TUserKey>
       where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
    {
-      builder.ApplyAuditConfiguration<TKey, TUserType, TUserKey>();
+      builder.ApplyConfiguration(new AuditableConfiguration<TKey, TUserType, TUserKey>());
       builder.ApplyUserAuditConfiguration<TKey, TUserType, TUserKey>();
       builder.ApplySoftDeleteAuditConfiguration<TKey, TUserType, TUserKey>();
       builder.ApplySoftDeleteUserAuditConfiguration<TKey, TUserType, TUserKey>();
@@ -39,7 +39,7 @@ public static class AuditContextExtensions
       where TUserType : IdentityUser<TUserKey>
       where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
    {
-      builder.ApplyConfiguration(new AuditConfiguration<TKey, TUserType, TUserKey>());
+      builder.ApplyConfiguration(new AuditableConfiguration<TKey, TUserType, TUserKey>());
    }
 
    /// <summary>Applies user-auditable entity configuration to the Entity Framework model.</summary>

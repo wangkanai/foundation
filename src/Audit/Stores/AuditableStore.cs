@@ -12,7 +12,7 @@ namespace Wangkanai.Audit;
 /// <typeparam name="TUserKey">The type of the key for the user, which must implement <see cref="IEquatable{T}"/> and
 /// <see cref="IComparable{T}"/>.</typeparam>
 /// <param name="context">The database context instance to be used for accessing the audit trails.</param>
-public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
+public class AuditableStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    : IQueryableAuditStore<TKey, TUserType, TUserKey>
    where TContext : DbContext
    where TKey : IEquatable<TKey>, IComparable<TKey>
@@ -22,12 +22,12 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    private readonly TContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
 
-   private DbSet<Audit<TKey, TUserType, TUserKey>> AuditsSet
-      => _context.Set<Audit<TKey, TUserType, TUserKey>>();
+   private DbSet<AuditableEntity<TKey, TUserType, TUserKey>> AuditsSet
+      => _context.Set<AuditableEntity<TKey, TUserType, TUserKey>>();
 
    /// <summary>Provides a queryable collection of audit trails associated with the specified identity user and key types.</summary>
    /// <remarks>This property acts as an interface to the underlying entity set of audit trails, allowing for LINQ-based querying and manipulation of audit trail data. </remarks>
-   public IQueryable<Audit<TKey, TUserType, TUserKey>> Audits
+   public IQueryable<AuditableEntity<TKey, TUserType, TUserKey>> Audits
       => AuditsSet;
 
    /// <summary>Indicates whether changes to the context are automatically persisted to the database upon certain operations.</summary>
@@ -38,7 +38,7 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    /// <param name="audit">The audit entity to be created.</param>
    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
    /// <returns>A result containing the created audit entity, indicating success or failure with potential error information.</returns>
-   public async Task<Result<Audit<TKey, TUserType, TUserKey>>> CreateAsync(Audit<TKey, TUserType, TUserKey> audit, CancellationToken cancellationToken)
+   public async Task<Result<AuditableEntity<TKey, TUserType, TUserKey>>> CreateAsync(AuditableEntity<TKey, TUserType, TUserKey> audit, CancellationToken cancellationToken)
    {
       _context.Add(audit);
       try
@@ -58,7 +58,7 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    /// <param name="audit">The audit entity with updated information to be persisted.</param>
    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
    /// <returns>A result containing the updated audit entity, indicating success or failure with potential error details.</returns>
-   public async Task<Result<Audit<TKey, TUserType, TUserKey>>> UpdateAsync(Audit<TKey, TUserType, TUserKey> audit, CancellationToken cancellationToken)
+   public async Task<Result<AuditableEntity<TKey, TUserType, TUserKey>>> UpdateAsync(AuditableEntity<TKey, TUserType, TUserKey> audit, CancellationToken cancellationToken)
    {
       _context.Attach(audit);
       _context.Update(audit);
@@ -80,7 +80,7 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    /// <param name="audit">The audit entity to be deleted.</param>
    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
    /// <returns>A result containing the deleted audit entity, indicating success or failure with potential error information.</returns>
-   public async Task<Result<Audit<TKey, TUserType, TUserKey>>> DeleteAsync(Audit<TKey, TUserType, TUserKey> audit, CancellationToken cancellationToken)
+   public async Task<Result<AuditableEntity<TKey, TUserType, TUserKey>>> DeleteAsync(AuditableEntity<TKey, TUserType, TUserKey> audit, CancellationToken cancellationToken)
    {
       _context.Remove(audit);
 
@@ -101,9 +101,9 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    /// <param name="id">The unique identifier of the audit entry to retrieve.</param>
    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
    /// <returns>A result containing the found audit entry if it exists, or null if not found, along with success or failure information.</returns>
-   public async Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByIdAsync(TKey id, CancellationToken cancellationToken)
+   public async Task<Result<AuditableEntity<TKey, TUserType, TUserKey>?>> FindByIdAsync(TKey id, CancellationToken cancellationToken)
    {
-      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>()
+      var audit = await _context.Set<AuditableEntity<TKey, TUserType, TUserKey>>()
                                 .FindAsync(id, cancellationToken);
       return Result.Success(audit);
    }
@@ -113,9 +113,9 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    /// <param name="userId">The unique identifier of the user associated with the audit entry.</param>
    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
    /// <returns>A result containing the found audit entity or null if not found, indicating success or failure with potential error information.</returns>
-   public async Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByIdAsync(TKey id, TUserKey userId, CancellationToken cancellationToken)
+   public async Task<Result<AuditableEntity<TKey, TUserType, TUserKey>?>> FindByIdAsync(TKey id, TUserKey userId, CancellationToken cancellationToken)
    {
-      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>()
+      var audit = await _context.Set<AuditableEntity<TKey, TUserType, TUserKey>>()
                                 .FirstOrDefaultAsync(a => a.Id.Equals(id) && a.UserId!.Equals(userId), cancellationToken);
       return Result.Success(audit);
    }
@@ -124,9 +124,9 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    /// <param name="userId">The unique identifier of the user to find the associated audit entry.</param>
    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
    /// <returns>A result containing the found audit entity or null, indicating the operation's outcome with potential error information.</returns>
-   public async Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByUserIdAsync(TUserKey userId, CancellationToken cancellationToken)
+   public async Task<Result<AuditableEntity<TKey, TUserType, TUserKey>?>> FindByUserIdAsync(TUserKey userId, CancellationToken cancellationToken)
    {
-      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>()
+      var audit = await _context.Set<AuditableEntity<TKey, TUserType, TUserKey>>()
                                 .FirstOrDefaultAsync(a => a.UserId!.Equals(userId), cancellationToken);
       return Result.Success(audit);
    }
@@ -136,9 +136,9 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    /// <param name="id">The unique identifier of the audit entry to find.</param>
    /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
    /// <returns>A result containing the found audit entry if it exists, or null if not found, along with success or failure status and potential error information.</returns>
-   public async Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByUserIdAsync(TUserKey userId, TKey id, CancellationToken cancellationToken)
+   public async Task<Result<AuditableEntity<TKey, TUserType, TUserKey>?>> FindByUserIdAsync(TUserKey userId, TKey id, CancellationToken cancellationToken)
    {
-      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>()
+      var audit = await _context.Set<AuditableEntity<TKey, TUserType, TUserKey>>()
                                 .FirstOrDefaultAsync(a => a.UserId!.Equals(userId) && a.Id.Equals(id), cancellationToken);
       return Result.Success(audit);
    }

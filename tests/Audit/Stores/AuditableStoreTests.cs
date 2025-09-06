@@ -7,7 +7,7 @@ using Moq;
 
 namespace Wangkanai.Audit.Stores;
 
-public class AuditStoreTests
+public class AuditableStoreTests
 {
    private DbContextOptions<TestAuditDbContext> CreateNewContextOptions()
       => new DbContextOptionsBuilder<TestAuditDbContext>()
@@ -17,7 +17,7 @@ public class AuditStoreTests
    [Fact]
    public void Constructor_WithNullContext_ThrowsException() =>
       // Arrange & Act & Assert
-      Assert.Throws<ArgumentNullException>(() => new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(null!));
+      Assert.Throws<ArgumentNullException>(() => new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(null!));
 
    [Fact]
    public void Audits_ReturnsQueryableCollection()
@@ -26,14 +26,14 @@ public class AuditStoreTests
       var       options = CreateNewContextOptions();
       using var context = new TestAuditDbContext(options);
 
-      var store = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var store = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
 
       // Act
       var audits = store.Audits;
 
       // Assert
       Assert.NotNull(audits);
-      Assert.IsAssignableFrom<IQueryable<Audit<Guid, IdentityUser<Guid>, Guid>>>(audits);
+      Assert.IsAssignableFrom<IQueryable<AuditableEntity<Guid, IdentityUser<Guid>, Guid>>>(audits);
    }
 
    [Fact]
@@ -43,8 +43,8 @@ public class AuditStoreTests
       var             options = CreateNewContextOptions();
       await using var context = new TestAuditDbContext(options);
 
-      var store = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
-      var audit = new Audit<Guid, IdentityUser<Guid>, Guid>();
+      var store = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var audit = new AuditableEntity<Guid, IdentityUser<Guid>, Guid>();
       audit.EntityName = "Test";
 
       // Act
@@ -64,8 +64,8 @@ public class AuditStoreTests
       var             options = CreateNewContextOptions();
       await using var context = new TestAuditDbContext(options);
 
-      var store = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context) { AutoSaveChanges = false };
-      var audit = new Audit<Guid, IdentityUser<Guid>, Guid>();
+      var store = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context) { AutoSaveChanges = false };
+      var audit = new AuditableEntity<Guid, IdentityUser<Guid>, Guid>();
 
       // Act
       var result = await store.CreateAsync(audit, CancellationToken.None);
@@ -83,8 +83,8 @@ public class AuditStoreTests
       mockContext.Setup(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()))
                  .Throws(new DbUpdateConcurrencyException());
 
-      var store = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(mockContext.Object);
-      var audit = new Audit<Guid, IdentityUser<Guid>, Guid>();
+      var store = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(mockContext.Object);
+      var audit = new AuditableEntity<Guid, IdentityUser<Guid>, Guid>();
 
       // Act
       var result = await store.CreateAsync(audit, CancellationToken.None);
@@ -101,8 +101,8 @@ public class AuditStoreTests
       var             options = CreateNewContextOptions();
       await using var context = new TestAuditDbContext(options);
 
-      var store = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
-      var audit = new Audit<Guid, IdentityUser<Guid>, Guid>();
+      var store = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var audit = new AuditableEntity<Guid, IdentityUser<Guid>, Guid>();
       audit.EntityName = "Test";
 
       context.Audits.Add(audit);
@@ -127,12 +127,12 @@ public class AuditStoreTests
       // Arrange
       var mockContext = new Mock<TestAuditDbContext>(CreateNewContextOptions());
 
-      mockContext.Setup(c => c.Update(It.IsAny<Audit<Guid, IdentityUser<Guid>, Guid>>()));
+      mockContext.Setup(c => c.Update(It.IsAny<AuditableEntity<Guid, IdentityUser<Guid>, Guid>>()));
       mockContext.Setup(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()))
                  .Throws(new DbUpdateConcurrencyException());
 
-      var store = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(mockContext.Object);
-      var audit = new Audit<Guid, IdentityUser<Guid>, Guid> { EntityName = "Test" };
+      var store = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(mockContext.Object);
+      var audit = new AuditableEntity<Guid, IdentityUser<Guid>, Guid> { EntityName = "Test" };
 
       // Act
       var result = await store.UpdateAsync(audit, CancellationToken.None);
@@ -149,8 +149,8 @@ public class AuditStoreTests
       var             options = CreateNewContextOptions();
       await using var context = new TestAuditDbContext(options);
 
-      var store = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
-      var audit = new Audit<Guid, IdentityUser<Guid>, Guid>();
+      var store = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var audit = new AuditableEntity<Guid, IdentityUser<Guid>, Guid>();
       audit.EntityName = "Test";
       context.Audits.Add(audit);
       await context.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -168,12 +168,12 @@ public class AuditStoreTests
    {
       // Arrange
       var mockContext = new Mock<TestAuditDbContext>(CreateNewContextOptions());
-      mockContext.Setup(c => c.Remove(It.IsAny<Audit<Guid, IdentityUser<Guid>, Guid>>()));
+      mockContext.Setup(c => c.Remove(It.IsAny<AuditableEntity<Guid, IdentityUser<Guid>, Guid>>()));
       mockContext.Setup(c => c.SaveChangesAsync(It.IsAny<CancellationToken>()))
                  .Throws(new DbUpdateConcurrencyException());
 
-      var store = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(mockContext.Object);
-      var audit = new Audit<Guid, IdentityUser<Guid>, Guid>();
+      var store = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(mockContext.Object);
+      var audit = new AuditableEntity<Guid, IdentityUser<Guid>, Guid>();
 
       // Act
       var result = await store.DeleteAsync(audit, CancellationToken.None);
@@ -190,8 +190,8 @@ public class AuditStoreTests
       var             options = CreateNewContextOptions();
       await using var context = new TestAuditDbContext(options);
 
-      var store = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
-      var audit = new Audit<Guid, IdentityUser<Guid>, Guid>();
+      var store = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var audit = new AuditableEntity<Guid, IdentityUser<Guid>, Guid>();
       audit.EntityName = "Test";
       context.Audits.Add(audit);
       await context.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -211,7 +211,7 @@ public class AuditStoreTests
       // Arrange
       var       options = CreateNewContextOptions();
       using var context = new TestAuditDbContext(options);
-      var       store   = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var       store   = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
 
       // Act
       var result = await store.FindByIdAsync(Guid.NewGuid(), CancellationToken.None);
@@ -228,9 +228,9 @@ public class AuditStoreTests
       var             options = CreateNewContextOptions();
       await using var context = new TestAuditDbContext(options);
 
-      var store  = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var store  = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
       var userId = Guid.NewGuid();
-      var audit  = new Audit<Guid, IdentityUser<Guid>, Guid> { UserId = userId, EntityName = "Test" };
+      var audit  = new AuditableEntity<Guid, IdentityUser<Guid>, Guid> { UserId = userId, EntityName = "Test" };
 
       context.Audits.Add(audit);
       await context.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -251,8 +251,8 @@ public class AuditStoreTests
       var             options = CreateNewContextOptions();
       await using var context = new TestAuditDbContext(options);
 
-      var store = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
-      var audit = new Audit<Guid, IdentityUser<Guid>, Guid> { UserId = Guid.NewGuid(), EntityName = "Test" };
+      var store = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var audit = new AuditableEntity<Guid, IdentityUser<Guid>, Guid> { UserId = Guid.NewGuid(), EntityName = "Test" };
       context.Audits.Add(audit);
       await context.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -271,9 +271,9 @@ public class AuditStoreTests
       var             options = CreateNewContextOptions();
       await using var context = new TestAuditDbContext(options);
 
-      var store  = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var store  = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
       var userId = Guid.NewGuid();
-      var audit  = new Audit<Guid, IdentityUser<Guid>, Guid> { UserId = userId, EntityName = "Test" };
+      var audit  = new AuditableEntity<Guid, IdentityUser<Guid>, Guid> { UserId = userId, EntityName = "Test" };
       context.Audits.Add(audit);
       await context.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -293,8 +293,8 @@ public class AuditStoreTests
       var             options = CreateNewContextOptions();
       await using var context = new TestAuditDbContext(options);
 
-      var store = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
-      var audit = new Audit<Guid, IdentityUser<Guid>, Guid> { UserId = Guid.NewGuid(), EntityName = "Test" };
+      var store = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var audit = new AuditableEntity<Guid, IdentityUser<Guid>, Guid> { UserId = Guid.NewGuid(), EntityName = "Test" };
       context.Audits.Add(audit);
       await context.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -313,9 +313,9 @@ public class AuditStoreTests
       var       options = CreateNewContextOptions();
       using var context = new TestAuditDbContext(options);
 
-      var store  = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var store  = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
       var userId = Guid.NewGuid();
-      var audit  = new Audit<Guid, IdentityUser<Guid>, Guid> { UserId = userId, EntityName = "Test" };
+      var audit  = new AuditableEntity<Guid, IdentityUser<Guid>, Guid> { UserId = userId, EntityName = "Test" };
       context.Audits.Add(audit);
       await context.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -336,9 +336,9 @@ public class AuditStoreTests
       var             options = CreateNewContextOptions();
       await using var context = new TestAuditDbContext(options);
 
-      var store  = new AuditStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
+      var store  = new AuditableStore<TestAuditDbContext, Guid, IdentityUser<Guid>, Guid>(context);
       var userId = Guid.NewGuid();
-      var audit  = new Audit<Guid, IdentityUser<Guid>, Guid> { UserId = userId, EntityName = "Test" };
+      var audit  = new AuditableEntity<Guid, IdentityUser<Guid>, Guid> { UserId = userId, EntityName = "Test" };
       context.Audits.Add(audit);
       await context.SaveChangesAsync(TestContext.Current.CancellationToken);
 
@@ -352,13 +352,13 @@ public class AuditStoreTests
 
    public class TestAuditDbContext(DbContextOptions<TestAuditDbContext> options) : DbContext(options)
    {
-      public DbSet<Audit<Guid, IdentityUser<Guid>, Guid>> Audits { get; set; }
+      public DbSet<AuditableEntity<Guid, IdentityUser<Guid>, Guid>> Audits { get; set; }
       public DbSet<IdentityUser<Guid>>                    Users  { get; set; }
 
       protected override void OnModelCreating(ModelBuilder builder)
       {
          base.OnModelCreating(builder);
-         builder.ApplyAuditConfiguration<Guid, IdentityUser<Guid>, Guid>();
+         builder.ApplyAuditableConfiguration<Guid, IdentityUser<Guid>, Guid>();
       }
    }
 
