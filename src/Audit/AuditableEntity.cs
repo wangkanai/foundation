@@ -245,7 +245,7 @@ public class AuditableEntity<TKey, TUserType, TUserKey>
 /// <typeparam name="T">
 /// The type of the identifier for the entity. Must implement <see cref="IComparable{T}"/> and <see cref="IEquatable{T}"/>.
 /// </typeparam>
-public abstract class AuditableEntity<T> : Entity<T>, IAuditable
+public abstract class AuditableEntity<T> : Entity<T>, IAuditableEntity
    where T : IComparable<T>, IEquatable<T>
 {
    /// <summary>Gets or sets the date and time when the entity was created.</summary>

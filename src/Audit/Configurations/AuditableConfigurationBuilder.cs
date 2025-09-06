@@ -7,7 +7,7 @@ namespace Wangkanai.Audit.Configurations;
 public static class AuditableConfigurationBuilder
 {
    public static void ConfigureAuditableEntity<TEntity>(this EntityTypeBuilder<TEntity> builder)
-      where TEntity : class, IAuditable
+      where TEntity : class, IAuditableEntity
    {
       builder.Property(x => x.Created)
              .IsRequired(false);
