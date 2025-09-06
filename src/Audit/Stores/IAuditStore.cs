@@ -2,7 +2,9 @@
 
 namespace Wangkanai.Audit;
 
-/// <summary>Defines the contract for an audit trail store, capable of managing audit trail entities, including creation operations.</summary>
+/// <summary>
+/// Defines the contract for an audit trail store, capable of managing audit trail entities, including creation operations.
+/// </summary>
 /// <typeparam name="TKey">The type of the primary key for the audit trail entity.</typeparam>
 /// <typeparam name="TUserType">The type representing the user related to the audit trail entity.</typeparam>
 /// <typeparam name="TUserKey">The type of the primary key for the user entity.</typeparam>

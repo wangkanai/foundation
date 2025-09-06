@@ -10,7 +10,9 @@ public class PrimaryKeyResolvingMap
 {
    private readonly Dictionary<IKeyGuidEntity, IKeyGuidEntity> _resolvingMap = new();
 
-   /// <summary>Adds a mapping pair to the resolving map, associating a transient entity with its corresponding persistent entity.</summary>
+   /// <summary>
+   /// Adds a mapping pair to the resolving map, associating a transient entity with its corresponding persistent entity.
+   /// </summary>
    /// <param name="transient">The transient entity that requires a persistent reference.</param>
    /// <param name="persistent">The persistent entity associated with the transient entity.</param>
    public void AddPair(IKeyGuidEntity transient, IKeyGuidEntity persistent)
