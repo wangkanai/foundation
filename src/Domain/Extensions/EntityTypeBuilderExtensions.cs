@@ -4,7 +4,11 @@ using Wangkanai.Domain;
 
 namespace Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-/// <summary>Provides extension methods for configuring entity type properties using the <see cref="EntityTypeBuilder{TEntity}"/> from Entity Framework Core. These methods help apply conventions and default values for specific properties of entities that implement certain domain-driven design interfaces.</summary>
+/// <summary>
+/// Provides extension methods for configuring entity type properties using the <see cref="EntityTypeBuilder{TEntity}"/> from
+/// Entity Framework Core. These methods help apply conventions and default values for specific properties of
+/// entities that implement certain domain-driven design interfaces.
+/// </summary>
 public static class EntityTypeBuilderExtensions
 {
    /// <summary>
@@ -37,7 +41,9 @@ public static class EntityTypeBuilderExtensions
    /// allowing for any comparable and equatable type as the key.
    /// </summary>
    /// <typeparam name="T">The type of the entity being configured. Must implement <see cref="IEntity{TKey}"/>.</typeparam>
-   /// <typeparam name="TKey">The type of the key used by the entity. Must implement <see cref="IComparable{T}"/> and <see cref="IEquatable{T}"/>.</typeparam>
+   /// <typeparam name="TKey">
+   /// The type of the key used by the entity. Must implement <see cref="IComparable{T}"/> and <see cref="IEquatable{T}"/>.
+   /// </typeparam>
    /// <param name="builder">The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type.</param>
    public static void NewKeyOnAdd<T, TKey>(this EntityTypeBuilder<T> builder)
       where T : class, IEntity<TKey>
