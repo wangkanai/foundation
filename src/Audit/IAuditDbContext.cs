@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Wangkanai.EntityFramework;
+namespace Wangkanai.Audit;
 
 /// <summary>
 /// Defines the contract for an audit-aware database context.
