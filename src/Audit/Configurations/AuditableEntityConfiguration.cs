@@ -30,15 +30,15 @@ public abstract class AuditableEntityConfiguration<TEntity, TKey> : IEntityTypeC
 	protected virtual void ConfigureAuditableProperties(EntityTypeBuilder<TEntity> builder)
 	{
 		// Configure base auditable properties
-		builder.Property("Created")
+		builder.Property(x => x.Created)
 			   .IsRequired(false);
 
-		builder.Property("Updated")
+		builder.Property(x => x.Updated)
 			   .IsRequired(false);
 
 		// Create indexes for efficient querying
-		builder.HasIndex("Created");
-		builder.HasIndex("Updated");
+		builder.HasIndex(x => x.Created);
+		builder.HasIndex(x => x.Updated);
 	}
 
 	/// <summary>Override this method to configure additional properties specific to the derived entity type.</summary>

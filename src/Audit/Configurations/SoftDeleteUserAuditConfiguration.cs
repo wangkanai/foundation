@@ -6,19 +6,19 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Wangkanai.Audit.Configurations;
 
 /// <summary>
-/// Provides the configuration for the <see cref="UserSoftDeleteAuditableEntity{T}"/> entity type.
+/// Provides the configuration for the <see cref="UserSoftDeleteAuditableEntity{TKey}"/> entity type.
 /// This class is responsible for defining the model and entity relationship mappings for use with Entity Framework
 /// for entities that require comprehensive audit tracking with user information and soft delete capabilities.
 /// </summary>
-/// <typeparam name="T">
+/// <typeparam name="TKey">
 /// The type of the primary key for the auditable entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
-public class SoftDeleteUserAuditConfiguration<T> : AuditableEntityConfiguration<UserSoftDeleteAuditableEntity<T>, T>
-	where T : IEquatable<T>, IComparable<T>
+public class SoftDeleteUserAuditConfiguration<TKey> : AuditableEntityConfiguration<UserSoftDeleteAuditableEntity<TKey>, TKey>
+	where TKey : IEquatable<TKey>, IComparable<TKey>
 {
-	/// <summary>Configures all properties for the <see cref="UserSoftDeleteAuditableEntity{T}"/> class.</summary>
+	/// <summary>Configures all properties for the <see cref="UserSoftDeleteAuditableEntity{TKey}"/> class.</summary>
 	/// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
-	protected override void ConfigureAdditionalProperties(EntityTypeBuilder<UserSoftDeleteAuditableEntity<T>> builder)
+	protected override void ConfigureAdditionalProperties(EntityTypeBuilder<UserSoftDeleteAuditableEntity<TKey>> builder)
 	{
 		// Configure user tracking properties
 		builder.Property(x => x.CreatedBy)

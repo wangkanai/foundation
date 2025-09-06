@@ -6,19 +6,19 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Wangkanai.Audit.Configurations;
 
 /// <summary>
-/// Provides the configuration for the <see cref="UserAuditableEntity{T}"/> entity type.
+/// Provides the configuration for the <see cref="UserAuditableEntity{TKey}"/> entity type.
 /// This class is responsible for defining the model and entity relationship mappings for use with Entity Framework
 /// for entities that require user tracking during create and update operations.
 /// </summary>
-/// <typeparam name="T">
+/// <typeparam name="TKey">
 /// The type of the primary key for the auditable entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
-public class UserAuditConfiguration<T> : AuditableEntityConfiguration<UserAuditableEntity<T>, T>
-	where T : IEquatable<T>, IComparable<T>
+public class UserAuditConfiguration<TKey> : AuditableEntityConfiguration<UserAuditableEntity<TKey>, TKey>
+	where TKey : IEquatable<TKey>, IComparable<TKey>
 {
-	/// <summary>Configures the additional user tracking properties for the <see cref="UserAuditableEntity{T}"/> class.</summary>
+	/// <summary>Configures the additional user tracking properties for the <see cref="UserAuditableEntity{TKey}"/> class.</summary>
 	/// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
-	protected override void ConfigureAdditionalProperties(EntityTypeBuilder<UserAuditableEntity<T>> builder)
+	protected override void ConfigureAdditionalProperties(EntityTypeBuilder<UserAuditableEntity<TKey>> builder)
 	{
 		// Configure user tracking properties
 		builder.Property(x => x.CreatedBy)
