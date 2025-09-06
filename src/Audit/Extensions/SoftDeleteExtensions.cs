@@ -18,7 +18,10 @@ public static class SoftDeleteExtensions
       return entity;
    }
 
-   /// <summary>Marks an entity as soft deleted with user tracking by setting the IsDeleted flag to true, recording the deletion timestamp, and tracking the user who performed the deletion.</summary>
+   /// <summary>
+   /// Marks an entity as soft deleted with user tracking by setting the IsDeleted flag to true, recording the deletion timestamp,
+   /// and tracking the user who performed the deletion.
+   /// </summary>
    /// <typeparam name="T">The type of the entity that implements <see cref="IUserSoftDeleteAuditable"/>.</typeparam>
    /// <param name="entity">The entity to mark as deleted.</param>
    /// <param name="deletedBy">The identifier of the user who performed the deletion.</param>
@@ -33,7 +36,9 @@ public static class SoftDeleteExtensions
       return entity;
    }
 
-   /// <summary>Restores a soft deleted entity by setting the IsDeleted flag to false and clearing the deletion-related properties.</summary>
+   /// <summary>
+   /// Restores a soft deleted entity by setting the IsDeleted flag to false and clearing the deletion-related properties.
+   /// </summary>
    /// <typeparam name="T">The type of the entity that implements <see cref="ISoftDeleteAuditable"/>.</typeparam>
    /// <param name="entity">The entity to restore.</param>
    /// <returns>The same entity instance for method chaining.</returns>

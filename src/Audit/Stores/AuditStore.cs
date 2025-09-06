@@ -21,19 +21,18 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
 {
    private readonly TContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
-   private bool _disposed;
 
    private DbSet<Audit<TKey, TUserType, TUserKey>> AuditsSet
       => _context.Set<Audit<TKey, TUserType, TUserKey>>();
-
-   /// <summary>Indicates whether changes to the context are automatically persisted to the database upon certain operations.</summary>
-   /// <remarks>When set to true, any modifications to the underlying data store resulting from method calls such as creation, update, or delete will automatically trigger a call to save changes on the database context. If set to false, changes must be explicitly saved manually by invoking the appropriate context method.</remarks>
-   public bool AutoSaveChanges { get; set; } = true;
 
    /// <summary>Provides a queryable collection of audit trails associated with the specified identity user and key types.</summary>
    /// <remarks>This property acts as an interface to the underlying entity set of audit trails, allowing for LINQ-based querying and manipulation of audit trail data. </remarks>
    public IQueryable<Audit<TKey, TUserType, TUserKey>> Audits
       => AuditsSet;
+
+   /// <summary>Indicates whether changes to the context are automatically persisted to the database upon certain operations.</summary>
+   /// <remarks>When set to true, any modifications to the underlying data store resulting from method calls such as creation, update, or delete will automatically trigger a call to save changes on the database context. If set to false, changes must be explicitly saved manually by invoking the appropriate context method.</remarks>
+   public bool AutoSaveChanges { get; set; } = true;
 
    /// <summary>Creates a new audit trail entry in the underlying storage context.</summary>
    /// <param name="audit">The audit entity to be created.</param>
@@ -104,7 +103,8 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    /// <returns>A result containing the found audit entry if it exists, or null if not found, along with success or failure information.</returns>
    public async Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByIdAsync(TKey id, CancellationToken cancellationToken)
    {
-      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>().FindAsync(id, cancellationToken);
+      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>()
+                                .FindAsync(id, cancellationToken);
       return Result.Success(audit);
    }
 
@@ -115,7 +115,8 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    /// <returns>A result containing the found audit entity or null if not found, indicating success or failure with potential error information.</returns>
    public async Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByIdAsync(TKey id, TUserKey userId, CancellationToken cancellationToken)
    {
-      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>().FirstOrDefaultAsync(a => a.Id.Equals(id) && a.UserId!.Equals(userId), cancellationToken);
+      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>()
+                                .FirstOrDefaultAsync(a => a.Id.Equals(id) && a.UserId!.Equals(userId), cancellationToken);
       return Result.Success(audit);
    }
 
@@ -125,7 +126,8 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    /// <returns>A result containing the found audit entity or null, indicating the operation's outcome with potential error information.</returns>
    public async Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByUserIdAsync(TUserKey userId, CancellationToken cancellationToken)
    {
-      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>().FirstOrDefaultAsync(a => a.UserId!.Equals(userId), cancellationToken);
+      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>()
+                                .FirstOrDefaultAsync(a => a.UserId!.Equals(userId), cancellationToken);
       return Result.Success(audit);
    }
 
@@ -136,9 +138,14 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
    /// <returns>A result containing the found audit entry if it exists, or null if not found, along with success or failure status and potential error information.</returns>
    public async Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByUserIdAsync(TUserKey userId, TKey id, CancellationToken cancellationToken)
    {
-      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>().FirstOrDefaultAsync(a => a.UserId!.Equals(userId) && a.Id.Equals(id), cancellationToken);
+      var audit = await _context.Set<Audit<TKey, TUserType, TUserKey>>()
+                                .FirstOrDefaultAsync(a => a.UserId!.Equals(userId) && a.Id.Equals(id), cancellationToken);
       return Result.Success(audit);
    }
+
+
+   private Task SaveChangesAsync(CancellationToken cancellationToken)
+      => AutoSaveChanges ? _context.SaveChangesAsync(cancellationToken) : Task.CompletedTask;
 
    /// <summary>Releases the resources used by the current instance of the class.</summary>
    public void Dispose()
@@ -147,9 +154,7 @@ public class AuditStore<TContext, TKey, TUserType, TUserKey>(TContext context)
       GC.SuppressFinalize(this);
    }
 
-   private Task SaveChangesAsync(CancellationToken cancellationToken)
-      => AutoSaveChanges ? _context.SaveChangesAsync(cancellationToken) : Task.CompletedTask;
-
+   private bool _disposed;
 
    private void Dispose(bool disposing)
    {

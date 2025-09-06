@@ -8,7 +8,8 @@ namespace Wangkanai.EntityFramework.Generators;
 public sealed class DateTimeNowGenerator
    : ValueGenerator<DateTime>
 {
-   public override bool GeneratesTemporaryValues => false;
+   public override bool GeneratesTemporaryValues
+      => false;
 
    public override DateTime Next(EntityEntry entry)
    {
