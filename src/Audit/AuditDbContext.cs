@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Wangkanai.EntityFramework;
+namespace Wangkanai.Audit;
 
 /// <summary>
 /// Represents an abstract database context that supports auditing capabilities.
