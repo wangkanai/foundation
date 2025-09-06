@@ -15,34 +15,34 @@ namespace Wangkanai.Audit.Configurations;
 /// </typeparam>
 public abstract class AuditableEntityConfiguration<TEntity, TKey>
    : IEntityTypeConfiguration<TEntity>
-	where TEntity : class, IAuditable
-	where TKey : IEquatable<TKey>, IComparable<TKey>
+   where TEntity : class, IAuditable
+   where TKey : IEquatable<TKey>, IComparable<TKey>
 {
-	/// <summary>Configures the base auditable properties for the entity.</summary>
-	/// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
-	public virtual void Configure(EntityTypeBuilder<TEntity> builder)
-	{
-		ConfigureAuditableProperties(builder);
-		ConfigureAdditionalProperties(builder);
-	}
+   /// <summary>Configures the base auditable properties for the entity.</summary>
+   /// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
+   public virtual void Configure(EntityTypeBuilder<TEntity> builder)
+   {
+      ConfigureAuditableProperties(builder);
+      ConfigureAdditionalProperties(builder);
+   }
 
-	/// <summary>Configures the basic auditable timestamp properties.</summary>
-	/// <param name="builder">The entity type builder.</param>
-	protected virtual void ConfigureAuditableProperties(EntityTypeBuilder<TEntity> builder)
-	{
-		// Configure base auditable properties
-		builder.Property(x => x.Created)
-			   .IsRequired(false);
+   /// <summary>Configures the basic auditable timestamp properties.</summary>
+   /// <param name="builder">The entity type builder.</param>
+   protected virtual void ConfigureAuditableProperties(EntityTypeBuilder<TEntity> builder)
+   {
+      // Configure base auditable properties
+      builder.Property(x => x.Created)
+             .IsRequired(false);
 
-		builder.Property(x => x.Updated)
-			   .IsRequired(false);
+      builder.Property(x => x.Updated)
+             .IsRequired(false);
 
-		// Create indexes for efficient querying
-		builder.HasIndex(x => x.Created);
-		builder.HasIndex(x => x.Updated);
-	}
+      // Create indexes for efficient querying
+      builder.HasIndex(x => x.Created);
+      builder.HasIndex(x => x.Updated);
+   }
 
-	/// <summary>Override this method to configure additional properties specific to the derived entity type.</summary>
-	/// <param name="builder">The entity type builder.</param>
-	protected abstract void ConfigureAdditionalProperties(EntityTypeBuilder<TEntity> builder);
+   /// <summary>Override this method to configure additional properties specific to the derived entity type.</summary>
+   /// <param name="builder">The entity type builder.</param>
+   protected abstract void ConfigureAdditionalProperties(EntityTypeBuilder<TEntity> builder);
 }
