@@ -52,26 +52,21 @@ public class AuditConfiguration<TKey, TUserType, TUserKey>
       builder.Property(x => x.EntityName)
              .IsRequired();
 
-      // Store ChangedColumns as JSON
       builder.Property(x => x.ChangedColumns)
-             .HasColumnType("jsonb")
+             .HasColumnType(ConfigNames.Jsonb)
              .HasConversion(
                             c => JsonSerializer.Serialize(c, (JsonSerializerOptions?)null),
                             c => JsonSerializer.Deserialize<List<string>>(c, (JsonSerializerOptions?)null) ?? new List<string>()
                            );
 
-      // Store OldValuesJson directly as the underlying storage
       builder.Property(x => x.OldValuesJson)
-             .HasColumnName("OldValues")
-             .HasColumnType("jsonb");
-
-      // Store NewValuesJson directly as the underlying storage
-      builder.Property(x => x.NewValuesJson)
-             .HasColumnName("NewValues")
-             .HasColumnType("jsonb");
-
-      // Ignore the computed properties that use JSON deserialization
+             .HasColumnName(ConfigNames.OldValues)
+             .HasColumnType(ConfigNames.Jsonb);
       builder.Ignore(x => x.OldValues);
+
+      builder.Property(x => x.NewValuesJson)
+             .HasColumnName(ConfigNames.NewValues)
+             .HasColumnType(ConfigNames.Jsonb);
       builder.Ignore(x => x.NewValues);
 
       builder.Property(x => x.UserId);
