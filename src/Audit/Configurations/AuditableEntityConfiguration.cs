@@ -7,7 +7,7 @@ namespace Wangkanai.Audit.Configurations;
 
 /// <summary>
 /// Provides the base configuration for auditable entities with timestamp tracking.
-/// This class defines common audit properties and indexes for entities implementing <see cref="IAuditable"/>.
+/// This class defines common audit properties and indexes for entities implementing <see cref="IAuditableEntity"/>.
 /// </summary>
 /// <typeparam name="TEntity">The auditable entity type.</typeparam>
 /// <typeparam name="TKey">
@@ -15,7 +15,7 @@ namespace Wangkanai.Audit.Configurations;
 /// </typeparam>
 public abstract class AuditableEntityConfiguration<TEntity, TKey>
    : IEntityTypeConfiguration<TEntity>
-   where TEntity : class, IAuditable
+   where TEntity : class, IAuditableEntity
    where TKey : IEquatable<TKey>, IComparable<TKey>
 {
    /// <summary>Configures the base auditable properties for the entity.</summary>

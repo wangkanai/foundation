@@ -63,12 +63,12 @@ public static class EntityTypeBuilderExtensions
    /// <summary>
    /// Configures the entity type for comprehensive soft delete audit functionality.
    /// Sets up the IsDeleted property with a default value of false and configures the Deleted timestamp property.
-   /// This method is intended for entities implementing the <see cref="ISoftDeleteAuditable"/> interface.
+   /// This method is intended for entities implementing the <see cref="ISoftDeleteAuditableEntity"/> interface.
    /// </summary>
-   /// <typeparam name="T">The type of the entity being configured. Must implement <see cref="ISoftDeleteAuditable"/>.</typeparam>
+   /// <typeparam name="T">The type of the entity being configured. Must implement <see cref="ISoftDeleteAuditableEntity"/>.</typeparam>
    /// <param name="builder">The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type.</param>
    public static void HasSoftDeleteAudit<T>(this EntityTypeBuilder<T> builder)
-      where T : class, ISoftDeleteAuditable
+      where T : class, ISoftDeleteAuditableEntity
    {
       builder.HasDefaultCreatedAndUpdated();
       builder.HasDefaultSoftDelete();

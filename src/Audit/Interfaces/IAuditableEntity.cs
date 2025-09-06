@@ -7,5 +7,4 @@ namespace Wangkanai.Audit;
 /// This interface combines the functionality of <see cref="ICreatedEntity"/> and
 /// <see cref="IUpdatedEntity"/> to provide a standard structure for auditing entities.
 /// </remarks>
-public interface IAuditable
-   : ICreatedEntity, IUpdatedEntity;
+public interface IAuditableEntity : ICreatedEntity, IUpdatedEntity;

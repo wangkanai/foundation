@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Wangkanai.Audit.Configurations;
 
 /// <summary>
-/// Provides the configuration for the <see cref="Audit{TKey, TUserType, TUserKey}"/> entity type.
+/// Provides the configuration for the <see cref="AuditableEntity{TKey,TUserType,TUserKey}"/> entity type.
 /// This class is responsible for defining the model and entity relationship mappings for use with Entity Framework.
 /// </summary>
 /// <typeparam name="TKey">
@@ -20,15 +20,15 @@ namespace Wangkanai.Audit.Configurations;
 /// <typeparam name="TUserKey">
 /// The type of the primary key for the associated user. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
-public class AuditConfiguration<TKey, TUserType, TUserKey>
-   : IEntityTypeConfiguration<Audit<TKey, TUserType, TUserKey>>
+public class AuditableConfiguration<TKey, TUserType, TUserKey>
+   : IEntityTypeConfiguration<AuditableEntity<TKey, TUserType, TUserKey>>
    where TKey : IEquatable<TKey>, IComparable<TKey>
    where TUserType : IdentityUser<TUserKey>
    where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
 {
-   /// <summary>Configures the entity type for the <see cref="Audit{TKey, TUserType, TUserKey}"/> class.</summary>
+   /// <summary>Configures the entity type for the <see cref="AuditableEntity{TKey,TUserType,TUserKey}"/> class.</summary>
    /// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
-   public void Configure(EntityTypeBuilder<Audit<TKey, TUserType, TUserKey>> builder)
+   public void Configure(EntityTypeBuilder<AuditableEntity<TKey, TUserType, TUserKey>> builder)
    {
       builder.HasKey(x => x.Id);
       builder.Property(x => x.Id);

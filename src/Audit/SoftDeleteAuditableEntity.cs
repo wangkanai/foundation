@@ -7,7 +7,7 @@ namespace Wangkanai.Audit;
 /// The type of the identifier for the entity. Must implement <see cref="IComparable{T}"/> and <see cref="IEquatable{T}"/>.
 /// </typeparam>
 public abstract class SoftDeleteAuditableEntity<T>
-   : AuditableEntity<T>, ISoftDeleteAuditable
+   : AuditableEntity<T>, ISoftDeleteAuditableEntity
    where T : IComparable<T>, IEquatable<T>
 {
    /// <summary>Gets or sets a value indicating whether the entity has been softly deleted.</summary>
