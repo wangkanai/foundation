@@ -11,11 +11,15 @@ namespace Wangkanai.Audit.Configurations;
 /// Provides the configuration for the <see cref="Audit{TKey, TUserType, TUserKey}"/> entity type.
 /// This class is responsible for defining the model and entity relationship mappings for use with Entity Framework.
 /// </summary>
-/// <typeparam name="TKey">The type of the primary key for the audit entity. Must implement <see cref="IEquatable{T}"/> and
-/// <see cref="IComparable{T}"/>.</typeparam>
-/// <typeparam name="TUserType">The user type associated with the audit entity. Must derive from <see cref="IdentityUser"/>.</typeparam>
-/// <typeparam name="TUserKey">The type of the primary key for the associated user. Must implement <see cref="IEquatable{T}"/> and
-/// <see cref="IComparable{T}"/>.</typeparam>
+/// <typeparam name="TKey">
+/// The type of the primary key for the audit entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
+/// </typeparam>
+/// <typeparam name="TUserType">
+/// The user type associated with the audit entity. Must derive from <see cref="IdentityUser"/>.
+/// </typeparam>
+/// <typeparam name="TUserKey">
+/// The type of the primary key for the associated user. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
+/// </typeparam>
 public class AuditConfiguration<TKey, TUserType, TUserKey>
    : IEntityTypeConfiguration<Audit<TKey, TUserType, TUserKey>>
    where TKey : IEquatable<TKey>, IComparable<TKey>
@@ -39,7 +43,8 @@ public class AuditConfiguration<TKey, TUserType, TUserKey>
 
       builder.Property(x => x.Timestamp)
              .IsRequired()
-             .HasConversion(to => DateTime.SpecifyKind(to, DateTimeKind.Utc), value => DateTime.SpecifyKind(value, DateTimeKind.Utc));
+             .HasConversion(c => DateTime.SpecifyKind(c, DateTimeKind.Utc),
+                            c => DateTime.SpecifyKind(c, DateTimeKind.Utc));
 
       builder.Property(x => x.TrailType)
              .HasConversion<string>();
@@ -60,7 +65,7 @@ public class AuditConfiguration<TKey, TUserType, TUserKey>
              .HasColumnName("OldValues")
              .HasColumnType("jsonb");
 
-      // Store NewValuesJson directly as the underlying storage  
+      // Store NewValuesJson directly as the underlying storage
       builder.Property(x => x.NewValuesJson)
              .HasColumnName("NewValues")
              .HasColumnType("jsonb");
