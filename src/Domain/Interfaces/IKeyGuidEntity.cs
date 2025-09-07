@@ -12,5 +12,4 @@ namespace Wangkanai.Domain;
 /// entities within a domain-driven design context.
 /// It is commonly used for entities where a globally unique identifier is required.
 /// </remarks>
-public interface IKeyGuidEntity
-   : IEntity<Guid>;
+public interface IKeyGuidEntity : IEntity<Guid>;

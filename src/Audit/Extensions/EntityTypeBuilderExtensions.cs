@@ -8,7 +8,7 @@ namespace Wangkanai.Audit;
 public static class EntityTypeBuilderExtensions
 {
    /// <summary>
-   /// Configures the entity type to set a default value of the current date and time for the
+   /// Configures the entity type to set a default value of the current UTC DateTimeOffset for the
    /// <see cref="ICreatedEntity.Created"/> property when a new entity is added to the database context.
    /// This method is intended for entities implementing the <see cref="ICreatedEntity"/> interface.
    /// </summary>
@@ -18,13 +18,13 @@ public static class EntityTypeBuilderExtensions
       where T : class, ICreatedEntity
    {
       builder.Property(x => x.Created)
-             .HasDefaultValue(DateTime.Now)
+             .HasDefaultValueSql("SYSDATETIMEOFFSET()")
              .ValueGeneratedOnAdd();
       builder.HasIndex(x => x.Created);
    }
 
    /// <summary>
-   /// Configures the entity type to set a default value for the <see cref="IUpdatedEntity.Updated"/> property and
+   /// Configures the entity type to set a default value for the <see cref="IUpdatedEntity.Updated"/> property using UTC DateTimeOffset and
    /// to mark it as a value that is automatically generated when the entity is updated.
    /// This method is intended for entities that implement the <see cref="IUpdatedEntity"/> interface.
    /// </summary>
@@ -34,17 +34,17 @@ public static class EntityTypeBuilderExtensions
       where T : class, IUpdatedEntity
    {
       builder.Property(x => x.Updated)
-             .HasDefaultValue(DateTime.Now)
+             .HasDefaultValueSql("SYSDATETIMEOFFSET()")
              .ValueGeneratedOnUpdate();
       builder.HasIndex(x => x.Updated);
    }
 
    /// <summary>
    /// Configures the entity type to set default values and value generation strategies for the
-   /// <see cref="ICreatedEntity.Created"/> and <see cref="IUpdatedEntity.Updated"/> properties.
-   /// The <see cref="ICreatedEntity.Created"/> property is assigned a default value of the current date and time and
+   /// <see cref="ICreatedEntity.Created"/> and <see cref="IUpdatedEntity.Updated"/> properties using UTC DateTimeOffset.
+   /// The <see cref="ICreatedEntity.Created"/> property is assigned a default value of the current UTC DateTimeOffset and
    /// is generated when a new entity is added.
-   /// The Updated property is assigned a default value of the current date and time and is generated or
+   /// The Updated property is assigned a default value of the current UTC DateTimeOffset and is generated or
    /// updated when the entity is added or modified.
    /// </summary>
    /// <typeparam name="T">
@@ -57,7 +57,7 @@ public static class EntityTypeBuilderExtensions
       builder.HasDefaultCreated();
 
       builder.Property(x => x.Updated)
-             .HasDefaultValue(DateTime.Now)
+             .HasDefaultValueSql("SYSDATETIMEOFFSET()")
              .ValueGeneratedOnAddOrUpdate();
       builder.HasIndex(x => x.Updated);
    }

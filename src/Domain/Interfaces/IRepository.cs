@@ -8,8 +8,7 @@ namespace Wangkanai.Domain;
 /// and supporting transactional unit-of-work patterns.
 /// </summary>
 /// <typeparam name="T">The type of entity that the repository will manage. Must be a reference type.</typeparam>
-public interface IRepository<in T>
-   : IDisposable where T : class
+public interface IRepository<in T> : IDisposable where T : class
 {
    /// <summary>
    /// Represents a transactional unit-of-work property that is associated with the repository instance.

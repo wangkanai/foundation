@@ -8,4 +8,4 @@ namespace Wangkanai.Audit;
 /// It extends the <see cref="IDeletedEntity"/> interface, inheriting the contract for capturing and storing the
 /// deletion timestamp, which is often used in soft delete mechanisms.
 /// </remarks>
-public interface IDeletableEntity : IDeletedEntity;
+public interface IDeletable : IDeletedEntity;

@@ -10,5 +10,4 @@ namespace Wangkanai.Domain;
 /// This interface ensures the encapsulation and consistency of business logic across complex domain entities that share a common aggregate root.
 /// By using a <see cref="Guid"/> key, it provides a universally unique identifier for entities.
 /// </remarks>
-public interface IGuidAggregateRoot
-   : IAggregateRoot<Guid>, IKeyGuidEntity;
+public interface IGuidAggregateRoot : IAggregateRoot<Guid>, IKeyGuidEntity;

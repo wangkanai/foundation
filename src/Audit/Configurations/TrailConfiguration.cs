@@ -53,20 +53,20 @@ public class TrailConfiguration<TKey, TUserType, TUserKey> : IEntityTypeConfigur
              .IsRequired();
 
       builder.Property(x => x.ChangedColumns)
-             .HasColumnType(ConfigNames.Jsonb)
+             .HasColumnType(Configuration.Jsonb)
              .HasConversion(
                             c => JsonSerializer.Serialize(c, (JsonSerializerOptions?)null),
                             c => JsonSerializer.Deserialize<List<string>>(c, (JsonSerializerOptions?)null) ?? new List<string>()
                            );
 
       builder.Property(x => x.OldValuesJson)
-             .HasColumnName(ConfigNames.OldValues)
-             .HasColumnType(ConfigNames.Jsonb);
+             .HasColumnName(Configuration.OldValues)
+             .HasColumnType(Configuration.Jsonb);
       builder.Ignore(x => x.OldValues);
 
       builder.Property(x => x.NewValuesJson)
-             .HasColumnName(ConfigNames.NewValues)
-             .HasColumnType(ConfigNames.Jsonb);
+             .HasColumnName(Configuration.NewValues)
+             .HasColumnType(Configuration.Jsonb);
       builder.Ignore(x => x.NewValues);
 
       builder.Property(x => x.UserId);

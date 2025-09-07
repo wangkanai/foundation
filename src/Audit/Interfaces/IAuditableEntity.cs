@@ -3,10 +3,10 @@
 namespace Wangkanai.Audit;
 
 /// <summary>
-/// Represents an auditable entity with properties and behaviors that allow tracking of its creation, update, and deletion states.
+/// Represents an auditable entity with timezone-aware properties and behaviors that allow tracking of its creation, update, and deletion states.
 /// </summary>
 /// <remarks>
-/// Implementing this interface indicates that an entity captures audit information related to its lifecycle events, including
-/// creation, updates, and deletions.
+/// Implementing this interface indicates that an entity captures timezone-aware audit information related to its lifecycle events, including
+/// creation, updates, and deletions using DateTimeOffset for precise timestamp tracking across different timezones.
 /// </remarks>
 public interface IAuditableEntity : ICreatedEntity, IUpdatedEntity, IDeletedEntity;
