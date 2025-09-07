@@ -253,4 +253,3 @@ public class AuditableEntity<TKey, TUserType, TUserKey> : Entity<TKey>
          _                    => element.GetRawText()
       };
 }
-
