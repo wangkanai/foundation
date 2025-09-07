@@ -16,5 +16,9 @@ public static class AuditableConfigurationBuilder
       builder.Property(x => x.Updated)
              .IsRequired(false);
       builder.HasIndex();
+
+      builder.Property(x=> x.Deleted)
+             .IsRequired(false);
+      builder.HasIndex(x=> x.Deleted);
    }
 }
