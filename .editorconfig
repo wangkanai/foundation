@@ -7,7 +7,7 @@ charset                                                                         
 indent_style                                                                     = space
 indent_size                                                                      = 3
 tab_width                                                                        = 3
-end_of_line                                                                      = crlf
+end_of_line                                                                      = lf
 insert_final_newline                                                             = false
 max_line_length                                                                  = 200
 ij_any_wrap_long_lines                                                           = false
