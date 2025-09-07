@@ -6,12 +6,53 @@ using System.Text.Json.Serialization;
 
 namespace Wangkanai.Audit;
 
+/// <summary>Represents an auditable entity with properties for tracking creation and modification timestamps.</summary>
+/// <typeparam name="T">
+/// The type of the identifier for the entity. Must implement <see cref="IComparable{T}"/> and <see cref="IEquatable{T}"/>.
+/// </typeparam>
+public  class AuditableEntity<T> : Entity<T>, IAuditableEntity
+   where T : IComparable<T>, IEquatable<T>
+{
+   /// <summary>Gets or sets the date and time when the entity was created.</summary>
+   /// <remarks>
+   /// This property is nullable to account for scenarios where the creation timestamp might not be immediately available or applicable.
+   /// It is primarily used to track when the entity was first instantiated or persisted into the system.
+   /// </remarks>
+   public DateTime? Created { get; set; }
+
+   /// <summary>Gets or sets the date and time when the entity was last updated.</summary>
+   /// <remarks>
+   /// This property is nullable to accommodate scenarios where the last updated timestamp may not be available or applicable.
+   /// It is typically used to track modifications made to the entity after its initial creation.
+   /// </remarks>
+   public DateTime? Updated { get; set; }
+
+   public DateTime? Deleted { get; set; }
+
+   /// <summary>Determines whether the auditable properties of the entity should be serialized.</summary>
+   /// <remarks>
+   /// This property acts as a central flag to control the serialization of all auditable timestamp properties, such as creation and modification dates.
+   /// It can be overridden in derived classes to customize the serialization behavior based on specific requirements.
+   /// </remarks>
+   public virtual bool ShouldSerializeAuditableProperties
+      => true;
+
+   /// <summary>Determines whether the Created date of the entity should be serialized.</summary>
+   /// <returns>A boolean value indicating whether the Created date should be included in serialization.</returns>
+   public virtual bool ShouldSerializeCreatedDate()
+      => ShouldSerializeAuditableProperties;
+
+   /// <summary>Determines whether the Updated date of the entity should be serialized.</summary>
+   /// <returns>A boolean value indicating whether the Updated date should be included in serialization.</returns>
+   public virtual bool ShouldSerializeUpdatedDate()
+      => ShouldSerializeAuditableProperties;
+}
+
 /// <summary>Represents an audit trail record for tracking entity changes in the system.</summary>
 /// <typeparam name="TKey">The type of the unique identifier for the audit trail.</typeparam>
 /// <typeparam name="TUserType">The type of the user associated with the audit action.</typeparam>
 /// <typeparam name="TUserKey">The type of the user's unique identifier.</typeparam>
-public class AuditableEntity<TKey, TUserType, TUserKey>
-   : Entity<TKey>
+public abstract class AuditableEntity<TKey, TUserType, TUserKey> : Entity<TKey>
    where TKey : IEquatable<TKey>, IComparable<TKey>
    where TUserType : IdentityUser<TUserKey>
    where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
@@ -241,42 +282,3 @@ public class AuditableEntity<TKey, TUserType, TUserKey>
       };
 }
 
-/// <summary>Represents an auditable entity with properties for tracking creation and modification timestamps.</summary>
-/// <typeparam name="T">
-/// The type of the identifier for the entity. Must implement <see cref="IComparable{T}"/> and <see cref="IEquatable{T}"/>.
-/// </typeparam>
-public abstract class AuditableEntity<T> : Entity<T>, IAuditableEntity
-   where T : IComparable<T>, IEquatable<T>
-{
-   /// <summary>Gets or sets the date and time when the entity was created.</summary>
-   /// <remarks>
-   /// This property is nullable to account for scenarios where the creation timestamp might not be immediately available or applicable.
-   /// It is primarily used to track when the entity was first instantiated or persisted into the system.
-   /// </remarks>
-   public DateTime? Created { get; set; }
-
-   /// <summary>Gets or sets the date and time when the entity was last updated.</summary>
-   /// <remarks>
-   /// This property is nullable to accommodate scenarios where the last updated timestamp may not be available or applicable.
-   /// It is typically used to track modifications made to the entity after its initial creation.
-   /// </remarks>
-   public DateTime? Updated { get; set; }
-
-   /// <summary>Determines whether the auditable properties of the entity should be serialized.</summary>
-   /// <remarks>
-   /// This property acts as a central flag to control the serialization of all auditable timestamp properties, such as creation and modification dates.
-   /// It can be overridden in derived classes to customize the serialization behavior based on specific requirements.
-   /// </remarks>
-   public virtual bool ShouldSerializeAuditableProperties
-      => true;
-
-   /// <summary>Determines whether the Created date of the entity should be serialized.</summary>
-   /// <returns>A boolean value indicating whether the Created date should be included in serialization.</returns>
-   public virtual bool ShouldSerializeCreatedDate()
-      => ShouldSerializeAuditableProperties;
-
-   /// <summary>Determines whether the Updated date of the entity should be serialized.</summary>
-   /// <returns>A boolean value indicating whether the Updated date should be included in serialization.</returns>
-   public virtual bool ShouldSerializeUpdatedDate()
-      => ShouldSerializeAuditableProperties;
-}

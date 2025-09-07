@@ -8,7 +8,7 @@ namespace Wangkanai.Audit;
 /// tracking the user who created and last updated the entity. It is intended for use in ensuring accountability and
 /// auditing in systems where user actions need to be recorded.
 /// </remarks>
-public interface IUserAuditableEntity : ICreatedEntity, IUpdatedEntity
+public interface IUserAuditableEntity : ICreatedEntity, IUpdatedEntity, IDeletedEntity
 {
    /// <summary>Gets or sets the identifier of the user who created the entity.</summary>
    /// <remarks>

@@ -3,10 +3,4 @@
 namespace Wangkanai.Audit;
 
 /// <summary>Represents an auditable entity that includes comprehensive soft delete functionality.</summary>
-/// <remarks>
-/// This interface combines the functionality of <see cref="IAuditableEntity"/>, <see cref="ISoftDeletable"/>, and
-/// <see cref="IDeletedEntity"/> to provide a complete structure for auditing entities with soft delete capabilities.
-/// It tracks creation, update, and deletion timestamps along with the soft delete state.
-/// </remarks>
-public interface ISoftDeleteAuditableEntity
-   : IAuditableEntity, ISoftDeletable, IDeletedEntity;
+public interface ISoftDeleteAuditableEntity : IAuditableEntity, ISoftDeletable;
