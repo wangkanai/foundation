@@ -8,26 +8,27 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Wangkanai.Audit.Configurations;
 
 /// <summary>
-/// Provides the configuration for the <see cref="AuditableEntity{TKey,TUserType,TUserKey}"/> entity type.
-/// This class is responsible for defining the model and entity relationship mappings for use with Entity Framework.
+/// Represents the configuration settings for the <see cref="Trail{TKey, TUserType, TUserKey}"/> entity in the context of Entity Framework Core.
+/// This class defines how the <see cref="Trail{TKey, TUserType, TUserKey}"/> entity is mapped to the database schema,
+/// including property configurations, relationships, and column specifications.
 /// </summary>
 /// <typeparam name="TKey">
-/// The type of the primary key for the audit entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
+/// The type of the primary key for the <see cref="Trail{TKey, TUserType, TUserKey}"/> entity.
 /// </typeparam>
 /// <typeparam name="TUserType">
-/// The user type associated with the audit entity. Must derive from <see cref="IdentityUser"/>.
+/// The type of the user entity associated with the trail. Typically a type derived from <see cref="IdentityUser{TUserKey}"/>.
 /// </typeparam>
 /// <typeparam name="TUserKey">
-/// The type of the primary key for the associated user. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
+/// The type of the primary key of the user entity associated with the trail.
 /// </typeparam>
-public class AuditableConfiguration<TKey, TUserType, TUserKey> : IEntityTypeConfiguration<AuditableEntity<TKey, TUserType, TUserKey>>
+public class TrailConfiguration<TKey, TUserType, TUserKey> : IEntityTypeConfiguration<Trail<TKey, TUserType, TUserKey>>
    where TKey : IEquatable<TKey>, IComparable<TKey>
    where TUserType : IdentityUser<TUserKey>
    where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
 {
-   /// <summary>Configures the entity type for the <see cref="AuditableEntity{TKey,TUserType,TUserKey}"/> class.</summary>
+   /// <summary>Configures the entity type for the <see cref="Trail{TKey,TUserType,TUserKey}"/> class.</summary>
    /// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
-   public void Configure(EntityTypeBuilder<AuditableEntity<TKey, TUserType, TUserKey>> builder)
+   public void Configure(EntityTypeBuilder<Trail<TKey, TUserType, TUserKey>> builder)
    {
       builder.HasKey(x => x.Id);
       builder.Property(x => x.Id);

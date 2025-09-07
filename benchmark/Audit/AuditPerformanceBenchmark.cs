@@ -57,7 +57,7 @@ public class AuditPerformanceBenchmark
    [Benchmark(Baseline = true)]
    public void OriginalDictionary_SmallChangeSet()
    {
-      var audit = new AuditableEntity<int, IdentityUser<int>, int>
+      var audit = new Trail<int, IdentityUser<int>, int>
                   {
                      OldValues = new(_smallChangeSet),
                      NewValues = new(_smallChangeSet)
@@ -72,7 +72,7 @@ public class AuditPerformanceBenchmark
    [Benchmark]
    public void OptimizedJson_SmallChangeSet()
    {
-      var audit = new AuditableEntity<int, IdentityUser<int>, int>();
+      var audit = new Trail<int, IdentityUser<int>, int>();
       audit.SetValuesFromJson(_smallJsonOld, _smallJsonNew);
 
       // Simulate access patterns
@@ -84,7 +84,7 @@ public class AuditPerformanceBenchmark
    [Benchmark]
    public void OptimizedSpan_SmallChangeSet()
    {
-      var                  audit       = new AuditableEntity<int, IdentityUser<int>, int>();
+      var                  audit       = new Trail<int, IdentityUser<int>, int>();
       ReadOnlySpan<string> columnNames = ["Name", "Age", "IsActive"];
       ReadOnlySpan<object> oldValues   = ["John Doe", 30, true];
       ReadOnlySpan<object> newValues   = ["Jane Doe", 31, false];
@@ -100,7 +100,7 @@ public class AuditPerformanceBenchmark
    [Benchmark]
    public void OriginalDictionary_LargeChangeSet()
    {
-      var audit = new AuditableEntity<int, IdentityUser<int>, int>
+      var audit = new Trail<int, IdentityUser<int>, int>
                   {
                      OldValues = new(_largeChangeSet),
                      NewValues = new(_largeChangeSet)
@@ -115,7 +115,7 @@ public class AuditPerformanceBenchmark
    [Benchmark]
    public void OptimizedJson_LargeChangeSet()
    {
-      var audit = new AuditableEntity<int, IdentityUser<int>, int>();
+      var audit = new Trail<int, IdentityUser<int>, int>();
       audit.SetValuesFromJson(_largeJsonOld, _largeJsonNew);
 
       // Simulate access patterns
@@ -127,7 +127,7 @@ public class AuditPerformanceBenchmark
    [Benchmark]
    public void OptimizedSpan_LargeChangeSet()
    {
-      var audit       = new AuditableEntity<int, IdentityUser<int>, int>();
+      var audit       = new Trail<int, IdentityUser<int>, int>();
       var columnNames = new string[10];
       var oldValues   = new object[10];
       var newValues   = new object[10];
@@ -160,7 +160,7 @@ public class AuditPerformanceBenchmark
    [Benchmark]
    public void JsonSerialization_Optimized()
    {
-      var audit = new AuditableEntity<int, IdentityUser<int>, int>();
+      var audit = new Trail<int, IdentityUser<int>, int>();
       audit.SetValuesFromJson(_smallJsonOld, _smallJsonNew);
       _ = audit.GetOldValue("Name");
    }
@@ -171,11 +171,11 @@ public class AuditPerformanceBenchmark
    [Arguments(1000)]
    public void BulkAuditCreation_Original(int count)
    {
-      var audits = new List<AuditableEntity<int, IdentityUser<int>, int>>(count);
+      var audits = new List<Trail<int, IdentityUser<int>, int>>(count);
 
       for (var i = 0; i < count; i++)
       {
-         var audit = new AuditableEntity<int, IdentityUser<int>, int>
+         var audit = new Trail<int, IdentityUser<int>, int>
                      {
                         OldValues = new(_smallChangeSet),
                         NewValues = new(_smallChangeSet)
@@ -190,11 +190,11 @@ public class AuditPerformanceBenchmark
    [Arguments(1000)]
    public void BulkAuditCreation_Optimized(int count)
    {
-      var audits = new List<AuditableEntity<int, IdentityUser<int>, int>>(count);
+      var audits = new List<Trail<int, IdentityUser<int>, int>>(count);
 
       for (var i = 0; i < count; i++)
       {
-         var audit = new AuditableEntity<int, IdentityUser<int>, int>();
+         var audit = new Trail<int, IdentityUser<int>, int>();
          audit.SetValuesFromJson(_smallJsonOld, _smallJsonNew);
          audits.Add(audit);
       }
@@ -204,7 +204,7 @@ public class AuditPerformanceBenchmark
    [Benchmark]
    public void PropertyLookup_Original()
    {
-      var audit = new AuditableEntity<int, IdentityUser<int>, int>
+      var audit = new Trail<int, IdentityUser<int>, int>
                   {
                      OldValues = new(_largeChangeSet)
                   };
@@ -218,7 +218,7 @@ public class AuditPerformanceBenchmark
    [Benchmark]
    public void PropertyLookup_Optimized()
    {
-      var audit = new AuditableEntity<int, IdentityUser<int>, int>();
+      var audit = new Trail<int, IdentityUser<int>, int>();
       audit.SetValuesFromJson(_largeJsonOld, null);
 
       // Multiple lookups to simulate real usage
