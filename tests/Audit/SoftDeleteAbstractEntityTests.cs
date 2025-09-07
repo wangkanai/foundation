@@ -56,7 +56,7 @@ public class SoftDeleteAbstractEntityTests
       Assert.IsAssignableFrom<UserSoftDeleteAuditableEntity<Guid>>(entity);
       Assert.IsAssignableFrom<SoftDeleteAuditableEntity<Guid>>(entity);
       Assert.IsAssignableFrom<IUserSoftDeleteAuditable>(entity);
-      Assert.IsAssignableFrom<IUserAuditable>(entity);
+      Assert.IsAssignableFrom<IUserAuditableEntity>(entity);
    }
 
    [Fact]

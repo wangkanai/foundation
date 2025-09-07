@@ -9,7 +9,7 @@ namespace Wangkanai.Audit;
 /// for entities that support soft delete with user accountability.
 /// </remarks>
 public interface IUserSoftDeleteAuditable
-   : ISoftDeleteAuditableEntity, IUserAuditable
+   : ISoftDeleteAuditableEntity, IUserAuditableEntity
 {
    /// <summary>Gets or sets the identifier of the user who soft deleted the entity.</summary>
    /// <remarks>

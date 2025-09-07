@@ -30,7 +30,7 @@ public class PrimaryKeyResolvingMap
          {
             pair.Key.Id = pair.Value.Id;
 
-            if (pair is { Key: IUserAuditable transient, Value: IUserAuditable presistent })
+            if (pair is { Key: IUserAuditableEntity transient, Value: IUserAuditableEntity presistent })
             {
                transient.CreatedBy = presistent.CreatedBy;
                transient.Created   = presistent.Created;
