@@ -23,4 +23,6 @@ public interface IUserAuditableEntity : ICreatedEntity, IUpdatedEntity, IDeleted
    /// This is essential for auditing purposes and ensuring traceability in systems that monitor changes to entities.
    /// </remarks>
    string? UpdatedBy { get; set; }
+
+   string? DeletedBy { get; set; }
 }

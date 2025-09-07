@@ -11,20 +11,12 @@ namespace Wangkanai.Audit;
 /// <typeparam name="T">
 /// The type of the entity identifier, which must implement <see cref="IComparable{T}"/> and <see cref="IEquatable{T}"/>.
 /// </typeparam>
-public abstract class UserAuditableEntity<T>
-   : AuditableEntity<T>, IUserAuditableEntity
+public abstract class UserAuditableEntity<T> : AuditableEntity<T>, IUserAuditableEntity
    where T : IComparable<T>, IEquatable<T>
 {
-   [StringLength(128)]
    public string? CreatedBy { get; set; }
 
-   [StringLength(128)]
    public string? UpdatedBy { get; set; }
 
-
-   public virtual bool ShouldSerializeCreatedBy()
-      => ShouldSerializeAuditableProperties;
-
-   public virtual bool ShouldSerializeUpdatedBy()
-      => ShouldSerializeAuditableProperties;
+   public string? DeletedBy { get; set; }
 }
