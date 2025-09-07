@@ -20,8 +20,7 @@ namespace Wangkanai.Audit.Configurations;
 /// <typeparam name="TUserKey">
 /// The type of the primary key for the associated user. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
-public class AuditableConfiguration<TKey, TUserType, TUserKey>
-   : IEntityTypeConfiguration<AuditableEntity<TKey, TUserType, TUserKey>>
+public class AuditableConfiguration<TKey, TUserType, TUserKey> : IEntityTypeConfiguration<AuditableEntity<TKey, TUserType, TUserKey>>
    where TKey : IEquatable<TKey>, IComparable<TKey>
    where TUserType : IdentityUser<TUserKey>
    where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>

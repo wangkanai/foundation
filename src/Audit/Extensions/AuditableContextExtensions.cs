@@ -24,6 +24,6 @@ public static class AuditableContextExtensions
       where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
    {
       builder.ApplyConfiguration(new AuditableConfiguration<TKey, TUserType, TUserKey>());
-      builder.ApplyConfiguration(new UserAuditConfiguration<TKey>());
+      // builder.ApplyConfiguration(new UserAuditConfiguration<TKey>());
    }
 }
