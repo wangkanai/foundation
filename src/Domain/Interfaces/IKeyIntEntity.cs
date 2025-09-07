@@ -7,5 +7,4 @@ namespace Wangkanai.Domain;
 /// This interface serves as a specialization of the generic
 /// <see cref="IEntity{T}"/> for entities whose identifier is an integer.
 /// </summary>
-public interface IKeyIntEntity
-   : IEntity<int>;
+public interface IKeyIntEntity : IEntity<int>;
