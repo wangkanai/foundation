@@ -8,7 +8,7 @@ namespace Wangkanai.Audit;
 /// <typeparam name="TKey">The type of the primary key for the audit trail entity.</typeparam>
 /// <typeparam name="TUserType">The type representing the user related to the audit trail entity.</typeparam>
 /// <typeparam name="TUserKey">The type of the primary key for the user entity.</typeparam>
-public interface IAuditableStore<TKey, TUserType, TUserKey> : IDisposable
+public interface ITrailStore<TKey, TUserType, TUserKey> : IDisposable
    where TKey : IEquatable<TKey>, IComparable<TKey>
    where TUserType : IdentityUser<TUserKey>
    where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>

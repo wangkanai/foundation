@@ -14,7 +14,7 @@ namespace Wangkanai.Audit;
 /// <typeparam name="TUserKey">
 /// The type of the unique identifier for the user. It must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
-public interface IQueryableAuditableStore<TKey, TUserType, TUserKey> : IAuditableStore<TKey, TUserType, TUserKey>
+public interface IQueryableTrailStore<TKey, TUserType, TUserKey> : ITrailStore<TKey, TUserType, TUserKey>
    where TKey : IEquatable<TKey>, IComparable<TKey>
    where TUserType : IdentityUser<TUserKey>
    where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>

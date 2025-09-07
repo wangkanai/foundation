@@ -15,9 +15,12 @@ public static class EntityTypeBuilderExtensions
    /// <param name="builder">The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type.</param>
    public static void HasDefaultCreated<T>(this EntityTypeBuilder<T> builder)
       where T : class, ICreatedEntity
-      => builder.Property(x => x.Created)
-                .HasDefaultValue(DateTime.Now)
-                .ValueGeneratedOnAdd();
+   {
+      builder.Property(x => x.Created)
+             .HasDefaultValue(DateTime.Now)
+             .ValueGeneratedOnAdd();
+      builder.HasIndex(x => x.Created);
+   }
 
    /// <summary>
    /// Configures the entity type to set a default value for the Updated property and to mark it as a value that is automatically generated when the entity is updated.
@@ -27,9 +30,12 @@ public static class EntityTypeBuilderExtensions
    /// <param name="builder">The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type.</param>
    public static void HasDefaultUpdated<T>(this EntityTypeBuilder<T> builder)
       where T : class, IUpdatedEntity
-      => builder.Property(x => x.Updated)
-                .HasDefaultValue(DateTime.Now)
-                .ValueGeneratedOnUpdate();
+   {
+      builder.Property(x => x.Updated)
+             .HasDefaultValue(DateTime.Now)
+             .ValueGeneratedOnUpdate();
+      builder.HasIndex(x => x.Updated);
+   }
 
    /// <summary>
    /// Configures the entity type to set default values and value generation strategies for the Created and Updated properties.
@@ -46,5 +52,6 @@ public static class EntityTypeBuilderExtensions
       builder.Property(x => x.Updated)
              .HasDefaultValue(DateTime.Now)
              .ValueGeneratedOnAddOrUpdate();
+      builder.HasIndex(x => x.Updated);
    }
 }

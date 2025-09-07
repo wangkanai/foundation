@@ -16,7 +16,7 @@ namespace Wangkanai.Audit;
 /// The type of the key for the user, which must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
 /// <param name="context">The database context instance to be used for accessing the audit trails.</param>
-public class AuditableStore<TContext, TKey, TUserType, TUserKey>(TContext context) : IQueryableAuditableStore<TKey, TUserType, TUserKey>
+public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) : IQueryableTrailStore<TKey, TUserType, TUserKey>
    where TContext : DbContext
    where TKey : IEquatable<TKey>, IComparable<TKey>
    where TUserType : IdentityUser<TUserKey>
