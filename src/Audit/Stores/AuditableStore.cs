@@ -13,7 +13,7 @@ namespace Wangkanai.Audit;
 /// <see cref="IComparable{T}"/>.</typeparam>
 /// <param name="context">The database context instance to be used for accessing the audit trails.</param>
 public class AuditableStore<TContext, TKey, TUserType, TUserKey>(TContext context)
-   : IQueryableAuditStore<TKey, TUserType, TUserKey>
+   : IQueryableAuditableStore<TKey, TUserType, TUserKey>
    where TContext : DbContext
    where TKey : IEquatable<TKey>, IComparable<TKey>
    where TUserType : IdentityUser<TUserKey>
