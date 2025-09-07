@@ -4,8 +4,9 @@ namespace Wangkanai.Audit;
 
 /// <summary>Represents an entity that tracks the deletion date and time.</summary>
 /// <remarks>
-/// The <see cref="IDeletedEntity"/> interface defines a contract for entities that require the ability to capture and store the timestamp of their deletion.
-/// This is commonly used in soft delete scenarios where entities are marked as deleted rather than physically removed from the database.
+/// The <see cref="IDeletedEntity"/> interface defines a contract for entities that require the ability to capture and
+/// store the timestamp of their deletion. This is commonly used in soft delete scenarios where entities are marked as
+/// deleted rather than physically removed from the database.
 /// </remarks>
 public interface IDeletedEntity
 {
