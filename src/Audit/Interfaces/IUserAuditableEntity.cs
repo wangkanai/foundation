@@ -30,3 +30,4 @@ public interface IUserAuditableEntity : IAuditableEntity
    /// </summary>
    string? DeletedBy { get; set; }
 }
+
