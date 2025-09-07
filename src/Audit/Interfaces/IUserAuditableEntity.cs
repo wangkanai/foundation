@@ -2,11 +2,16 @@
 
 namespace Wangkanai.Audit;
 
-public interface IUserAuditableEntity : ICreatedEntity, IUpdatedEntity, IDeletedEntity
-{
-   string? CreatedBy { get; set; }
+/// <summary>
+/// Represents an interface that combines user-specific auditing capabilities for tracking
+/// creation, modification, and deletion activities performed by users.
+/// </summary>
+public interface IUserAuditableEntity : IUserAuditableEntity<string>;
 
-   string? UpdatedBy { get; set; }
-
-   string? DeletedBy { get; set; }
-}
+/// <summary>
+/// Represents an interface that extends the base-auditable entity functionality by including
+/// user-specific auditing capabilities for tracking changes made by users.
+/// </summary>
+public interface IUserAuditableEntity<T>
+   : IAuditableEntity, IUserCreatedAuditableEntity<T>, IUserUpdatedAuditableEntity<T>, IUserDeletedAuditableEntity<T>
+   where T : IComparable<T>, IEquatable<T>;

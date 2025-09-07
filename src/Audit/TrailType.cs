@@ -3,7 +3,7 @@
 namespace Wangkanai.Audit;
 
 /// <summary>Specifies the type of operation recorded in an audit trail.</summary>
-public enum AuditTrailType : byte
+public enum TrailType : byte
 {
    None    = 0,
    Create  = 1,

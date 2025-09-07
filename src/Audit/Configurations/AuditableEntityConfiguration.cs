@@ -13,8 +13,7 @@ namespace Wangkanai.Audit.Configurations;
 /// <typeparam name="TKey">
 /// The type of the primary key for the auditable entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
-public abstract class AuditableEntityConfiguration<TEntity, TKey>
-   : IEntityTypeConfiguration<TEntity>
+public abstract class AuditableEntityConfiguration<TEntity, TKey> : IEntityTypeConfiguration<TEntity>
    where TEntity : class, IAuditableEntity
    where TKey : IEquatable<TKey>, IComparable<TKey>
 {

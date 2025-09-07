@@ -23,7 +23,7 @@ public static class AuditableContextExtensions
       where TUserType : IdentityUser<TUserKey>
       where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
    {
-      builder.ApplyConfiguration(new AuditableConfiguration<TKey, TUserType, TUserKey>());
+      builder.ApplyConfiguration(new TrailConfiguration<TKey, TUserType, TUserKey>());
       // builder.ApplyConfiguration(new UserAuditConfiguration<TKey>());
    }
 }

@@ -9,16 +9,8 @@ public static class AuditableConfigurationBuilder
    public static void ConfigureAuditableEntity<TEntity>(this EntityTypeBuilder<TEntity> builder)
       where TEntity : class, IAuditableEntity
    {
-      builder.Property(x => x.Created)
-             .IsRequired(false);
-      builder.HasIndex(x=> x.Created);
-
-      builder.Property(x => x.Updated)
-             .IsRequired(false);
-      builder.HasIndex();
-
-      builder.Property(x=> x.Deleted)
-             .IsRequired(false);
-      builder.HasIndex(x=> x.Deleted);
+      builder.HasDefaultCreated();
+      builder.HasDefaultCreatedAndUpdated();
+      builder.HasDefaultDeleted();
    }
 }

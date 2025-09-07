@@ -2,7 +2,7 @@
 
 namespace Wangkanai.Audit;
 
-public static class AuditableEntityExtensions
+public static class TrailExtensions
 {
 
 }
