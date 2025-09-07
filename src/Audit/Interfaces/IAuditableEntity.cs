@@ -2,9 +2,11 @@
 
 namespace Wangkanai.Audit;
 
-/// <summary>Represents an entity that is auditable, tracking creation and update timestamps.</summary>
+/// <summary>
+/// Represents an auditable entity with properties and behaviors that allow tracking of its creation, update, and deletion states.
+/// </summary>
 /// <remarks>
-/// This interface combines the functionality of <see cref="ICreatedEntity"/> and
-/// <see cref="IUpdatedEntity"/> to provide a standard structure for auditing entities.
+/// Implementing this interface indicates that an entity captures audit information related to its lifecycle events, including
+/// creation, updates, and deletions.
 /// </remarks>
-public interface IAuditableEntity : ICreatedEntity, IUpdatedEntity;
+public interface IAuditableEntity : ICreatedEntity, IUpdatedEntity, IDeletedEntity;

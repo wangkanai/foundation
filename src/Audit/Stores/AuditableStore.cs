@@ -6,14 +6,17 @@ namespace Wangkanai.Audit;
 
 /// <summary>Provides an implementation for managing audit trails within a database context.</summary>
 /// <typeparam name="TContext">The type of the database context, which must derive from <see cref="DbContext"/>.</typeparam>
-/// <typeparam name="TKey">The type of the primary key for the audit trail, which must implement <see cref="IEquatable{T}"/> and
-/// <see cref="IComparable{T}"/>.</typeparam>
-/// <typeparam name="TUserType">The type of the user associated with the audit trail, which must derive from <see cref="IdentityUser{T}"/>.</typeparam>
-/// <typeparam name="TUserKey">The type of the key for the user, which must implement <see cref="IEquatable{T}"/> and
-/// <see cref="IComparable{T}"/>.</typeparam>
+/// <typeparam name="TKey">
+/// The type of the primary key for the audit trail, which must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
+/// </typeparam>
+/// <typeparam name="TUserType">
+/// The type of the user associated with the audit trail, which must derive from <see cref="IdentityUser{T}"/>.
+/// </typeparam>
+/// <typeparam name="TUserKey">
+/// The type of the key for the user, which must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
+/// </typeparam>
 /// <param name="context">The database context instance to be used for accessing the audit trails.</param>
-public class AuditableStore<TContext, TKey, TUserType, TUserKey>(TContext context)
-   : IQueryableAuditStore<TKey, TUserType, TUserKey>
+public class AuditableStore<TContext, TKey, TUserType, TUserKey>(TContext context) : IQueryableAuditableStore<TKey, TUserType, TUserKey>
    where TContext : DbContext
    where TKey : IEquatable<TKey>, IComparable<TKey>
    where TUserType : IdentityUser<TUserKey>
@@ -21,12 +24,16 @@ public class AuditableStore<TContext, TKey, TUserType, TUserKey>(TContext contex
 {
    private readonly TContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
-
    private DbSet<AuditableEntity<TKey, TUserType, TUserKey>> AuditsSet
       => _context.Set<AuditableEntity<TKey, TUserType, TUserKey>>();
 
-   /// <summary>Provides a queryable collection of audit trails associated with the specified identity user and key types.</summary>
-   /// <remarks>This property acts as an interface to the underlying entity set of audit trails, allowing for LINQ-based querying and manipulation of audit trail data. </remarks>
+   /// <summary>
+   /// Provides a queryable collection of audit trails associated with the specified identity user and key types.
+   /// </summary>
+   /// <remarks>
+   /// This property acts as an interface to the underlying entity set of audit trails,
+   /// allowing for LINQ-based querying and manipulation of audit trail data.
+   /// </remarks>
    public IQueryable<AuditableEntity<TKey, TUserType, TUserKey>> Audits
       => AuditsSet;
 
@@ -105,6 +112,7 @@ public class AuditableStore<TContext, TKey, TUserType, TUserKey>(TContext contex
    {
       var audit = await _context.Set<AuditableEntity<TKey, TUserType, TUserKey>>()
                                 .FindAsync(id, cancellationToken);
+
       return Result.Success(audit);
    }
 
@@ -140,9 +148,9 @@ public class AuditableStore<TContext, TKey, TUserType, TUserKey>(TContext contex
    {
       var audit = await _context.Set<AuditableEntity<TKey, TUserType, TUserKey>>()
                                 .FirstOrDefaultAsync(a => a.UserId!.Equals(userId) && a.Id.Equals(id), cancellationToken);
+
       return Result.Success(audit);
    }
-
 
    private Task SaveChangesAsync(CancellationToken cancellationToken)
       => AutoSaveChanges ? _context.SaveChangesAsync(cancellationToken) : Task.CompletedTask;

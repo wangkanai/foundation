@@ -4,7 +4,8 @@ namespace Wangkanai.Audit;
 
 /// <summary>Represents an entity that tracks the creation date and time.</summary>
 /// <remarks>
-/// The <see cref="ICreatedEntity"/> interface defines a contract for entities that require the ability to capture and store the timestamp of their creation.
+/// The <see cref="ICreatedEntity"/> interface defines a contract for entities that require
+/// the ability to capture and store the timestamp of their creation.
 /// </remarks>
 public interface ICreatedEntity
 {

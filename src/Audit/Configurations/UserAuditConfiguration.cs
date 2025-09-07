@@ -19,7 +19,7 @@ public class UserAuditConfiguration<TKey>
 {
    /// <summary>Configures the additional user tracking properties for the <see cref="UserAuditableEntity{TKey}"/> class.</summary>
    /// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
-   protected override void ConfigureAdditionalProperties(EntityTypeBuilder<UserAuditableEntity<TKey>> builder)
+   protected virtual void ConfigureAdditionalProperties(EntityTypeBuilder<UserAuditableEntity<TKey>> builder)
    {
       // Configure user tracking properties
       builder.Property(x => x.CreatedBy)
