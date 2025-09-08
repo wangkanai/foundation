@@ -4,7 +4,7 @@ using BenchmarkDotNet.Running;
 
 using Wangkanai.Audit.Benchmark;
 
-Console.WriteLine("=== Wangkanai.Foundation.Audit Performance Benchmarks ===");
+Console.WriteLine("=== Wangkanai.Audit Performance Benchmarks ===");
 Console.WriteLine();
 
 // Run the audit performance benchmarks
