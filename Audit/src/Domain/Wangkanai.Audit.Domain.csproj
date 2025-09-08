@@ -6,7 +6,7 @@
       <PackageReference Include="Microsoft.Extensions.Identity.Stores" />
    </ItemGroup>
    <ItemGroup>
-      <ProjectReference Include="..\..\..\Foundation\src\Domain\Wangkanai.Foundation.Domain.csproj" />
+      <ProjectReference Include="$(RepoRoot)\Foundation\src\Domain\Wangkanai.Foundation.Domain.csproj" />
    </ItemGroup>
 
 </Project>
