@@ -26,7 +26,7 @@ public static class EntityConfigurationBuilder
 
       _ = Type.GetTypeCode(keyType) switch
           {
-             TypeCode.Int32 or TypeCode.Int64             => property.ValueGeneratedOnAdd(),        // Let EF Core handle identity generation based on provider
+             TypeCode.Int32 or TypeCode.Int64             => property,                               // Already configured with ValueGeneratedOnAdd()
              TypeCode.String                              => property.HasMaxLength(IndexKeyLength), // Common database index key limit
              TypeCode.Object when keyType == typeof(Guid) => property.ValueGeneratedOnAdd(),        // Client-side GUID generation - database agnostic
              _                                            => property
