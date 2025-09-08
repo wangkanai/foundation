@@ -10,6 +10,7 @@
       <Optimize>true</Optimize>
       <IsPackable>false</IsPackable>
       <SonarQubeExclude>true</SonarQubeExclude>
+      <EnforceExtendedAnalyzerRules>false</EnforceExtendedAnalyzerRules>
    </PropertyGroup>
 
    <ItemGroup Condition="$(MSBuildProjectName.Contains('Benchmark'))">
