@@ -16,10 +16,10 @@ public static class EntityConfigurationBuilder
       builder.Property(x => x.Id)
              .IsRequired()
              .ValueGeneratedOnAdd()
-             .ConfigureByKeyType();
+             .HasKeyOptimization();
    }
 
-   private static void ConfigureByKeyType<T>(this PropertyBuilder<T> property)
+   public static void HasKeyOptimization<T>(this PropertyBuilder<T> property)
       where T : IEquatable<T>, IComparable<T>
    {
       var keyType = typeof(T);
