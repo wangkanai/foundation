@@ -5,6 +5,8 @@
       <PackageTags>wangkanai;domain;ddd;audit;entityframework;dotnet</PackageTags>
 
       <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+
+      <RootNamespace>Wangkanai.Domain</RootNamespace>
    </PropertyGroup>
    <ItemGroup>
       <PackageReference Include="Microsoft.CodeAnalysis.Common" />

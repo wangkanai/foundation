@@ -3,6 +3,7 @@
       <VersionPrefix>0.3.0</VersionPrefix>
       <Product>Wangkanai Audit</Product>
       <PackageTags>wangkanai;audit;trail;traceability</PackageTags>
+      <RootNamespace>Wangkanai.Audit</RootNamespace>
    </PropertyGroup>
    <ItemGroup>
       <PackageReference Include="Microsoft.EntityFrameworkCore" />
@@ -10,7 +11,7 @@
       <PackageReference Include="Microsoft.Extensions.Identity.Stores" />
    </ItemGroup>
    <ItemGroup>
-      <ProjectReference Include="..\Domain\Wangkanai.Domain.csproj" />
+      <ProjectReference Include="..\Domain\Wangkanai.Foundation.Domain.csproj" />
    </ItemGroup>
 
 </Project>
