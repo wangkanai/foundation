@@ -13,6 +13,22 @@ public static class VersionConfigurationBuilder
    private const string RowVersion = "RowVersion";
 
    /// <summary>
+   /// Configures a RowVersion property with appropriate database-specific settings.
+   /// </summary>
+   /// <typeparam name="T">The type of the RowVersion property.</typeparam>
+   /// <param name="property">The property builder to configure.</param>
+   /// <returns>The configured property builder.</returns>
+   private static PropertyBuilder ConfigureRowVersion<T>(this PropertyBuilder property)
+   {
+      property.IsConcurrencyToken();
+
+      if (typeof(T) == typeof(byte[]))
+         property.IsRowVersion();
+
+      return property;
+   }
+
+   /// <summary>
    /// Configures the entity type to include a RowVersion property for concurrency control with a generic type.
    /// </summary>
    /// <typeparam name="T">
@@ -25,15 +41,7 @@ public static class VersionConfigurationBuilder
    /// A <see cref="PropertyBuilder"/> configured with the RowVersion property as a concurrency token.
    /// </returns>
    public static PropertyBuilder HasRowVersion<T>(this EntityTypeBuilder<IHasRowVersion<T>> builder)
-   {
-      var propertyBuilder = builder.Property<T>(RowVersion).IsConcurrencyToken();
-
-      // Apply SQL Server specific configuration for byte[] types
-      if (typeof(T) == typeof(byte[]))
-         propertyBuilder.IsRowVersion();
-
-      return propertyBuilder;
-   }
+      => builder.Property<T>(RowVersion).ConfigureRowVersion<T>();
 
    /// <summary>
    /// Configures the entity type to include a RowVersion property for concurrency control.
@@ -46,9 +54,7 @@ public static class VersionConfigurationBuilder
    /// A <see cref="PropertyBuilder"/> configured with the RowVersion property as a concurrency token.
    /// </returns>
    public static PropertyBuilder HasRowVersion(this EntityTypeBuilder<IHasRowVersion> builder)
-      => builder.Property<byte[]>(RowVersion)
-                .IsRowVersion()
-                .IsConcurrencyToken();
+      => builder.Property<byte[]>(RowVersion).ConfigureRowVersion<byte[]>();
 
    /// <summary>
    /// Configures the entity type to include a RowVersion property for concurrency control.
@@ -64,7 +70,5 @@ public static class VersionConfigurationBuilder
    /// </returns>
    public static PropertyBuilder HasRowVersion<T>(this EntityTypeBuilder<Entity<T>> builder)
       where T : IEquatable<T>, IComparable<T>
-      => builder.Property<byte[]>(RowVersion)
-                .IsRowVersion()
-                .IsConcurrencyToken();
+      => builder.Property<byte[]>(RowVersion).ConfigureRowVersion<byte[]>();
 }
