@@ -16,17 +16,17 @@ public static class EntityConfigurationBuilder
       builder.Property(x => x.Id)
              .IsRequired()
              .ValueGeneratedOnAdd()
-             .HasKeyOptimization();
+             .ApplyKeyOptimizations();
    }
 
-   public static void HasKeyOptimization<T>(this PropertyBuilder<T> property)
+   private static void ApplyKeyOptimizations<T>(this PropertyBuilder<T> property)
       where T : IEquatable<T>, IComparable<T>
    {
       var keyType = typeof(T);
 
       _ = Type.GetTypeCode(keyType) switch
           {
-             TypeCode.Int32 or TypeCode.Int64             => property,                               // Already configured with ValueGeneratedOnAdd()
+             TypeCode.Int32 or TypeCode.Int64             => property,                              // Already configured with ValueGeneratedOnAdd()
              TypeCode.String                              => property.HasMaxLength(IndexKeyLength), // Common database index key limit
              TypeCode.Object when keyType == typeof(Guid) => property.ValueGeneratedOnAdd(),        // Client-side GUID generation - database agnostic
              _                                            => property
