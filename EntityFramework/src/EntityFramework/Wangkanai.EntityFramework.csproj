@@ -15,7 +15,7 @@
    </ItemGroup>
 
    <ItemGroup>
-      <ProjectReference Include="..\Audit\Wangkanai.Audit.csproj" />
+      <ProjectReference Include="..\..\..\Audit\src\Domain\Wangkanai.Audit.Domain.csproj" />
    </ItemGroup>
 
 </Project>

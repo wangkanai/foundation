@@ -23,26 +23,19 @@
     <File Path=".editorconfig" />
     <File Path=".resharper-cleanup.config" />
   </Folder>
-  <Folder Name="/Audit/" />
+  <Folder Name="/Audit/">
+    <Project Path="Audit\src\Domain\Wangkanai.Audit.Domain.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Audit/benchmarks/" />
   <Folder Name="/Audit/tests/" />
-  <Folder Name="/benchmark/">
-    <Project Path="benchmark\Audit\Wangkanai.Audit.Benchmark.csproj" Type="Classic C#" />
-    <Project Path="benchmark\Domain\Wangkanai.Foundation.Domain.Benchmark.csproj" Type="Classic C#" />
-    <Project Path="benchmark\EntityFramework\Wangkanai.EntityFramework.Benchmark.csproj" Type="Classic C#" />
+  <Folder Name="/EntityFramework/">
+    <Project Path="EntityFramework\src\EntityFramework\Wangkanai.EntityFramework.csproj" Type="Classic C#" />
   </Folder>
-  <Folder Name="/EntityFramework/" />
   <Folder Name="/EntityFramework/benchmarks/" />
   <Folder Name="/EntityFramework/tests/" />
-  <Folder Name="/Foundation/" />
+  <Folder Name="/Foundation/">
+    <Project Path="Foundation\src\Domain\Wangkanai.Foundation.Domain.csproj" Type="Classic C#" />
+  </Folder>
   <Folder Name="/Foundation/benchmarks/" />
   <Folder Name="/Foundation/tests/" />
-  <Folder Name="/tests/">
-    <Project Path="tests\Audit\Wangkanai.Audit.Tests.csproj" Type="Classic C#" />
-    <Project Path="tests\Domain\Wangkanai.Foundation.Domain.Tests.csproj" Type="Classic C#" />
-    <Project Path="tests\EntityFramework\Wangkanai.EntityFramework.Tests.csproj" Type="Classic C#" />
-  </Folder>
-  <Project Path="src\Audit\Wangkanai.Audit.csproj" Type="Classic C#" />
-  <Project Path="src\Domain\Wangkanai.Foundation.Domain.csproj" Type="Classic C#" />
-  <Project Path="src\EntityFramework\Wangkanai.EntityFramework.csproj" Type="Classic C#" />
 </Solution>
