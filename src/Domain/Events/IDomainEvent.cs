@@ -14,7 +14,7 @@ public interface IDomainEvent
 /// This serves as the base interface for implementing domain events with an integer identifier and integrates with domain-driven design concepts.
 /// </summary>
 public interface IDomainEvent<T>
-   : IEntity<T>, IDomainMessage
+   : IEntity<T>, IEvent, IDomainMessage
    where T : IComparable<T>, IEquatable<T>
 {
    /// <summary>
