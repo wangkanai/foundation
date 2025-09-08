@@ -52,6 +52,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Nullable Reference Types**: Enabled throughout the solution
 - **Implicit Usings**: Simplified namespace management
 
+## Code Style Preferences
+
+### Extension Methods
+- **Strongly prefer extension methods** over static utility methods for better code readability
+- Extension methods make code more fluent and discoverable through IntelliSense
+- Use extension methods whenever possible to create a more natural, chainable API
+- Example: `builder.Property<T>(name).ConfigureRowVersion<T>()` instead of `UtilityClass.ConfigureRowVersion(builder.Property<T>(name))`
+
 ## Documentation Guidelines
 
 - **Location**: All documentation files (*.md) created by Claude must be saved in the `docs/` folder
