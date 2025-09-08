@@ -27,17 +27,21 @@ public static class EntityConfigurationBuilder
              .IsConcurrencyToken();
    }
 
-   private static void ApplyKeyOptimizations<T>(this PropertyBuilder<T> property)
+   private static PropertyBuilder<T> ApplyKeyOptimizations<T>(this PropertyBuilder<T> property)
       where T : IEquatable<T>, IComparable<T>
    {
       var keyType = typeof(T);
 
       _ = Type.GetTypeCode(keyType) switch
           {
-             TypeCode.Int32 or TypeCode.Int64             => property.ValueGeneratedOnAdd(),                         // EF Core handles identity generation
+             TypeCode.Byte                                => property.ValueGeneratedOnAdd(),
+             TypeCode.Int32                               => property.ValueGeneratedOnAdd(),
+             TypeCode.Int64                               => property.ValueGeneratedOnAdd(),                         // EF Core handles identity generation
              TypeCode.String                              => property.HasMaxLength(IndexKeyLength).IsUnicode(false), // String keys are application-provided
              TypeCode.Object when keyType == typeof(Guid) => property.ValueGeneratedOnAdd(),                         // Client-side GUID generation
              _                                            => property
           };
+
+      return property;
    }
 }
