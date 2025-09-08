@@ -25,6 +25,7 @@
   </Folder>
   <Folder Name="/Audit/">
     <Project Path="Audit\src\Domain\Wangkanai.Audit.Domain.csproj" Type="Classic C#" />
+    <File Path="Audit\Directory.Build.props" />
   </Folder>
   <Folder Name="/Audit/benchmarks/">
     <Project Path="Audit\benchmarks\Domain\Wangkanai.Audit.Domain.Benchmark.csproj" Type="Classic C#" />
@@ -34,6 +35,7 @@
   </Folder>
   <Folder Name="/EntityFramework/">
     <Project Path="EntityFramework\src\EntityFramework\Wangkanai.EntityFramework.csproj" Type="Classic C#" />
+    <File Path="EntityFramework\Directory.Build.props" />
   </Folder>
   <Folder Name="/EntityFramework/benchmarks/">
     <Project Path="EntityFramework\benchmarks\EntityFramework\Wangkanai.EntityFramework.Benchmark.csproj" Type="Classic C#" />

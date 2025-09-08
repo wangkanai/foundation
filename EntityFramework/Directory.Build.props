@@ -1,0 +1,8 @@
+<Project>
+   <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory)..\, Directory.Build.props))\Directory.Build.props"/>
+   <PropertyGroup>
+      <VersionPrefix>1.0.0</VersionPrefix>
+      <Product>Wangkanai EntityFramework</Product>
+      <PackageTags>wangkanai;entityframework;orm;ddd;dotnet</PackageTags>
+   </PropertyGroup>
+</Project>

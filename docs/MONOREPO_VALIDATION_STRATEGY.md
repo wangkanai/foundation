@@ -53,9 +53,11 @@ fi
 # Check all projects are registered in solution
 echo "📋 Validating project registration..."
 
-# Expected projects
+# Expected projects (including Clean Architecture layers)
 expected_projects=(
     "Foundation\\src\\Domain\\Wangkanai.Foundation.Domain.csproj"
+    "Foundation\\src\\Application\\Wangkanai.Foundation.Application.csproj"
+    "Foundation\\src\\Infrastructure\\Wangkanai.Foundation.Infrastructure.csproj"
     "Foundation\\benchmarks\\Domain\\Wangkanai.Foundation.Domain.Benchmark.csproj"
     "Foundation\\tests\\Domain\\Wangkanai.Foundation.Domain.Tests.csproj"
     "Audit\\src\\Domain\\Wangkanai.Audit.Domain.csproj"
