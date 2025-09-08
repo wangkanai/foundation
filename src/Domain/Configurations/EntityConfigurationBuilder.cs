@@ -6,7 +6,8 @@ namespace Wangkanai.Domain.Configurations;
 
 public static class EntityConfigurationBuilder
 {
-   private const int IndexKeyLength = 450;
+   private const int    IndexKeyLength = 450;
+   private const string RowVersion     = "RowVersion";
 
    public static void HasDomainKey<T>(this EntityTypeBuilder<Entity<T>> builder)
       where T : IEquatable<T>, IComparable<T>
@@ -18,6 +19,14 @@ public static class EntityConfigurationBuilder
              .ApplyKeyOptimizations();
    }
 
+   public static void HasRowVersion<T>(this EntityTypeBuilder<Entity<T>> builder)
+      where T : IEquatable<T>, IComparable<T>
+   {
+      builder.Property<byte[]>(RowVersion)
+             .IsRowVersion()
+             .IsConcurrencyToken();
+   }
+
    private static void ApplyKeyOptimizations<T>(this PropertyBuilder<T> property)
       where T : IEquatable<T>, IComparable<T>
    {
@@ -25,9 +34,9 @@ public static class EntityConfigurationBuilder
 
       _ = Type.GetTypeCode(keyType) switch
           {
-             TypeCode.Int32 or TypeCode.Int64             => property.ValueGeneratedOnAdd(),                              // EF Core handles identity generation
-             TypeCode.String                              => property.HasMaxLength(IndexKeyLength),                       // String keys are application-provided
-             TypeCode.Object when keyType == typeof(Guid) => property.ValueGeneratedOnAdd(),                              // Client-side GUID generation
+             TypeCode.Int32 or TypeCode.Int64             => property.ValueGeneratedOnAdd(),                         // EF Core handles identity generation
+             TypeCode.String                              => property.HasMaxLength(IndexKeyLength).IsUnicode(false), // String keys are application-provided
+             TypeCode.Object when keyType == typeof(Guid) => property.ValueGeneratedOnAdd(),                         // Client-side GUID generation
              _                                            => property
           };
    }
