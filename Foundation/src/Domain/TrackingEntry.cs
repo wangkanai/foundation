@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Foundation;
 
 /// <summary>Represents an entry that tracks changes to an entity within a particular state.</summary>
 public class TrackingEntry

@@ -3,7 +3,7 @@
 using System.Collections;
 using System.Linq.Expressions;
 
-namespace Wangkanai.Domain.Extensions;
+namespace Wangkanai.Foundation.Extensions;
 
 public class ReflectionExtensionsTests
 {

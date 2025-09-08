@@ -1,8 +1,8 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Wangkanai.Domain;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Microsoft.EntityFrameworkCore.Metadata.Builders;
+namespace Wangkanai.Foundation.Extensions;
 
 /// <summary>
 /// Provides extension methods for configuring entity type properties using the <see cref="EntityTypeBuilder{TEntity}"/> from

@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Audit;
+namespace Wangkanai.Audit.Domain;
 
 /// <summary>
 /// Defines an interface for entities that support audit tracking of the user who last updated them.

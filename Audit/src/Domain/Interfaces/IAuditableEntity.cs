@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Audit;
+namespace Wangkanai.Audit.Domain;
 
 /// <summary>
 /// Represents an auditable entity with timezone-aware properties and behaviors that allow tracking of its creation, update, and deletion states.

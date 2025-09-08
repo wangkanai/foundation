@@ -7,7 +7,7 @@ using BenchmarkDotNet.Jobs;
 
 using Microsoft.AspNetCore.Identity;
 
-namespace Wangkanai.Audit.Benchmark;
+namespace Wangkanai.Audit.Domain.Benchmark;
 
 /// <summary>Performance benchmarks for optimized audit trail storage.</summary>
 [MemoryDiagnoser]

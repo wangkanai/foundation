@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Audit.Configurations;
+namespace Wangkanai.Audit.Domain.Configurations;
 
 internal static class Configuration
 {

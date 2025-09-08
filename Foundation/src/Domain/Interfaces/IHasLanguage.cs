@@ -1,6 +1,6 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Foundation;
 
 /// <summary>Represents an entity that contains language-related functionality.</summary>
 public interface IHasLanguage

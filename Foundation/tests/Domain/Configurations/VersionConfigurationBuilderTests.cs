@@ -2,7 +2,7 @@
 
 using System.Runtime.CompilerServices;
 
-namespace Wangkanai.Domain.Configurations;
+namespace Wangkanai.Foundation.Configurations;
 
 /// <summary>
 /// Unit tests for VersionConfigurationBuilder extension methods.

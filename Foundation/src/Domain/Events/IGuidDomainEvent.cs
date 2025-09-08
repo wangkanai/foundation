@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Foundation;
 
 /// <summary>
 /// Represents a domain event interface that uses a globally unique identifier (GUID) as its primary key.

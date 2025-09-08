@@ -1,6 +1,6 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Foundation;
 
 /// <summary>
 /// Represents a utility class designed to manage the suppression of events in the domain.

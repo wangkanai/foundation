@@ -2,7 +2,7 @@
 
 using System.Collections.ObjectModel;
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Foundation;
 
 /// <summary>
 /// Represents a collection of objects of a specified type that does not hold any elements.

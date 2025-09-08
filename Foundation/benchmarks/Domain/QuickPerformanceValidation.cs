@@ -2,10 +2,7 @@
 
 using System.Diagnostics;
 
-using Wangkanai.Domain;
-using Wangkanai.Domain.Models;
-
-namespace Wangkanai.Benchmark;
+namespace Wangkanai.Foundation;
 
 /// <summary>
 /// Quick performance validation for Entity equality caching optimization.

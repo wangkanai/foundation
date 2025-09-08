@@ -2,7 +2,7 @@
 
 using BenchmarkDotNet.Running;
 
-using Wangkanai.Benchmark;
+using Wangkanai.Foundation;
 
 Console.WriteLine("Choose benchmark mode:");
 Console.WriteLine("1. Quick Performance Validation (recommended)");

@@ -2,7 +2,7 @@
 
 using BenchmarkDotNet.Running;
 
-using Wangkanai.Audit.Benchmark;
+using Wangkanai.Audit.Domain.Benchmark;
 
 Console.WriteLine("=== Wangkanai.Audit Performance Benchmarks ===");
 Console.WriteLine();

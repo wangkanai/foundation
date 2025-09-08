@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain.Exceptions;
+namespace Wangkanai.Foundation.Exceptions;
 
 /// <summary>
 /// Represents an exception thrown when an invariant defined within an aggregate is violated.

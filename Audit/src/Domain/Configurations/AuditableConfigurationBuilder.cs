@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.Audit.Configurations;
+namespace Wangkanai.Audit.Domain.Configurations;
 
 public static class AuditableConfigurationBuilder
 {

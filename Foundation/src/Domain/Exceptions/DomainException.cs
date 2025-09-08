@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain.Exceptions;
+namespace Wangkanai.Foundation.Exceptions;
 
 /// <summary>
 /// Represents a base class for domain-specific exceptions.

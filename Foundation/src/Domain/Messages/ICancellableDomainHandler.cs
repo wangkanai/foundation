@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Foundation;
 
 /// <summary>Represents a handler for processing domain messages that supports cancellation.</summary>
 /// <typeparam name="T">The type of the domain message, which must implement <see cref="IDomainMessage"/>.</typeparam>

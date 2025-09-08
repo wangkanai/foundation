@@ -2,9 +2,9 @@
 
 using Microsoft.EntityFrameworkCore;
 
-using Wangkanai.Audit.Configurations;
+using Wangkanai.Audit.Domain.Configurations;
 
-namespace Wangkanai.Audit;
+namespace Wangkanai.Audit.Domain;
 
 /// <summary>
 /// Provides extension methods for configuring audit-related entity configurations in the Entity Framework model.

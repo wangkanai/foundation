@@ -4,7 +4,9 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Wangkanai.Audit;
+using Wangkanai.Foundation;
+
+namespace Wangkanai.Audit.Domain;
 
 /// <summary>Represents an audit trail record for tracking entity changes in the system.</summary>
 /// <typeparam name="TKey">The type of the unique identifier for the audit trail.</typeparam>

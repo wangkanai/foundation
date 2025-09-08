@@ -1,8 +1,6 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Wangkanai.Domain.Models;
-
-namespace Wangkanai.Domain;
+namespace Wangkanai.Foundation;
 
 public class EntityTests
 {

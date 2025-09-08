@@ -3,9 +3,7 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 
-using Wangkanai.Domain;
-
-namespace Wangkanai.Benchmark;
+namespace Wangkanai.Foundation;
 
 /// <summary>
 /// Performance benchmarks for the optimized ValueObject implementation.

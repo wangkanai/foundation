@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Audit;
+namespace Wangkanai.Audit.Domain;
 
 public static class TrailExtensions { }

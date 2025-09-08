@@ -2,7 +2,7 @@
 
 using System.Linq.Expressions;
 
-namespace Wangkanai.Domain.Extensions;
+namespace Wangkanai.Foundation.Extensions;
 
 /// <summary>Provides utility methods for working with reflection in C#.</summary>
 public static class ReflectionExtensions

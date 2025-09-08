@@ -2,10 +2,7 @@
 
 using BenchmarkDotNet.Attributes;
 
-using Wangkanai.Domain;
-using Wangkanai.Domain.Models;
-
-namespace Wangkanai.Benchmark;
+namespace Wangkanai.Foundation;
 
 /// <summary>
 /// Performance benchmarks for Entity equality operations.

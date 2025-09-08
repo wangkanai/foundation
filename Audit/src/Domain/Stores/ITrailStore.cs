@@ -1,6 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Audit;
+using Wangkanai.Foundation;
+
+namespace Wangkanai.Audit.Domain;
 
 /// <summary>
 /// Defines the contract for an audit trail store, capable of managing audit trail entities, including creation operations.

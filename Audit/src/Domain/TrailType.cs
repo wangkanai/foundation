@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Audit;
+namespace Wangkanai.Audit.Domain;
 
 /// <summary>Specifies the type of operation recorded in an audit trail.</summary>
 public enum TrailType : byte

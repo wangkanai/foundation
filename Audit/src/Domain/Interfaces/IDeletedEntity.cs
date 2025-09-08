@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Audit;
+namespace Wangkanai.Audit.Domain;
 
 /// <summary>Represents an entity that tracks the deletion date and time with timezone awareness.</summary>
 /// <remarks>

@@ -3,9 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-using Wangkanai.Domain.Models;
-
-namespace Wangkanai.Domain.Configurations.Cases;
+namespace Wangkanai.Foundation.Configurations.Cases;
 
 public class GuidEntityTypeConfiguration : IEntityTypeConfiguration<GuidEntity>
 {

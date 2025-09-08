@@ -1,6 +1,8 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Audit.Reflections;
+using Wangkanai.Foundation;
+
+namespace Wangkanai.Audit.Domain.Reflections;
 
 /// <summary>
 /// Represents a mapping mechanism to resolve the primary key of transient entities and

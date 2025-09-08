@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.Domain.Configurations;
+namespace Wangkanai.Foundation.Configurations;
 
 /// <summary>
 /// Represents the base configuration class for an entity of type <see cref="Entity{T}"/>.

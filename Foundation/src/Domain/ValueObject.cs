@@ -6,9 +6,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-using Wangkanai.Domain.Extensions;
+using Wangkanai.Foundation.Extensions;
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Foundation;
 
 /// <summary>
 /// Represents an abstract base class for value objects in the domain-driven design context.

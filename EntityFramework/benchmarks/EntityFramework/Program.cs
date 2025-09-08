@@ -3,4 +3,6 @@
 global using BenchmarkDotNet.Attributes;
 global using BenchmarkDotNet.Running;
 
+using Wangkanai.EntityFramework.Benchmark;
+
 BenchmarkRunner.Run<EntityFrameworkBenchmark>();

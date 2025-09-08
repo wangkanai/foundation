@@ -5,7 +5,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.Audit.Configurations;
+namespace Wangkanai.Audit.Domain.Configurations;
 
 /// <summary>
 /// Represents the configuration settings for the <see cref="Trail{TKey, TUserType, TUserKey}"/> entity in the context of Entity Framework Core.

@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.Hosting;
 
-namespace Wangkanai.Domain;
+namespace Wangkanai.Foundation;
 
 public interface IEventListener<in TEvent, in TAction> : IHostedService
    where TEvent : IEvent
