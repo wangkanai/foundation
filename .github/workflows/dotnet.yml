@@ -44,7 +44,7 @@ jobs:
         run: dotnet tool install --global dotnet-sonarscanner
 
       - name: Restore dependencies
-        run: dotnet restore Domain.slnx
+        run: dotnet restore Foundation.slnx
 
       - name: SonarCloud Begin Analysis
         env:
@@ -61,11 +61,11 @@ jobs:
           /d:sonar.coverage.exclusions="**/tests/**,**/benchmarks/**"
 
       - name: Build
-        run: dotnet build Domain.slnx --no-restore -c Release
+        run: dotnet build Foundation.slnx --no-restore -c Release
 
       - name: Test
         run: |
-          dotnet test Domain.slnx --configuration Release --no-build --verbosity normal \
+          dotnet test Foundation.slnx --configuration Release --no-build --verbosity normal \
             --collect:"XPlat Code Coverage" \
             --results-directory ./TestResults/ \
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
