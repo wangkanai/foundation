@@ -1,0 +1,58 @@
+<Solution>
+  <Folder Name="/.claude/">
+    <File Path="CLAUDE.md" />
+    <File Path=".repomixignore" />
+    <File Path="repomix.config.json" />
+  </Folder>
+  <Folder Name="/.github/">
+    <File Path=".github\FUNDING.yml" />
+    <File Path=".github\RELEASE.yml" />
+    <File Path=".github\workflows\dotnet.yml" />
+  </Folder>
+  <Folder Name="/.solutions/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="Directory.Packages.props" />
+    <File Path=".gitattributes" />
+    <File Path=".gitignore" />
+    <File Path="build.ps1" />
+    <File Path="sign.ps1" />
+    <File Path="md-styles.css" />
+    <File Path="README.md" />
+    <File Path="SonarQube.Analysis.xml" />
+    <File Path=".editorconfig" />
+    <File Path=".resharper-cleanup.config" />
+  </Folder>
+  <Folder Name="/Audit/">
+    <Project Path="Audit\src\Domain\Wangkanai.Audit.Domain.csproj" Type="Classic C#" />
+    <File Path="Audit\Directory.Build.props" />
+  </Folder>
+  <Folder Name="/Audit/benchmarks/">
+    <Project Path="Audit\benchmarks\Domain\Wangkanai.Audit.Domain.Benchmark.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Audit/tests/">
+    <Project Path="Audit\tests\Domain\Wangkanai.Audit.Domain.Tests.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/EntityFramework/">
+    <Project Path="EntityFramework\src\EntityFramework\Wangkanai.EntityFramework.csproj" Type="Classic C#" />
+    <File Path="EntityFramework\Directory.Build.props" />
+  </Folder>
+  <Folder Name="/EntityFramework/benchmarks/">
+    <Project Path="EntityFramework\benchmarks\EntityFramework\Wangkanai.EntityFramework.Benchmark.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/EntityFramework/tests/">
+    <Project Path="EntityFramework\tests\EntityFramework\Wangkanai.EntityFramework.Tests.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Foundation/">
+    <Project Path="Foundation\src\Application\Wangkanai.Foundation.Application.csproj" Type="Classic C#" />
+    <Project Path="Foundation\src\Domain\Wangkanai.Foundation.Domain.csproj" Type="Classic C#" />
+    <Project Path="Foundation\src\Infrastructure\Wangkanai.Foundation.Infrastructure.csproj" Type="Classic C#" />
+    <File Path="Foundation\Directory.Build.props" />
+  </Folder>
+  <Folder Name="/Foundation/benchmarks/">
+    <Project Path="Foundation\benchmarks\Domain\Wangkanai.Foundation.Domain.Benchmark.csproj" Type="Classic C#" />
+  </Folder>
+  <Folder Name="/Foundation/tests/">
+    <Project Path="Foundation\tests\Domain\Wangkanai.Foundation.Domain.Tests.csproj" Type="Classic C#" />
+  </Folder>
+</Solution>

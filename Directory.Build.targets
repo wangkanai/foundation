@@ -1,6 +1,8 @@
 <Project>
    <ItemGroup>
       <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all"/>
+      <PackageReference Include="Microsoft.CodeAnalysis.Common" />
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
    </ItemGroup>
 
    <PropertyGroup Condition="$(MSBuildProjectName.Contains('Benchmark'))">
@@ -8,6 +10,7 @@
       <Optimize>true</Optimize>
       <IsPackable>false</IsPackable>
       <SonarQubeExclude>true</SonarQubeExclude>
+      <EnforceExtendedAnalyzerRules>false</EnforceExtendedAnalyzerRules>
    </PropertyGroup>
 
    <ItemGroup Condition="$(MSBuildProjectName.Contains('Benchmark'))">

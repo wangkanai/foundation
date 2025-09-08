@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+      <!-- Disable extended analyzer rules for benchmark projects -->
+      <EnforceExtendedAnalyzerRules>false</EnforceExtendedAnalyzerRules>
+   </PropertyGroup>
+
+   <ItemGroup>
+      <ProjectReference Include="..\..\src\Domain\Wangkanai.Foundation.Domain.csproj" />
+   </ItemGroup>
+
+   <ItemGroup>
+      <Compile Include="..\..\tests\Domain\Models\*.cs">
+         <Link>Models\%(Filename)%(Extension)</Link>
+      </Compile>
+   </ItemGroup>
+
+</Project>
