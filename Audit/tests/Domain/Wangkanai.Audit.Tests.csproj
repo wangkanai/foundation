@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+      <RootNamespace>Wangkanai.Audit</RootNamespace>
+   </PropertyGroup>
+
+   <ItemGroup>
+      <ProjectReference Include="..\..\src\Audit\Wangkanai.Audit.csproj" />
+      <ProjectReference Include="..\Domain\Wangkanai.Foundation.Domain.Tests.csproj" />
+   </ItemGroup>
+
+</Project>

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+      <RootNamespace>Wangkanai.EntityFramework</RootNamespace>
+   </PropertyGroup>
+
+   <ItemGroup>
+      <ProjectReference Include="..\..\src\EntityFramework\Wangkanai.EntityFramework.csproj" />
+   </ItemGroup>
+
+</Project>

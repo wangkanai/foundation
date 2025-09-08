@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+      <VersionPrefix>3.7.0</VersionPrefix>
+      <Product>Wangkanai EntityFramework</Product>
+      <PackageTags>wangkanai;entityframework;orm;ddd;dotnet</PackageTags>
+   </PropertyGroup>
+
+   <ItemGroup>
+      <FrameworkReference Include="Microsoft.AspNetCore.App" />
+   </ItemGroup>
+
+   <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+   </ItemGroup>
+
+   <ItemGroup>
+      <ProjectReference Include="..\Audit\Wangkanai.Audit.csproj" />
+   </ItemGroup>
+
+</Project>
