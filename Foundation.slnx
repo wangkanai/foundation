@@ -43,6 +43,7 @@
   </Folder>
   <Folder Name="/Foundation/">
     <Project Path="Foundation\src\Domain\Wangkanai.Foundation.Domain.csproj" Type="Classic C#" />
+    <File Path="Foundation\Directory.Build.props" />
   </Folder>
   <Folder Name="/Foundation/benchmarks/">
     <Project Path="Foundation\benchmarks\Domain\Wangkanai.Foundation.Domain.Benchmark.csproj" Type="Classic C#" />

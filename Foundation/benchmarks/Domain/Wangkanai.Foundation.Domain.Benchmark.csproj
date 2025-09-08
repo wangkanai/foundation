@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
    <PropertyGroup>
-     <RootNamespace>Wangkanai.Domain.Benchmark</RootNamespace>
+      <RootNamespace>Wangkanai.Domain.Benchmark</RootNamespace>
    </PropertyGroup>
 
    <ItemGroup>
