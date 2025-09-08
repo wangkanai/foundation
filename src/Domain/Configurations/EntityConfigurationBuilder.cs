@@ -6,6 +6,8 @@ namespace Wangkanai.Domain.Configurations;
 
 public static class EntityConfigurationBuilder
 {
+   private const int IndexKeyLength = 450;
+
    public static void HasDomainKey<T>(this EntityTypeBuilder<Entity<T>> builder)
       where T : IEquatable<T>, IComparable<T>
    {
@@ -24,9 +26,9 @@ public static class EntityConfigurationBuilder
 
       _ = Type.GetTypeCode(keyType) switch
           {
-             TypeCode.Int32 or TypeCode.Int64             => property.ValueGeneratedOnAdd(), // Let EF Core handle identity generation based on provider
-             TypeCode.String                              => property.HasMaxLength(450),     // Common database index key limit
-             TypeCode.Object when keyType == typeof(Guid) => property.ValueGeneratedOnAdd(), // Client-side GUID generation - database agnostic
+             TypeCode.Int32 or TypeCode.Int64             => property.ValueGeneratedOnAdd(),        // Let EF Core handle identity generation based on provider
+             TypeCode.String                              => property.HasMaxLength(IndexKeyLength), // Common database index key limit
+             TypeCode.Object when keyType == typeof(Guid) => property.ValueGeneratedOnAdd(),        // Client-side GUID generation - database agnostic
              _                                            => property
           };
    }
