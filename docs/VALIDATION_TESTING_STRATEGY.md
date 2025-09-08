@@ -1,16 +1,20 @@
 # Validation & Testing Strategy - Foundation Restructure
 
 ## 🎯 **Overview**
-Comprehensive validation strategy to ensure safe migration from `Wangkanai.*` to `Wangkanai.Foundation.*` hierarchy without breaking functionality.
+
+Comprehensive validation strategy to ensure safe migration from `Wangkanai.*` to `Wangkanai.Foundation.*` hierarchy without
+breaking functionality.
 
 ---
 
 ## 🧪 **Testing Phases**
 
 ### **Phase 1: Pre-Migration Baseline**
+
 Establish baseline before any changes to compare against.
 
 #### Baseline Commands
+
 ```bash
 # Record current state
 echo "=== PRE-MIGRATION BASELINE ===" > validation_log.txt
@@ -21,7 +25,7 @@ echo "" >> validation_log.txt
 echo "🔧 Build Status:" >> validation_log.txt
 dotnet build --verbosity minimal >> validation_log.txt 2>&1
 
-# Current test status  
+# Current test status
 echo -e "\n🧪 Test Status:" >> validation_log.txt
 dotnet test --logger "console;verbosity=minimal" >> validation_log.txt 2>&1
 
@@ -36,17 +40,20 @@ echo "Total test files: $(find tests -name "*Tests.cs" | wc -l)" >> validation_l
 ```
 
 #### Success Criteria
+
 - ✅ All builds pass
-- ✅ All tests pass  
+- ✅ All tests pass
 - ✅ Current versions documented
 - ✅ Test counts recorded
 
 ---
 
 ### **Phase 2: Incremental Validation**
+
 Validate at each major migration step.
 
 #### After Project Structure Creation
+
 ```bash
 echo -e "\n=== POST-STRUCTURE CREATION ===" >> validation_log.txt
 
@@ -61,12 +68,13 @@ find tests/Foundation -name "*.csproj" >> validation_log.txt
 ```
 
 #### After Content Migration
+
 ```bash
 echo -e "\n=== POST-CONTENT MIGRATION ===" >> validation_log.txt
 
 # File count verification
 echo "📊 File Migration Metrics:" >> validation_log.txt
-echo "Domain .cs files: $(find src/Foundation/Domain -name "*.cs" | wc -l)" >> validation_log.txt  
+echo "Domain .cs files: $(find src/Foundation/Domain -name "*.cs" | wc -l)" >> validation_log.txt
 echo "Audit .cs files: $(find src/Foundation/Audit -name "*.cs" | wc -l)" >> validation_log.txt
 echo "EF .cs files: $(find src/Foundation/EntityFramework -name "*.cs" | wc -l)" >> validation_log.txt
 
@@ -78,6 +86,7 @@ echo "Old EF namespaces remaining: $(grep -r "namespace Wangkanai\.EntityFramewo
 ```
 
 #### After Each Build Attempt
+
 ```bash
 echo -e "\n=== BUILD VALIDATION ===" >> validation_log.txt
 
@@ -90,7 +99,7 @@ for project in src/Foundation/*/Wangkanai.Foundation.*.csproj; do
 done
 
 # Build solution
-echo "Building complete solution:" >> validation_log.txt  
+echo "Building complete solution:" >> validation_log.txt
 dotnet build --verbosity minimal >> validation_log.txt 2>&1
 echo "Exit code: $?" >> validation_log.txt
 ```
@@ -100,6 +109,7 @@ echo "Exit code: $?" >> validation_log.txt
 ### **Phase 3: Functional Testing**
 
 #### Unit Test Validation
+
 ```bash
 echo -e "\n=== UNIT TEST VALIDATION ===" >> validation_log.txt
 
@@ -116,6 +126,7 @@ dotnet test --logger "console;verbosity=minimal" >> validation_log.txt 2>&1
 ```
 
 #### Package Generation Test
+
 ```bash
 echo -e "\n=== PACKAGE GENERATION TEST ===" >> validation_log.txt
 
@@ -140,6 +151,7 @@ ls -la packages/*.nupkg >> validation_log.txt 2>&1
 ### **Phase 4: Integration Testing**
 
 #### Consumer Project Simulation
+
 Create a minimal test consumer to validate the new packages work correctly.
 
 ```bash
@@ -194,6 +206,7 @@ cd ..
 ### **Phase 5: Regression Testing**
 
 #### Compare Against Baseline
+
 ```bash
 echo -e "\n=== REGRESSION ANALYSIS ===" >> validation_log.txt
 
@@ -210,7 +223,7 @@ else
     echo "❌ Build regression detected!" >> validation_log.txt
 fi
 
-# Compare test success  
+# Compare test success
 echo "Test regression check:" >> validation_log.txt
 if dotnet test --verbosity minimal > /dev/null 2>&1; then
     echo "✅ Tests still pass" >> validation_log.txt
@@ -242,7 +255,7 @@ echo "" >> $VALIDATION_LOG
 check_command() {
     local cmd="$1"
     local description="$2"
-    
+
     echo "🔍 $description..." | tee -a $VALIDATION_LOG
     if eval "$cmd" >> $VALIDATION_LOG 2>&1; then
         echo "✅ $description: PASSED" | tee -a $VALIDATION_LOG
@@ -264,7 +277,7 @@ if [ -d "src/Foundation" ]; then
 fi
 
 if [ -d "tests/Foundation" ]; then
-    check_command "find tests/Foundation -name '*.csproj' | wc -l | grep -q '[1-9]'" "Foundation tests exist"  
+    check_command "find tests/Foundation -name '*.csproj' | wc -l | grep -q '[1-9]'" "Foundation tests exist"
 fi
 
 # Namespace validations (after migration)
@@ -291,13 +304,14 @@ echo "" >> $VALIDATION_LOG
 ```
 
 #### Usage
+
 ```bash
 # Make executable
 chmod +x validate-foundation.sh
 
 # Run at each phase
 ./validate-foundation.sh "baseline"
-./validate-foundation.sh "structure-created"  
+./validate-foundation.sh "structure-created"
 ./validate-foundation.sh "content-migrated"
 ./validate-foundation.sh "post-migration"
 ./validate-foundation.sh "final"
@@ -308,6 +322,7 @@ chmod +x validate-foundation.sh
 ## 📊 **Success Metrics**
 
 ### Critical Success Indicators
+
 - ✅ **Zero build errors** across all projects
 - ✅ **All unit tests pass** (same count as baseline)
 - ✅ **All packages generate successfully**
@@ -315,11 +330,13 @@ chmod +x validate-foundation.sh
 - ✅ **No old namespaces remain** in Foundation projects
 
 ### Performance Metrics
+
 - ✅ **Build time** ≤ baseline + 20%
-- ✅ **Test execution time** ≤ baseline + 20%  
+- ✅ **Test execution time** ≤ baseline + 20%
 - ✅ **Package size** ≤ baseline + 10%
 
 ### Quality Metrics
+
 - ✅ **Test coverage maintained** (same % as baseline)
 - ✅ **No new warnings** introduced
 - ✅ **All analyzers pass** (EnforceExtendedAnalyzerRules)
@@ -329,6 +346,7 @@ chmod +x validate-foundation.sh
 ## ⚠️ **Failure Response**
 
 ### If Validation Fails
+
 ```bash
 # Document failure
 echo "❌ VALIDATION FAILURE at phase: $PHASE" >> validation_log.txt
@@ -348,6 +366,7 @@ echo "Check validation_log.txt for details."
 ```
 
 ### Recovery Process
+
 1. **Analyze** validation_log.txt for specific failures
 2. **Fix** identified issues in backup branch
 3. **Re-run** validation on fixes
@@ -362,7 +381,7 @@ Before considering migration complete:
 - [ ] All Foundation projects build successfully
 - [ ] All Foundation tests pass
 - [ ] All Foundation packages generate
-- [ ] Consumer project works with new packages  
+- [ ] Consumer project works with new packages
 - [ ] No old namespaces remain in Foundation code
 - [ ] Documentation updated with new package names
 - [ ] Migration guide created for consumers

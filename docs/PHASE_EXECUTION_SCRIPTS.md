@@ -11,7 +11,7 @@ git pull origin main
 git checkout -b backup/pre-foundation-restructure
 git push -u origin backup/pre-foundation-restructure
 
-# Tag current state  
+# Tag current state
 git tag -a v5.0.0-pre-foundation -m "Pre-Foundation restructure snapshot - Domain v5.0.0, Audit v0.3.0, EF v3.7.0"
 git push origin v5.0.0-pre-foundation
 
@@ -21,6 +21,7 @@ git checkout -b feature/foundation-restructure
 ```
 
 **Validation**: Confirm branches created successfully
+
 ```bash
 git branch -a | grep -E "(backup|feature)"
 git tag | grep "pre-foundation"
@@ -51,6 +52,7 @@ mkdir -p benchmark/Foundation/EntityFramework
 ```
 
 **Validation**: Verify directory structure
+
 ```bash
 tree src/Foundation tests/Foundation benchmark/Foundation
 ```
@@ -60,6 +62,7 @@ tree src/Foundation tests/Foundation benchmark/Foundation
 ### **Phase 3A: Create New Project Files**
 
 #### Foundation.Domain Project File
+
 ```bash
 cat > src/Foundation/Domain/Wangkanai.Foundation.Domain.csproj << 'EOF'
 <Project Sdk="Microsoft.NET.Sdk">
@@ -84,6 +87,7 @@ EOF
 ```
 
 #### Foundation.Audit Project File
+
 ```bash
 cat > src/Foundation/Audit/Wangkanai.Foundation.Audit.csproj << 'EOF'
 <Project Sdk="Microsoft.NET.Sdk">
@@ -106,6 +110,7 @@ EOF
 ```
 
 #### Foundation.EntityFramework Project File
+
 ```bash
 cat > src/Foundation/EntityFramework/Wangkanai.Foundation.EntityFramework.csproj << 'EOF'
 <Project Sdk="Microsoft.NET.Sdk">
@@ -129,6 +134,7 @@ EOF
 ```
 
 #### Foundation.Events Project File
+
 ```bash
 cat > src/Foundation/Events/Wangkanai.Foundation.Events.csproj << 'EOF'
 <Project Sdk="Microsoft.NET.Sdk">
@@ -150,6 +156,7 @@ EOF
 ```
 
 #### Foundation Metapackage Project File
+
 ```bash
 cat > src/Foundation/Metapackage/Wangkanai.Foundation.csproj << 'EOF'
 <Project Sdk="Microsoft.NET.Sdk">
@@ -171,6 +178,7 @@ EOF
 ```
 
 **Validation**: Verify project files created
+
 ```bash
 ls -la src/Foundation/*/Wangkanai.Foundation.*.csproj
 ```
@@ -180,6 +188,7 @@ ls -la src/Foundation/*/Wangkanai.Foundation.*.csproj
 ### **Phase 3B: Content Migration**
 
 #### Migrate Domain Files
+
 ```bash
 # Copy all domain files (except Events and Infrastructure)
 cp -r src/Domain/* src/Foundation/Domain/ 2>/dev/null || true
@@ -190,11 +199,12 @@ rm -f src/Foundation/Domain/Wangkanai.Domain.csproj*
 # Remove Events directory (will be restructured)
 rm -rf src/Foundation/Domain/Events
 
-# Remove Infrastructure directory (will be restructured)  
+# Remove Infrastructure directory (will be restructured)
 rm -rf src/Foundation/Domain/Infrastructure
 ```
 
 #### Migrate Audit Files
+
 ```bash
 # Copy all audit files
 cp -r src/Audit/* src/Foundation/Audit/ 2>/dev/null || true
@@ -204,6 +214,7 @@ rm -f src/Foundation/Audit/Wangkanai.Audit.csproj*
 ```
 
 #### Migrate EntityFramework Files
+
 ```bash
 # Copy all EF files
 cp -r src/EntityFramework/* src/Foundation/EntityFramework/ 2>/dev/null || true
@@ -213,6 +224,7 @@ rm -f src/Foundation/EntityFramework/Wangkanai.EntityFramework.csproj*
 ```
 
 **Validation**: Verify content copied
+
 ```bash
 find src/Foundation -name "*.cs" | wc -l
 ls -la src/Foundation/*/
@@ -244,13 +256,15 @@ EOF
 ### **Phase 3D: Update Namespaces**
 
 #### Domain Namespace Updates
+
 ```bash
 # Update all .cs files in Foundation.Domain
 find src/Foundation/Domain -name "*.cs" -exec sed -i '' 's/namespace Wangkanai\.Domain/namespace Wangkanai.Foundation.Domain/g' {} \;
 find src/Foundation/Domain -name "*.cs" -exec sed -i '' 's/using Wangkanai\.Domain/using Wangkanai.Foundation.Domain/g' {} \;
 ```
 
-#### Audit Namespace Updates  
+#### Audit Namespace Updates
+
 ```bash
 # Update all .cs files in Foundation.Audit
 find src/Foundation/Audit -name "*.cs" -exec sed -i '' 's/namespace Wangkanai\.Audit/namespace Wangkanai.Foundation.Audit/g' {} \;
@@ -259,6 +273,7 @@ find src/Foundation/Audit -name "*.cs" -exec sed -i '' 's/using Wangkanai\.Domai
 ```
 
 #### EntityFramework Namespace Updates
+
 ```bash
 # Update all .cs files in Foundation.EntityFramework
 find src/Foundation/EntityFramework -name "*.cs" -exec sed -i '' 's/namespace Wangkanai\.EntityFramework/namespace Wangkanai.Foundation.EntityFramework/g' {} \;
@@ -268,9 +283,10 @@ find src/Foundation/EntityFramework -name "*.cs" -exec sed -i '' 's/using Wangka
 ```
 
 **Validation**: Verify namespace changes
+
 ```bash
 grep -r "namespace Wangkanai\.Domain" src/Foundation/ || echo "✅ No old Domain namespaces found"
-grep -r "namespace Wangkanai\.Audit" src/Foundation/ || echo "✅ No old Audit namespaces found"  
+grep -r "namespace Wangkanai\.Audit" src/Foundation/ || echo "✅ No old Audit namespaces found"
 grep -r "namespace Wangkanai\.EntityFramework" src/Foundation/ || echo "✅ No old EF namespaces found"
 ```
 
@@ -279,6 +295,7 @@ grep -r "namespace Wangkanai\.EntityFramework" src/Foundation/ || echo "✅ No o
 ### **Phase 4: Test Migration**
 
 #### Create Test Project Files
+
 ```bash
 # Foundation.Domain Tests
 cat > tests/Foundation/Domain/Wangkanai.Foundation.Domain.Tests.csproj << 'EOF'
@@ -299,7 +316,7 @@ cat > tests/Foundation/Domain/Wangkanai.Foundation.Domain.Tests.csproj << 'EOF'
 </Project>
 EOF
 
-# Foundation.Audit Tests  
+# Foundation.Audit Tests
 cat > tests/Foundation/Audit/Wangkanai.Foundation.Audit.Tests.csproj << 'EOF'
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
@@ -358,6 +375,7 @@ EOF
 ```
 
 #### Migrate Test Content
+
 ```bash
 # Copy existing test files and update namespaces
 cp -r tests/Domain/* tests/Foundation/Domain/ 2>/dev/null || true
@@ -378,6 +396,7 @@ find tests/Foundation/EntityFramework -name "*.cs" -exec sed -i '' 's/using Wang
 ```
 
 **Validation**: Verify test projects created
+
 ```bash
 ls -la tests/Foundation/*/Wangkanai.Foundation.*.Tests.csproj
 ```
@@ -387,6 +406,7 @@ ls -la tests/Foundation/*/Wangkanai.Foundation.*.Tests.csproj
 ### **Phase 5: Solution Update**
 
 #### Update Solution File
+
 ```bash
 # Create new solution structure (manual edit needed for Domain.slnx)
 echo "🔧 MANUAL STEP: Update Domain.slnx to include new Foundation projects"
@@ -433,7 +453,7 @@ dotnet pack --configuration Release --output ./packages
 # Remove old directory structure (ONLY after validation passes)
 echo "⚠️  MANUAL STEP: After confirming everything works:"
 echo "rm -rf src/Domain"
-echo "rm -rf src/Audit" 
+echo "rm -rf src/Audit"
 echo "rm -rf src/EntityFramework"
 echo "rm -rf tests/Domain"
 echo "rm -rf tests/Audit"
@@ -452,7 +472,7 @@ git add .
 git commit -m "feat: restructure to Wangkanai.Foundation hierarchy
 
 BREAKING CHANGES:
-- Wangkanai.Domain → Wangkanai.Foundation.Domain  
+- Wangkanai.Domain → Wangkanai.Foundation.Domain
 - Wangkanai.Audit → Wangkanai.Foundation.Audit
 - Wangkanai.EntityFramework → Wangkanai.Foundation.EntityFramework
 - Add new Wangkanai.Foundation.Events package (resolves #50)
@@ -470,7 +490,7 @@ git tag -a v1.0.0 -m "Wangkanai Foundation v1.0.0
 
 Complete restructure to hierarchical Foundation pattern:
 - Foundation.Domain v1.0.0
-- Foundation.Audit v1.0.0  
+- Foundation.Audit v1.0.0
 - Foundation.EntityFramework v1.0.0
 - Foundation.Events v1.0.0 (NEW)
 - Foundation metapackage v1.0.0 (NEW)"
@@ -511,7 +531,7 @@ find tests/Foundation -name "*.csproj" | wc -l  # Should be 4
 # Build validation
 dotnet build --verbosity minimal
 
-# Test validation  
+# Test validation
 dotnet test --logger "console;verbosity=minimal"
 
 # Package validation
