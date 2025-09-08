@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-   <PropertyGroup>
-      <RootNamespace>Wangkanai.Domain</RootNamespace>
-   </PropertyGroup>
-   <ItemGroup>
-      <ProjectReference Include="..\..\src\Domain\Wangkanai.Foundation.Domain.csproj" />
-   </ItemGroup>
-</Project>
