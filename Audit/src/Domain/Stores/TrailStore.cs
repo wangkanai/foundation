@@ -24,8 +24,14 @@ public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) :
 {
    private readonly TContext _context = context ?? throw new ArgumentNullException(nameof(context));
 
+   private bool _disposed;
+
    private DbSet<Trail<TKey, TUserType, TUserKey>> AuditsSet
       => _context.Set<Trail<TKey, TUserType, TUserKey>>();
+
+   /// <summary>Indicates whether changes to the context are automatically persisted to the database upon certain operations.</summary>
+   /// <remarks>When set to true, any modifications to the underlying data store resulting from method calls such as creation, update, or delete will automatically trigger a call to save changes on the database context. If set to false, changes must be explicitly saved manually by invoking the appropriate context method.</remarks>
+   public bool AutoSaveChanges { get; set; } = true;
 
    /// <summary>
    /// Provides a queryable collection of audit trails associated with the specified identity user and key types.
@@ -36,10 +42,6 @@ public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) :
    /// </remarks>
    public IQueryable<Trail<TKey, TUserType, TUserKey>> Audits
       => AuditsSet;
-
-   /// <summary>Indicates whether changes to the context are automatically persisted to the database upon certain operations.</summary>
-   /// <remarks>When set to true, any modifications to the underlying data store resulting from method calls such as creation, update, or delete will automatically trigger a call to save changes on the database context. If set to false, changes must be explicitly saved manually by invoking the appropriate context method.</remarks>
-   public bool AutoSaveChanges { get; set; } = true;
 
    /// <summary>Creates a new audit trail entry in the underlying storage context.</summary>
    /// <param name="audit">The audit entity to be created.</param>
@@ -152,9 +154,6 @@ public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) :
       return Result.Success(audit);
    }
 
-   private Task SaveChangesAsync(CancellationToken cancellationToken)
-      => AutoSaveChanges ? _context.SaveChangesAsync(cancellationToken) : Task.CompletedTask;
-
    /// <summary>Releases the resources used by the current instance of the class.</summary>
    public void Dispose()
    {
@@ -162,7 +161,8 @@ public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) :
       GC.SuppressFinalize(this);
    }
 
-   private bool _disposed;
+   private Task SaveChangesAsync(CancellationToken cancellationToken)
+      => AutoSaveChanges ? _context.SaveChangesAsync(cancellationToken) : Task.CompletedTask;
 
    private void Dispose(bool disposing)
    {

@@ -2,7 +2,4 @@
 
 namespace Wangkanai.Audit;
 
-public static class TrailExtensions
-{
-
-}
+public static class TrailExtensions { }

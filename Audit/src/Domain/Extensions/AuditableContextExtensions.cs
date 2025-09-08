@@ -21,9 +21,7 @@ public static class AuditableContextExtensions
    public static void ApplyAuditableConfiguration<TKey, TUserType, TUserKey>(this ModelBuilder builder)
       where TKey : IEquatable<TKey>, IComparable<TKey>
       where TUserType : IdentityUser<TUserKey>
-      where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
-   {
+      where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey> =>
       builder.ApplyConfiguration(new TrailConfiguration<TKey, TUserType, TUserKey>());
-      // builder.ApplyConfiguration(new UserAuditConfiguration<TKey>());
-   }
+   // builder.ApplyConfiguration(new UserAuditConfiguration<TKey>());
 }

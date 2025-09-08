@@ -19,7 +19,5 @@ public abstract class AuditableEntityConfiguration<TEntity, TKey> : IEntityTypeC
 {
    /// <summary>Configures the base auditable properties for the entity.</summary>
    /// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
-   public virtual void Configure(EntityTypeBuilder<TEntity> builder)
-   {
-   }
+   public virtual void Configure(EntityTypeBuilder<TEntity> builder) { }
 }

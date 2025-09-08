@@ -24,5 +24,5 @@ public interface IHasRowVersion<T>
    /// It is commonly used for optimistic concurrency checks to ensure the record
    /// has not been modified or updated by another process since it was retrieved.
    /// </summary>
-   public T RowVersion { get; set; }
+   T RowVersion { get; set; }
 }
