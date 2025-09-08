@@ -10,18 +10,18 @@ Guide for consumers migrating from the old flat structure to the new Foundation 
 
 ### **Package Name Changes**
 
-| **Old Package** | **New Package** | **Status** |
-|-----------------|-----------------|------------|
-| `Wangkanai.Domain` (v5.0.0) | `Wangkanai.Foundation.Domain` (v1.0.0) | ✅ Available |
-| `Wangkanai.Audit` (v0.3.0) | `Wangkanai.Audit.Domain` (v1.0.0) | ✅ Available |  
-| `Wangkanai.EntityFramework` (v3.7.0) | `Wangkanai.EntityFramework` (v1.0.0) | ✅ Available |
+| **Old Package**                      | **New Package**                        | **Status**  |
+|--------------------------------------|----------------------------------------|-------------|
+| `Wangkanai.Domain` (v5.0.0)          | `Wangkanai.Foundation.Domain` (v1.0.0) | ✅ Available |
+| `Wangkanai.Audit` (v0.3.0)           | `Wangkanai.Audit.Domain` (v1.0.0)      | ✅ Available |
+| `Wangkanai.EntityFramework` (v3.7.0) | `Wangkanai.EntityFramework` (v1.0.0)   | ✅ Available |
 
 ### **Namespace Changes**
 
-| **Old Namespace** | **New Namespace** |
-|-------------------|-------------------|
-| `Wangkanai.Domain` | `Wangkanai.Foundation.Domain` |
-| `Wangkanai.Audit` | `Wangkanai.Audit` (unchanged) |
+| **Old Namespace**           | **New Namespace**                       |
+|-----------------------------|-----------------------------------------|
+| `Wangkanai.Domain`          | `Wangkanai.Foundation.Domain`           |
+| `Wangkanai.Audit`           | `Wangkanai.Audit` (unchanged)           |
 | `Wangkanai.EntityFramework` | `Wangkanai.EntityFramework` (unchanged) |
 
 ---
@@ -31,22 +31,27 @@ Guide for consumers migrating from the old flat structure to the new Foundation 
 ### **Step 1: Update Package References**
 
 #### **Before (PackageReference)**
+
 ```xml
-<PackageReference Include="Wangkanai.Domain" Version="5.0.0" />
-<PackageReference Include="Wangkanai.Audit" Version="0.3.0" />
-<PackageReference Include="Wangkanai.EntityFramework" Version="3.7.0" />
+
+<PackageReference Include="Wangkanai.Domain" Version="5.0.0"/>
+<PackageReference Include="Wangkanai.Audit" Version="0.3.0"/>
+<PackageReference Include="Wangkanai.EntityFramework" Version="3.7.0"/>
 ```
 
 #### **After (PackageReference)**
+
 ```xml
-<PackageReference Include="Wangkanai.Foundation.Domain" Version="1.0.0" />
-<PackageReference Include="Wangkanai.Audit.Domain" Version="1.0.0" />
-<PackageReference Include="Wangkanai.EntityFramework" Version="1.0.0" />
+
+<PackageReference Include="Wangkanai.Foundation.Domain" Version="1.0.0"/>
+<PackageReference Include="Wangkanai.Audit.Domain" Version="1.0.0"/>
+<PackageReference Include="Wangkanai.EntityFramework" Version="1.0.0"/>
 ```
 
 ### **Step 2: Update Using Statements**
 
 #### **Before (C# Code)**
+
 ```csharp
 using Wangkanai.Domain;
 using Wangkanai.Domain.Events;
@@ -57,9 +62,10 @@ using Wangkanai.EntityFramework;
 ```
 
 #### **After (C# Code)**
+
 ```csharp
 using Wangkanai.Foundation.Domain;
-using Wangkanai.Foundation.Domain.Events;  
+using Wangkanai.Foundation.Domain.Events;
 using Wangkanai.Foundation.Domain.Interfaces;
 using Wangkanai.Foundation.Domain.Primitives;
 using Wangkanai.Audit;                     // ← No change
@@ -69,6 +75,7 @@ using Wangkanai.EntityFramework;           // ← No change
 ### **Step 3: Update Code References**
 
 #### **Entity Base Classes**
+
 ```csharp
 // Before
 public class User : Entity<int> { }
@@ -80,6 +87,7 @@ public class Product : KeyGuidEntity { }   // Wangkanai.Foundation.Domain
 ```
 
 #### **Value Objects**
+
 ```csharp
 // Before
 public class Money : ValueObject { }
@@ -89,17 +97,19 @@ public class Money : ValueObject { }       // Wangkanai.Foundation.Domain
 ```
 
 #### **Result Pattern**
+
 ```csharp
 // Before
 public Result<User> GetUser(int id) { }
 
-// After - Same usage, different namespace  
+// After - Same usage, different namespace
 public Result<User> GetUser(int id) { }    // Wangkanai.Foundation.Domain
 ```
 
 ### **Step 4: Domain Events (⚠️ Issue #50 Pending)**
 
 #### **Current State (Still Coupled)**
+
 ```csharp
 // This still exists with hosting coupling
 using Wangkanai.Foundation.Domain;         // IEventListener still here
@@ -111,6 +121,7 @@ public class UserEventListener : IEventListener<UserCreated, UserAction>
 ```
 
 #### **Expected Future State**
+
 ```csharp
 // When Issue #50 is resolved
 using Wangkanai.Foundation.Domain;         // Pure domain events
@@ -135,11 +146,12 @@ public class UserEventListener : IEventListenerService<UserCreated, UserAction> 
 ## 🔧 **Migration Automation**
 
 ### **PowerShell Migration Script**
+
 ```powershell
 # migrate-to-foundation.ps1
 param(
-    [Parameter(Mandatory=$true)]
-    [string]$ProjectPath
+   [Parameter(Mandatory = $true)]
+   [string]$ProjectPath
 )
 
 Write-Host "🚀 Starting Foundation migration for: $ProjectPath"
@@ -158,22 +170,24 @@ Write-Host "📝 Updating using statements..."
 
 $csFiles = Get-ChildItem -Path (Split-Path $ProjectPath) -Filter "*.cs" -Recurse
 
-foreach ($file in $csFiles) {
-    $content = Get-Content $file.FullName -Raw
-    $content = $content -replace 'using Wangkanai\.Domain;', 'using Wangkanai.Foundation.Domain;'
-    $content = $content -replace 'using Wangkanai\.Domain\.', 'using Wangkanai.Foundation.Domain.'
-    Set-Content $file.FullName $content
+foreach ($file in $csFiles)
+{
+   $content = Get-Content $file.FullName -Raw
+   $content = $content -replace 'using Wangkanai\.Domain;', 'using Wangkanai.Foundation.Domain;'
+   $content = $content -replace 'using Wangkanai\.Domain\.', 'using Wangkanai.Foundation.Domain.'
+   Set-Content $file.FullName $content
 }
 
 Write-Host "✅ Migration completed!"
 Write-Host "⚠️  Note: Issue #50 still pending - IEventListener hosting coupling exists"
 Write-Host "🔧 Next steps:"
 Write-Host "   1. Build project: dotnet build"
-Write-Host "   2. Run tests: dotnet test"  
+Write-Host "   2. Run tests: dotnet test"
 Write-Host "   3. Update any remaining references manually"
 ```
 
 ### **Bash Migration Script**
+
 ```bash
 #!/bin/bash
 # migrate-to-foundation.sh
@@ -212,10 +226,12 @@ echo "   3. Update any remaining references manually"
 ## ⚠️ **Breaking Changes & Considerations**
 
 ### **Version Reset**
+
 - **All packages reset to v1.0.0** - indicates major architectural change
 - **Semantic versioning restart** - new ecosystem foundation established
 
 ### **IEventListener Coupling (Issue #50)**
+
 ```csharp
 // ⚠️ BREAKING: This interface still couples domain with hosting
 public interface IEventListener<in TEvent, in TAction> : IHostedService
@@ -223,11 +239,13 @@ public interface IEventListener<in TEvent, in TAction> : IHostedService
 
 **Impact**: Projects using `IEventListener` still have hosting dependencies
 
-**Mitigation**: 
+**Mitigation**:
+
 1. Current: Continue using existing interface (coupling remains)
 2. Future: Wait for Issue #50 resolution with proper abstraction
 
 ### **Project Reference Complexity**
+
 - **Cross-domain references** use complex relative paths
 - **Build system dependency** on monorepo structure
 - **IDE experience** may show projects in different locations
@@ -237,6 +255,7 @@ public interface IEventListener<in TEvent, in TAction> : IHostedService
 ## 🧪 **Validation After Migration**
 
 ### **Build Verification**
+
 ```bash
 # Clean and rebuild to ensure everything works
 dotnet clean
@@ -246,7 +265,8 @@ dotnet build
 # Should complete without errors
 ```
 
-### **Test Verification** 
+### **Test Verification**
+
 ```bash
 # Run all tests to ensure functionality preserved
 dotnet test
@@ -255,6 +275,7 @@ dotnet test
 ```
 
 ### **Runtime Verification**
+
 ```csharp
 // Test key components still work
 var entity = new MyEntity(1);           // Entity creation
@@ -269,16 +290,19 @@ var valueObj = new MyValueObject();     // Value objects
 ## 📈 **Benefits After Migration**
 
 ### **✅ Improved Architecture**
+
 - **Foundation branding** - clear ecosystem identity
 - **Domain separation** - monorepo organization
 - **Version alignment** - all packages v1.0.0
 
 ### **🚀 Future-Ready**
-- **Ecosystem expansion** - ready for additional domains  
+
+- **Ecosystem expansion** - ready for additional domains
 - **Independent evolution** - domains can evolve separately
 - **Enterprise structure** - scales for large organizations
 
 ### **🔧 Developer Experience**
+
 - **Consistent naming** - `Wangkanai.Foundation.*` pattern
 - **Clear dependencies** - domain relationships visible
 - **Modern architecture** - follows current best practices
@@ -288,17 +312,20 @@ var valueObj = new MyValueObject();     // Value objects
 ## 🎯 **Migration Timeline**
 
 ### **Immediate (Day 1)**
+
 1. ✅ Update package references in consumer projects
-2. ✅ Update using statements  
+2. ✅ Update using statements
 3. ✅ Rebuild and test projects
 4. ⚠️ Address any compilation errors
 
 ### **Short-term (Week 1)**
+
 1. 🔄 Monitor for runtime issues
 2. 📝 Update internal documentation
 3. 👥 Train team on new structure
 
 ### **Long-term (Month 1)**
+
 1. ⏳ Wait for Issue #50 resolution
 2. 🔄 Migrate to pure domain events when available
 3. 📦 Consider using metapackage when created
@@ -310,22 +337,25 @@ var valueObj = new MyValueObject();     // Value objects
 ### **Common Issues**
 
 #### **Build Errors After Migration**
+
 ```bash
 # Error: Cannot find package 'Wangkanai.Domain'
 # Solution: Ensure all references updated to 'Wangkanai.Foundation.Domain'
 
-# Error: Namespace 'Wangkanai.Domain' not found  
+# Error: Namespace 'Wangkanai.Domain' not found
 # Solution: Update using statements to 'Wangkanai.Foundation.Domain'
 ```
 
 #### **Runtime Issues**
+
 - **Behavior differences**: Should be minimal - same core logic
 - **Performance impact**: Should be negligible - same implementations
 - **Event handling**: May need adjustment when Issue #50 is resolved
 
 ### **Getting Help**
+
 1. **Check validation scripts** - use provided migration automation
-2. **Review documentation** - consult updated architectural guides  
+2. **Review documentation** - consult updated architectural guides
 3. **Test thoroughly** - run full test suites after migration
 4. **Monitor Issue #50** - track progress on hosting dependency resolution
 
@@ -336,7 +366,7 @@ var valueObj = new MyValueObject();     // Value objects
 Your migration is successful when:
 
 - [x] Project builds without errors
-- [x] All tests pass  
+- [x] All tests pass
 - [x] Runtime behavior unchanged
 - [x] New namespace references work correctly
 - [ ] Issue #50 resolution applied (when available)
