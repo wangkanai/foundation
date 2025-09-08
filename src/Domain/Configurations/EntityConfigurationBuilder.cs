@@ -15,7 +15,6 @@ public static class EntityConfigurationBuilder
 
       builder.Property(x => x.Id)
              .IsRequired()
-             .ValueGeneratedOnAdd()
              .ApplyKeyOptimizations();
    }
 
@@ -26,9 +25,9 @@ public static class EntityConfigurationBuilder
 
       _ = Type.GetTypeCode(keyType) switch
           {
-             TypeCode.Int32 or TypeCode.Int64             => property,                              // Already configured with ValueGeneratedOnAdd()
-             TypeCode.String                              => property.HasMaxLength(IndexKeyLength), // Common database index key limit
-             TypeCode.Object when keyType == typeof(Guid) => property.ValueGeneratedOnAdd(),        // Client-side GUID generation - database agnostic
+             TypeCode.Int32 or TypeCode.Int64             => property.ValueGeneratedOnAdd(),                              // EF Core handles identity generation
+             TypeCode.String                              => property.HasMaxLength(IndexKeyLength),                       // String keys are application-provided
+             TypeCode.Object when keyType == typeof(Guid) => property.ValueGeneratedOnAdd(),                              // Client-side GUID generation
              _                                            => property
           };
    }
