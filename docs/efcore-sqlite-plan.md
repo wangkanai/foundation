@@ -1,18 +1,22 @@
 # EF Core SQLite Optimization Implementation Plan
 
-> **Document Purpose**: Comprehensive roadmap for implementing SQLite-specific optimizations in the Wangkanai EntityFramework provider
-> 
+> **Document Purpose**: Comprehensive roadmap for implementing SQLite-specific optimizations in the Wangkanai EntityFramework
+> provider
+>
 > **Target**: Enhance performance, developer experience, and SQLite-specific capabilities
-> 
+>
 > **Created**: 2025-09-09 | **Status**: Planning Phase
 
 ---
 
 ## 🎯 Executive Summary
 
-This document outlines a strategic implementation plan for SQLite-specific optimizations in the Wangkanai EntityFramework provider. The plan focuses on performance enhancements, developer productivity, and SQLite-specific features through a series of extension methods that follow established project patterns.
+This document outlines a strategic implementation plan for SQLite-specific optimizations in the Wangkanai EntityFramework
+provider. The plan focuses on performance enhancements, developer productivity, and SQLite-specific features through a series of
+extension methods that follow established project patterns.
 
 ### **Key Objectives**
+
 - Improve SQLite performance through optimized configurations
 - Provide SQLite-specific features via fluent API extensions
 - Maintain consistency with existing provider patterns
@@ -23,6 +27,7 @@ This document outlines a strategic implementation plan for SQLite-specific optim
 ## 📊 Current State Analysis
 
 ### **Existing Implementation**
+
 ```csharp
 ✅ ConfigurationExtensions.cs
    └── SqliteValueGeneratedOnAdd<T>() - Basic value generation
@@ -39,8 +44,9 @@ This document outlines a strategic implementation plan for SQLite-specific optim
 ```
 
 ### **Gap Analysis**
+
 - **Missing**: Performance optimization extensions
-- **Missing**: SQLite-specific data type optimizations  
+- **Missing**: SQLite-specific data type optimizations
 - **Missing**: Connection-level configuration helpers
 - **Missing**: Advanced indexing strategies
 - **Missing**: Bulk operation optimizations
@@ -50,9 +56,11 @@ This document outlines a strategic implementation plan for SQLite-specific optim
 ## 🚀 Implementation Roadmap
 
 ### **Phase 1: Foundation Performance Extensions** (Week 1-2)
+
 **Priority**: High | **Effort**: Low | **Impact**: High
 
 #### **1.1 Connection Performance Extensions**
+
 ```csharp
 // File: src/Sqlite/ConnectionConfigurationExtensions.cs
 public static class ConnectionConfigurationExtensions
@@ -88,6 +96,7 @@ public static class ConnectionConfigurationExtensions
 ```
 
 #### **1.2 Property Performance Extensions**
+
 ```csharp
 // Extend existing ConfigurationExtensions.cs
 public static class ConfigurationExtensions
@@ -118,6 +127,7 @@ public static class ConfigurationExtensions
 ```
 
 **Deliverables**:
+
 - [ ] `ConnectionConfigurationExtensions.cs` implementation
 - [ ] Enhanced `ConfigurationExtensions.cs` with performance methods
 - [ ] Unit tests for all extension methods
@@ -127,9 +137,11 @@ public static class ConfigurationExtensions
 ---
 
 ### **Phase 2: Advanced Data Type Support** (Week 3-4)
+
 **Priority**: Medium | **Effort**: Medium | **Impact**: High
 
 #### **2.1 JSON Column Extensions**
+
 ```csharp
 // File: src/Sqlite/JsonConfigurationExtensions.cs
 public static class JsonConfigurationExtensions
@@ -158,6 +170,7 @@ public static class JsonConfigurationExtensions
 ```
 
 #### **2.2 Data Type Optimization Extensions**
+
 ```csharp
 // File: src/Sqlite/DataTypeConfigurationExtensions.cs
 public static class DataTypeConfigurationExtensions
@@ -186,6 +199,7 @@ public static class DataTypeConfigurationExtensions
 ```
 
 **Deliverables**:
+
 - [ ] `JsonConfigurationExtensions.cs` implementation
 - [ ] `DataTypeConfigurationExtensions.cs` implementation
 - [ ] JSON query optimization examples
@@ -195,9 +209,11 @@ public static class DataTypeConfigurationExtensions
 ---
 
 ### **Phase 3: Advanced Indexing & Query Optimization** (Week 5-6)
+
 **Priority**: Medium | **Effort**: Medium | **Impact**: Medium
 
 #### **3.1 Index Optimization Extensions**
+
 ```csharp
 // File: src/Sqlite/IndexConfigurationExtensions.cs
 public static class IndexConfigurationExtensions
@@ -233,6 +249,7 @@ public static class IndexConfigurationExtensions
 ```
 
 #### **3.2 Query Pattern Extensions**
+
 ```csharp
 // File: src/Sqlite/QueryOptimizationExtensions.cs
 public static class QueryOptimizationExtensions
@@ -261,6 +278,7 @@ public static class QueryOptimizationExtensions
 ```
 
 **Deliverables**:
+
 - [ ] `IndexConfigurationExtensions.cs` implementation
 - [ ] `QueryOptimizationExtensions.cs` implementation
 - [ ] Index performance benchmarks
@@ -270,9 +288,11 @@ public static class QueryOptimizationExtensions
 ---
 
 ### **Phase 4: Bulk Operations & Migration Support** (Week 7-8)
+
 **Priority**: Low | **Effort**: High | **Impact**: High
 
 #### **4.1 Bulk Operation Extensions**
+
 ```csharp
 // File: src/Sqlite/BulkConfigurationExtensions.cs
 public static class BulkConfigurationExtensions
@@ -301,6 +321,7 @@ public static class BulkConfigurationExtensions
 ```
 
 #### **4.2 Migration Performance Extensions**
+
 ```csharp
 // File: src/Sqlite/MigrationConfigurationExtensions.cs
 public static class MigrationConfigurationExtensions
@@ -329,6 +350,7 @@ public static class MigrationConfigurationExtensions
 ```
 
 **Deliverables**:
+
 - [ ] `BulkConfigurationExtensions.cs` implementation
 - [ ] `MigrationConfigurationExtensions.cs` implementation
 - [ ] Bulk operation performance benchmarks
@@ -338,9 +360,11 @@ public static class MigrationConfigurationExtensions
 ---
 
 ### **Phase 5: Advanced Features** (Week 9-10)
+
 **Priority**: Low | **Effort**: High | **Impact**: Medium
 
 #### **5.1 Full-Text Search Extensions**
+
 ```csharp
 // File: src/Sqlite/FullTextSearchExtensions.cs
 public static class FullTextSearchExtensions
@@ -369,6 +393,7 @@ public static class FullTextSearchExtensions
 ```
 
 #### **5.2 Spatial Data Extensions**
+
 ```csharp
 // File: src/Sqlite/SpatialConfigurationExtensions.cs
 public static class SpatialConfigurationExtensions
@@ -397,7 +422,8 @@ public static class SpatialConfigurationExtensions
 ```
 
 **Deliverables**:
-- [ ] `FullTextSearchExtensions.cs` implementation  
+
+- [ ] `FullTextSearchExtensions.cs` implementation
 - [ ] `SpatialConfigurationExtensions.cs` implementation
 - [ ] FTS performance analysis
 - [ ] Spatial query examples
@@ -407,14 +433,14 @@ public static class SpatialConfigurationExtensions
 
 ## 📈 Performance Impact Matrix
 
-| Extension Category | Read Performance | Write Performance | Storage Efficiency | Development Experience |
-|-------------------|------------------|-------------------|-------------------|----------------------|
-| **Connection Config** | +++++ | +++++ | +++ | ++++ |
-| **Property Optimization** | ++++ | +++ | ++++ | +++++ |
-| **JSON Support** | ++++ | ++ | +++ | +++++ |
-| **Index Optimization** | +++++ | ++ | ++++ | +++ |
-| **Bulk Operations** | +++ | +++++ | +++ | ++++ |
-| **Full-Text Search** | +++++ | ++ | +++ | +++++ |
+| Extension Category        | Read Performance | Write Performance | Storage Efficiency | Development Experience |
+|---------------------------|------------------|-------------------|--------------------|------------------------|
+| **Connection Config**     | +++++            | +++++             | +++                | ++++                   |
+| **Property Optimization** | ++++             | +++               | ++++               | +++++                  |
+| **JSON Support**          | ++++             | ++                | +++                | +++++                  |
+| **Index Optimization**    | +++++            | ++                | ++++               | +++                    |
+| **Bulk Operations**       | +++              | +++++             | +++                | ++++                   |
+| **Full-Text Search**      | +++++            | ++                | +++                | +++++                  |
 
 **Legend**: + (Minor) | ++ (Moderate) | +++ (Significant) | ++++ (Major) | +++++ (Exceptional)
 
@@ -423,11 +449,12 @@ public static class SpatialConfigurationExtensions
 ## 🧪 Testing Strategy
 
 ### **Unit Testing Framework**
+
 ```csharp
 // Test structure following project patterns
 EntityFramework/tests/Sqlite/Unit/
 ├── ConnectionConfigurationExtensionsTests.cs
-├── JsonConfigurationExtensionsTests.cs  
+├── JsonConfigurationExtensionsTests.cs
 ├── IndexConfigurationExtensionsTests.cs
 ├── BulkConfigurationExtensionsTests.cs
 └── PerformanceTests/
@@ -437,6 +464,7 @@ EntityFramework/tests/Sqlite/Unit/
 ```
 
 ### **Integration Testing**
+
 ```csharp
 EntityFramework/tests/Sqlite/Integration/
 ├── OptimizationScenarioTests.cs
@@ -445,6 +473,7 @@ EntityFramework/tests/Sqlite/Integration/
 ```
 
 ### **Performance Benchmarking**
+
 - BenchmarkDotNet integration for quantitative performance measurement
 - Before/after comparisons for each optimization
 - Memory usage analysis and optimization verification
@@ -455,24 +484,26 @@ EntityFramework/tests/Sqlite/Integration/
 ## 🔧 Implementation Guidelines
 
 ### **Code Style Consistency**
+
 - Follow existing project patterns in `ConfigurationExtensions.cs`
 - Use expression-bodied syntax for simple delegating methods
 - Comprehensive XML documentation for all public methods
 - Generic constraints where appropriate for type safety
 
 ### **Extension Method Patterns**
+
 ```csharp
 // Preferred pattern for property extensions
 public static PropertyBuilder<T> HasSqliteOptimization<T>(this PropertyBuilder<T> builder)
 {
     builder.HasAnnotation("Sqlite:Optimization", "enabled")
            .HasComment("Optimized for SQLite performance");
-    
+
     return builder;
 }
 
-// Preferred pattern for entity extensions  
-public static EntityTypeBuilder<T> OptimizeForSqlite<T>(this EntityTypeBuilder<T> builder) 
+// Preferred pattern for entity extensions
+public static EntityTypeBuilder<T> OptimizeForSqlite<T>(this EntityTypeBuilder<T> builder)
     where T : class
 {
     builder.HasAnnotation("Sqlite:EntityOptimization", "enabled");
@@ -481,12 +512,14 @@ public static EntityTypeBuilder<T> OptimizeForSqlite<T>(this EntityTypeBuilder<T
 ```
 
 ### **Error Handling Standards**
+
 - Validate parameters with meaningful error messages
 - Use `ArgumentNullException` for null parameters
 - Provide clear documentation of prerequisites and limitations
 - Include usage examples in XML documentation
 
 ### **Backwards Compatibility**
+
 - All extensions should be additive (no breaking changes)
 - Default parameter values for optional configurations
 - Graceful fallbacks for unsupported SQLite versions
@@ -497,16 +530,19 @@ public static EntityTypeBuilder<T> OptimizeForSqlite<T>(this EntityTypeBuilder<T
 ## 🚀 Deployment Strategy
 
 ### **Release Phases**
+
 1. **Alpha Release**: Phase 1 extensions with basic performance optimizations
 2. **Beta Release**: Phases 1-3 with comprehensive testing and documentation
 3. **Stable Release**: All phases with production-ready features
 
 ### **Version Compatibility**
+
 - **SQLite Version**: 3.35.0+ (for modern JSON and FTS5 support)
 - **.NET Version**: .NET 9.0+ (following project standards)
 - **EF Core Version**: 9.0.0+ (leveraging latest optimization features)
 
 ### **Migration Path**
+
 - Provide upgrade guide for existing applications
 - Include performance comparison benchmarks
 - Document breaking changes (if any) and mitigation strategies
@@ -517,12 +553,14 @@ public static EntityTypeBuilder<T> OptimizeForSqlite<T>(this EntityTypeBuilder<T
 ## 📚 Documentation Deliverables
 
 ### **Developer Documentation**
+
 - [ ] **API Reference**: Complete XML documentation for all extensions
-- [ ] **Usage Examples**: Real-world scenarios and code samples  
+- [ ] **Usage Examples**: Real-world scenarios and code samples
 - [ ] **Performance Guide**: Optimization strategies and benchmarks
 - [ ] **Migration Guide**: Upgrading existing applications
 
 ### **Architecture Documentation**
+
 - [ ] **Design Decisions**: Technical rationale for implementation choices
 - [ ] **Extension Patterns**: Guidelines for future extension development
 - [ ] **Integration Points**: How optimizations interact with EF Core
@@ -533,20 +571,23 @@ public static EntityTypeBuilder<T> OptimizeForSqlite<T>(this EntityTypeBuilder<T
 ## 🎯 Success Metrics
 
 ### **Performance Targets**
+
 - **Query Performance**: 25-50% improvement in read-heavy scenarios
-- **Bulk Operations**: 100-300% improvement in insert/update performance  
+- **Bulk Operations**: 100-300% improvement in insert/update performance
 - **Memory Usage**: 10-20% reduction in memory footprint
 - **Startup Time**: Minimal impact on application startup performance
 
 ### **Developer Experience**
+
 - **API Discoverability**: IntelliSense-friendly extension methods
 - **Documentation Coverage**: 100% XML documentation coverage
 - **Error Messages**: Clear, actionable error messages and guidance
 - **Migration Complexity**: Minimal breaking changes from current implementation
 
 ### **Quality Metrics**
+
 - **Test Coverage**: >95% code coverage across all extensions
-- **Performance Regression**: Zero performance regressions in existing functionality  
+- **Performance Regression**: Zero performance regressions in existing functionality
 - **Cross-Platform**: Consistent behavior across Windows, macOS, and Linux
 - **Production Stability**: Successful deployment in high-load scenarios
 
@@ -555,13 +596,16 @@ public static EntityTypeBuilder<T> OptimizeForSqlite<T>(this EntityTypeBuilder<T
 ## 🤝 Contribution Guidelines
 
 ### **Implementation Phases**
+
 Each phase can be implemented incrementally and independently, allowing for:
+
 - Iterative development and feedback incorporation
-- Early value delivery through Phase 1 quick wins  
+- Early value delivery through Phase 1 quick wins
 - Risk mitigation through gradual feature rollout
 - Community contribution opportunities at each phase
 
 ### **Review Process**
+
 - Code review with focus on performance impact verification
 - Benchmark validation for all performance-related claims
 - Documentation review for completeness and accuracy
@@ -569,4 +613,5 @@ Each phase can be implemented incrementally and independently, allowing for:
 
 ---
 
-**Next Steps**: Select priority phases based on current performance requirements and begin implementation with Phase 1 foundation extensions for immediate impact.
+**Next Steps**: Select priority phases based on current performance requirements and begin implementation with Phase 1 foundation
+extensions for immediate impact.
