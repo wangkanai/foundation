@@ -2,7 +2,4 @@
 
 namespace Wangkanai.EntityFramework.MySql;
 
-public static class ConfigurationExtensions
-{
-
-}
+public static class ConfigurationExtensions { }

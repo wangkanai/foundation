@@ -53,8 +53,5 @@ public static class ConfigurationExtensions
    /// </summary>
    /// <typeparam name="T">The type of the property being configured.</typeparam>
    /// <param name="builder">The property builder used to configure the property.</param>
-   public static void NpgValueGeneratedNever<T>(this PropertyBuilder<T> builder)
-   {
-      builder.ValueGeneratedNever();
-   }
+   public static void NpgValueGeneratedNever<T>(this PropertyBuilder<T> builder) => builder.ValueGeneratedNever();
 }
