@@ -44,6 +44,7 @@
     <Project Path="EntityFramework\src\EntityFramework\Wangkanai.EntityFramework.csproj" Type="Classic C#" />
     <Project Path="EntityFramework\src\MySql\Wangkanai.EntityFramework.MySql.csproj" Type="Classic C#" />
     <Project Path="EntityFramework\src\Postgres\Wangkanai.EntityFramework.Postgres.csproj" Type="Classic C#" />
+    <Project Path="EntityFramework\src\Sqlite\Wangkanai.EntityFramework.Sqlite.csproj" Type="Classic C#" />
     <Project Path="EntityFramework\src\SqlServer\Wangkanai.EntityFramework.SqlServer.csproj" Type="Classic C#" />
     <File Path="EntityFramework\Directory.Build.props" />
     <File Path="EntityFramework\README.md" />
