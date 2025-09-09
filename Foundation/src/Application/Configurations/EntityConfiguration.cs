@@ -12,10 +12,10 @@ namespace Wangkanai.Foundation.Configurations;
 /// <typeparam name="T">
 /// The type of the unique identifier for the entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
-public class EntityConfiguration<T> : IEntityTypeConfiguration<Entity<T>>
+public class EntityConfiguration<T> : IEntityTypeConfiguration<IEntity<T>>
    where T : IComparable<T>, IEquatable<T>
 {
-   public void Configure(EntityTypeBuilder<Entity<T>> builder)
+   public void Configure(EntityTypeBuilder<IEntity<T>> builder)
    {
       builder.HasDomainKey<T>();
       builder.HasRowVersion();

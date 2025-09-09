@@ -8,7 +8,7 @@ namespace Wangkanai.Audit;
 /// <typeparam name="T">
 /// The type of the identifier for the entity. Must implement <see cref="IComparable{T}"/> and <see cref="IEquatable{T}"/>.
 /// </typeparam>
-public class AuditableEntity<T> : Entity<T>, IAuditableEntity
+public class AuditableEntity<T> : IAuditableEntity<T>
    where T : IComparable<T>, IEquatable<T>
 {
    /// <summary>Gets or sets the DateTimeOffset when the entity was created, providing timezone-aware auditing.</summary>

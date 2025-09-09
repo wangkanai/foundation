@@ -22,7 +22,7 @@ public static class KeyConfigurationBuilder
    /// <param name="builder">
    /// The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type.
    /// </param>
-   public static void HasDomainKey<T>(this EntityTypeBuilder<Entity<T>> builder)
+   public static void HasDomainKey<T>(this EntityTypeBuilder<IEntity<T>> builder)
       where T : IEquatable<T>, IComparable<T>
    {
       builder.HasKey(x => x.Id);

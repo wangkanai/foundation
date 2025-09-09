@@ -5,6 +5,7 @@
    </ItemGroup>
 
    <ItemGroup>
+      <ProjectReference Include="..\..\..\Foundation\src\Application\Wangkanai.Foundation.Application.csproj" />
       <ProjectReference Include="..\Domain\Wangkanai.Audit.Domain.csproj" />
    </ItemGroup>
 

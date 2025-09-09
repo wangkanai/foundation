@@ -3,6 +3,12 @@
 namespace Wangkanai.Audit;
 
 /// <summary>
+/// Defines an interface for entities that support audit tracking of the user who last updated them
+/// with a default user identifier type of <see cref="string"/>.
+/// </summary>
+public interface IUserUpdatedAuditableEntity : IUserUpdatedAuditableEntity<string>;
+
+/// <summary>
 /// Defines an interface for entities that support audit tracking of the user who last updated them.
 /// </summary>
 /// <typeparam name="T">
