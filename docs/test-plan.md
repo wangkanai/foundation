@@ -162,27 +162,27 @@ Foundation/
   tests/
     Domain/
       Unit/
-        Wangkanai.Foundation.Domain.Unit.Tests.csproj
+        Wangkanai.Foundation.Domain.UnitTests.csproj
         Entities/
           EntityTests.cs
         ValueObjects/
           ValueObjectTests.cs
       Integration/
-        Wangkanai.Foundation.Domain.Integration.Tests.csproj
+        Wangkanai.Foundation.Domain.IntegrationTests.csproj
         Repositories/
           RepositoryTests.cs
     Application/
       Unit/
-        Wangkanai.Foundation.Application.Unit.Tests.csproj
+        Wangkanai.Foundation.Application.UnitTests.csproj
         Services/
           ServiceTests.cs
       Functional/
-        Wangkanai.Foundation.Application.Functional.Tests.csproj
+        Wangkanai.Foundation.Application.FunctionalTests.csproj
         UseCases/
           CreateEntityTests.cs
     Infrastructure/
       Integration/
-        Wangkanai.Foundation.Infrastructure.Integration.Tests.csproj
+        Wangkanai.Foundation.Infrastructure.IntegrationTests.csproj
         Database/
           DbContextTests.cs
 ```
@@ -194,24 +194,24 @@ Audit/
   tests/
     Domain/
       Unit/
-        Wangkanai.Audit.Domain.Unit.Tests.csproj
+        Wangkanai.Audit.Domain.UnitTests.csproj
         Entities/
           AuditableEntityTests.cs
           TrailTests.cs
       Integration/
-        Wangkanai.Audit.Domain.Integration.Tests.csproj
+        Wangkanai.Audit.Domain.IntegrationTests.csproj
     Application/
       Unit/
-        Wangkanai.Audit.Application.Unit.Tests.csproj
+        Wangkanai.Audit.Application.UnitTests.csproj
         Configurations/
           AuditConfigurationTests.cs
       Functional/
-        Wangkanai.Audit.Application.Functional.Tests.csproj
+        Wangkanai.Audit.Application.FunctionalTests.csproj
         Scenarios/
           AuditTrailScenarioTests.cs
     Infrastructure/
       Integration/
-        Wangkanai.Audit.Infrastructure.Integration.Tests.csproj
+        Wangkanai.Audit.Infrastructure.IntegrationTests.csproj
         Stores/
           TrailStoreTests.cs
 ```
@@ -223,20 +223,20 @@ EntityFramework/
   tests/
     Core/
       Unit/
-        Wangkanai.EntityFramework.Core.Unit.Tests.csproj
+        Wangkanai.EntityFramework.Core.UnitTests.csproj
         Extensions/
           DbContextExtensionsTests.cs
       Integration/
-        Wangkanai.EntityFramework.Core.Integration.Tests.csproj
+        Wangkanai.EntityFramework.Core.IntegrationTests.csproj
         Migrations/
           MigrationTests.cs
     PostgreSQL/
       Integration/
-        Wangkanai.EntityFramework.PostgreSQL.Integration.Tests.csproj
+        Wangkanai.EntityFramework.PostgreSQL.IntegrationTests.csproj
         PostgreSQLContextTests.cs
     SqlServer/
       Integration/
-        Wangkanai.EntityFramework.SqlServer.Integration.Tests.csproj
+        Wangkanai.EntityFramework.SqlServer.IntegrationTests.csproj
         SqlServerContextTests.cs
 ```
 
