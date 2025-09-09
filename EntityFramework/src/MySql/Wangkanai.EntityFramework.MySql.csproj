@@ -2,7 +2,7 @@
    <PropertyGroup>
       <Product>Wangkanai EntityFramework MySql</Product>
    </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\EntityFramework\Wangkanai.EntityFramework.csproj" />
-  </ItemGroup>
+   <ItemGroup>
+      <ProjectReference Include="..\EntityFramework\Wangkanai.EntityFramework.csproj" />
+   </ItemGroup>
 </Project>
