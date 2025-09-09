@@ -21,7 +21,7 @@ public static class AuditableConfigurationBuilder
       where TEntity : class, IEntity<TKey>, IAuditableEntity<TKey>
       where TKey : IEquatable<TKey>, IComparable<TKey>
    {
-      //builder.HasDomainKey<TKey>();
+      builder.HasDomainKey<TKey>();
       builder.HasDefaultCreated();
       builder.HasDefaultCreatedAndUpdated();
       builder.HasDefaultDeleted();
