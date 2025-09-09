@@ -5,11 +5,11 @@
    </PropertyGroup>
 
    <ItemGroup>
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
    </ItemGroup>
 
    <ItemGroup>
-      <ProjectReference Include="..\EntityFramework\Wangkanai.EntityFramework.csproj"/>
+      <ProjectReference Include="..\EntityFramework\Wangkanai.EntityFramework.csproj" />
    </ItemGroup>
 
 </Project>
