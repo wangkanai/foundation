@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+      <Product>Wangkanai EntityFramework PostgreSQL Integration Tests</Product>
+      <IsPackable>false</IsPackable>
+      <IsTestProject>true</IsTestProject>
+      <RootNamespace>Wangkanai.EntityFramework.PostgreSQL.Integration.Tests</RootNamespace>
+   </PropertyGroup>
+
+   <ItemGroup>
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+      <PackageReference Include="Testcontainers.PostgreSql" />
+   </ItemGroup>
+
+   <ItemGroup>
+      <ProjectReference Include="..\..\..\src\Postgres\Wangkanai.EntityFramework.Postgres.csproj" />
+   </ItemGroup>
+
+</Project>

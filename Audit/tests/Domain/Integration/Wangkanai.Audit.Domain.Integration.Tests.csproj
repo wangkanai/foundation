@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+      <IsPackable>false</IsPackable>
+      <IsTestProject>true</IsTestProject>
+   </PropertyGroup>
+
+   <ItemGroup>
+      <ProjectReference Include="..\..\..\src\Domain\Wangkanai.Audit.Domain.csproj" />
+      <ProjectReference Include="..\..\..\src\Infrastructure\Wangkanai.Audit.Infrastructure.csproj" />
+   </ItemGroup>
+
+   <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+   </ItemGroup>
+</Project>
