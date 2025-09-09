@@ -1,9 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
-  <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-
+   <PropertyGroup>
+      <Product>Wangkanai EntityFramework MySql</Product>
+   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EntityFramework\Wangkanai.EntityFramework.csproj" />
+  </ItemGroup>
 </Project>
