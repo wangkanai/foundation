@@ -13,7 +13,7 @@
    </ItemGroup>
 
    <ItemGroup>
-      <ProjectReference Include="..\..\..\Audit\src\Domain\Wangkanai.Audit.Domain.csproj"/>
+      <ProjectReference Include="$(RepoRoot)\Audit\src\Domain\Wangkanai.Audit.Domain.csproj"/>
    </ItemGroup>
 
 </Project>
