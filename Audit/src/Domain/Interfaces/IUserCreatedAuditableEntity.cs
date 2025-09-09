@@ -4,6 +4,12 @@ namespace Wangkanai.Audit;
 
 /// <summary>
 /// Represents an interface that provides user-specific auditing functionality
+/// to track the creation of an entity by a user with a string-based identifier.
+/// </summary>
+public interface IUserCreatedAuditableEntity : IUserCreatedAuditableEntity<string>;
+
+/// <summary>
+/// Represents an interface that provides user-specific auditing functionality
 /// to track the creation of an entity by a specific user.
 /// </summary>
 /// <typeparam name="T">

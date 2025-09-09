@@ -58,7 +58,7 @@ public class Trail<TKey, TUserType, TUserKey> : Entity<TKey>
    /// This property is typically used to associate the audit record with a specific entity type in the system,
    /// such as a database table or domain object.
    /// </remarks>
-   public string EntityName { get; set; }
+   public string EntityName { get; set; } = string.Empty;
 
    /// <summary>Gets or sets the list of column names that were changed during an audit action.</summary>
    /// <remarks>

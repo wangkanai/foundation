@@ -3,6 +3,12 @@
 namespace Wangkanai.Audit;
 
 /// <summary>
+/// Represents an interface for entities that record user-related deletion details
+/// using a default string identifier for the user who performed the action.
+/// </summary>
+public interface IUserDeletedAuditableEntity : IUserDeletedAuditableEntity<string>;
+
+/// <summary>
 /// Defines an interface for entities that track deletion actions,
 /// including the user responsible for performing the delete operation.
 /// </summary>
