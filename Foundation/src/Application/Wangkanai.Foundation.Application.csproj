@@ -8,8 +8,4 @@
       <ProjectReference Include="..\Domain\Wangkanai.Foundation.Domain.csproj"/>
    </ItemGroup>
 
-   <ItemGroup>
-      <Folder Include="Extensions\"/>
-   </ItemGroup>
-
 </Project>
