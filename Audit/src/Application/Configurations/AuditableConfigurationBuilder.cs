@@ -16,7 +16,7 @@ public static class AuditableConfigurationBuilder
       builder.HasDefaultDeleted();
    }
 
-   public static void ConfigureAuditableEntity<TEntity, TKey>(this EntityTypeBuilder<TEntity> builder)
+   public static void ConfigureAuditableEntity<TEntity, TKey>(this EntityTypeBuilder<TEntity<TKey>> builder)
       where TEntity : class, IAuditableEntity<TKey>
       where TKey : IEquatable<TKey>, IComparable<TKey>
    {
