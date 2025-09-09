@@ -1,6 +1,7 @@
 <Project>
 
    <PropertyGroup>
+      <VersionPrefix>0.1.0</VersionPrefix>
       <Company>Wangkanai</Company>
       <Authors>Sarin Na Wangkanai</Authors>
       <Copyright>Copyright © 2024 Sarin Na Wangkanai</Copyright>
