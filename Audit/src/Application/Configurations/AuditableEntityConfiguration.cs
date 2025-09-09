@@ -23,7 +23,8 @@ public abstract class AuditableEntityConfiguration<TEntity, TKey> : IEntityTypeC
    /// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
    public virtual void Configure(EntityTypeBuilder<TEntity> builder)
    {
-      builder.HasDomainKey<TKey>();
+      // Note: HasDomainKey requires IEntity<TKey> which IAuditableEntity doesn't implement
+      // The key configuration should be handled by the concrete entity configuration
       builder.HasDefaultCreatedAndUpdated();
       builder.HasDefaultDeleted();
    }

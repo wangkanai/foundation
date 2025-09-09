@@ -18,6 +18,7 @@ public class EntityConfiguration<T> : IEntityTypeConfiguration<IEntity<T>>
    public void Configure(EntityTypeBuilder<IEntity<T>> builder)
    {
       builder.HasDomainKey<T>();
-      builder.HasRowVersion();
+      // Configure RowVersion only if the entity implements IHasRowVersion
+      // This needs to be handled by specific entity configurations that implement IHasRowVersion
    }
 }
