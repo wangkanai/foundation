@@ -3,6 +3,8 @@ namespace Wangkanai.EntityFramework.Sqlite;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Sqlite;
 
 /// <summary>
 /// Extension methods for advanced SQLite indexing configurations.
@@ -56,7 +58,7 @@ public static class IndexConfigurationExtensions
     /// </example>
     public static IndexBuilder<T> HasSqliteCoveringIndex<T>(
         this IndexBuilder<T> indexBuilder,
-        params Expression<Func<T, object>>[] includeProperties) where T : class
+        params Expression<Func<T, object?>>[] includeProperties) where T : class
     {
         ArgumentNullException.ThrowIfNull(indexBuilder);
         ArgumentNullException.ThrowIfNull(includeProperties);
@@ -73,7 +75,11 @@ public static class IndexConfigurationExtensions
         if (propertyNames.Length == 0)
             throw new ArgumentException("No valid properties found in includeProperties", nameof(includeProperties));
 
-        return indexBuilder.IncludeProperties(propertyNames);
+        // SQLite doesn't have native covering index support like SQL Server
+        // However, we can simulate covering indexes by including the properties in the index itself
+        // or using SQLite-specific annotations for optimization hints
+        var includeAnnotation = string.Join(", ", propertyNames);
+        return indexBuilder.HasAnnotation("Sqlite:CoveringIndex:IncludeProperties", includeAnnotation);
     }
 
     /// <summary>
@@ -95,7 +101,7 @@ public static class IndexConfigurationExtensions
     /// </example>
     public static IndexBuilder HasSqliteExpressionIndex<T>(
         this EntityTypeBuilder<T> entityBuilder,
-        Expression<Func<T, object>> indexExpression,
+        Expression<Func<T, object?>> indexExpression,
         string? indexName = null) where T : class
     {
         ArgumentNullException.ThrowIfNull(entityBuilder);
@@ -250,7 +256,7 @@ public static class IndexConfigurationExtensions
     /// <summary>
     /// Extracts the property name from a lambda expression.
     /// </summary>
-    private static string ExtractPropertyName<T>(Expression<Func<T, object>> propertyExpression)
+    private static string ExtractPropertyName<T>(Expression<Func<T, object?>> propertyExpression)
     {
         return propertyExpression.Body switch
         {
@@ -263,7 +269,7 @@ public static class IndexConfigurationExtensions
     /// <summary>
     /// Generates a unique index name for expression-based indexes.
     /// </summary>
-    private static string GenerateExpressionIndexName<T>(Expression<Func<T, object>> expression)
+    private static string GenerateExpressionIndexName<T>(Expression<Func<T, object?>> expression)
     {
         var entityName = typeof(T).Name;
         var expressionHash = expression.ToString().GetHashCode().ToString("X8");
@@ -273,7 +279,7 @@ public static class IndexConfigurationExtensions
     /// <summary>
     /// Converts an expression to SQL syntax for SQLite expression indexes.
     /// </summary>
-    private static string ConvertExpressionToSql<T>(Expression<Func<T, object>> expression)
+    private static string ConvertExpressionToSql<T>(Expression<Func<T, object?>> expression)
     {
         // This is a simplified implementation. In production, you would use
         // a more comprehensive expression visitor to handle complex expressions.

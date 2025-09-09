@@ -57,24 +57,21 @@ public static class MigrationConfigurationExtensions
         if (migrationBuilder is null)
             throw new ArgumentNullException(nameof(migrationBuilder));
 
-        // Configure incremental migration settings
-        migrationBuilder.SetAnnotation("Sqlite:IncrementalMigrations", true);
-        migrationBuilder.SetAnnotation("Sqlite:OptimizeColumnAddition", enableColumnAddition);
-        migrationBuilder.SetAnnotation("Sqlite:OptimizeIndexCreation", enableIndexOptimization);
-        migrationBuilder.SetAnnotation("Sqlite:PreserveDataDuringMigration", preserveData);
+        // Configure SQLite for incremental migrations
+        if (preserveData)
+        {
+            migrationBuilder.Sql("PRAGMA foreign_keys = ON;");
+        }
         
-        // Configure SQLite-specific migration strategies
-        migrationBuilder.SetAnnotation("Sqlite:UseAlterTableWhenPossible", true);
-        migrationBuilder.SetAnnotation("Sqlite:MinimizeTableRecreation", true);
-        migrationBuilder.SetAnnotation("Sqlite:OptimizeForeignKeyHandling", true);
+        if (enableIndexOptimization)
+        {
+            migrationBuilder.Sql("PRAGMA optimize;");
+        }
         
-        // Set up transaction behavior for migrations
-        migrationBuilder.SetAnnotation("Sqlite:MigrationTransactionMode", "IMMEDIATE");
-        migrationBuilder.SetAnnotation("Sqlite:EnableMigrationCheckpoints", true);
-        
-        // Configure performance settings
-        migrationBuilder.SetAnnotation("Sqlite:MigrationSynchronousMode", "NORMAL");
-        migrationBuilder.SetAnnotation("Sqlite:MigrationJournalMode", "WAL");
+        // Set up performance settings for migrations
+        migrationBuilder.Sql("PRAGMA synchronous = NORMAL;");
+        migrationBuilder.Sql("PRAGMA journal_mode = WAL;");
+        migrationBuilder.Sql("PRAGMA temp_store = MEMORY;");
 
         return migrationBuilder;
     }
@@ -131,25 +128,26 @@ public static class MigrationConfigurationExtensions
             throw new ArgumentOutOfRangeException(nameof(maxDegreeOfParallelism),
                 "Maximum degree of parallelism must be between 1 and 16.");
 
-        // Configure parallel migration settings
-        migrationBuilder.SetAnnotation("Sqlite:ParallelMigrations", true);
-        migrationBuilder.SetAnnotation("Sqlite:MaxDegreeOfParallelism", maxDegreeOfParallelism);
-        migrationBuilder.SetAnnotation("Sqlite:EnableTableParallelism", enableTableLevelParallelism);
-        migrationBuilder.SetAnnotation("Sqlite:EnableIndexParallelism", enableIndexParallelism);
+        // Configure SQLite for better parallel operation support
+        migrationBuilder.Sql("PRAGMA journal_mode = WAL;");
+        migrationBuilder.Sql($"PRAGMA busy_timeout = 30000;");
         
-        // Configure parallel execution strategy
-        migrationBuilder.SetAnnotation("Sqlite:ParallelExecutionStrategy", "INDEPENDENT_OPERATIONS");
-        migrationBuilder.SetAnnotation("Sqlite:DependencyResolution", "AUTOMATIC");
-        migrationBuilder.SetAnnotation("Sqlite:ParallelResourceManagement", "OPTIMIZED");
+        if (enableTableLevelParallelism)
+        {
+            // Enable WAL mode for better concurrency
+            migrationBuilder.Sql("PRAGMA wal_autocheckpoint = 1000;");
+        }
         
-        // Set up connection management for parallel operations
-        migrationBuilder.SetAnnotation("Sqlite:ParallelConnectionPooling", true);
-        migrationBuilder.SetAnnotation("Sqlite:ParallelConnectionTimeout", 300);
-        migrationBuilder.SetAnnotation("Sqlite:ParallelBusyTimeout", 30000);
+        if (enableIndexParallelism)
+        {
+            // Optimize for index operations
+            migrationBuilder.Sql("PRAGMA optimize;");
+            migrationBuilder.Sql("PRAGMA analysis_limit = 400;");
+        }
         
-        // Configure monitoring for parallel operations
-        migrationBuilder.SetAnnotation("Sqlite:EnableParallelMonitoring", true);
-        migrationBuilder.SetAnnotation("Sqlite:ParallelPerformanceTracking", true);
+        // Configure cache and memory settings for better performance
+        migrationBuilder.Sql($"PRAGMA cache_size = -{Math.Min(maxDegreeOfParallelism * 16 * 1024, 128 * 1024)};"); // Scale cache with parallelism
+        migrationBuilder.Sql("PRAGMA temp_store = MEMORY;");
 
         return migrationBuilder;
     }
@@ -218,25 +216,24 @@ public static class MigrationConfigurationExtensions
         if (checkpointName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
             throw new ArgumentException("Checkpoint name contains invalid characters.", nameof(checkpointName));
 
-        // Configure checkpoint settings
-        migrationBuilder.SetAnnotation("Sqlite:CreateCheckpoint", true);
-        migrationBuilder.SetAnnotation("Sqlite:CheckpointName", checkpointName);
-        migrationBuilder.SetAnnotation("Sqlite:CheckpointIncludeData", includeData);
-        migrationBuilder.SetAnnotation("Sqlite:CheckpointCompressionLevel", compressionLevel);
+        // Perform WAL checkpoint to ensure consistency
+        migrationBuilder.Sql("PRAGMA wal_checkpoint(TRUNCATE);");
         
-        // Set checkpoint creation strategy
-        migrationBuilder.SetAnnotation("Sqlite:CheckpointStrategy", includeData ? "FULL_BACKUP" : "SCHEMA_ONLY");
-        migrationBuilder.SetAnnotation("Sqlite:CheckpointTimestamp", DateTime.UtcNow);
-        migrationBuilder.SetAnnotation("Sqlite:CheckpointVersion", "1.0");
+        // Optimize database before creating checkpoint
+        migrationBuilder.Sql("PRAGMA optimize;");
         
-        // Configure checkpoint storage and management
-        migrationBuilder.SetAnnotation("Sqlite:CheckpointStoragePath", "migrations/checkpoints");
-        migrationBuilder.SetAnnotation("Sqlite:CheckpointRetentionDays", 30);
-        migrationBuilder.SetAnnotation("Sqlite:CheckpointAutoCleanup", true);
+        // Create a SQL comment to mark the checkpoint in the migration history
+        migrationBuilder.Sql($"-- Migration Checkpoint: {checkpointName} at {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC");
+        migrationBuilder.Sql($"-- Include Data: {includeData}, Compression Level: {compressionLevel}");
         
-        // Set up WAL checkpoint for consistency
-        migrationBuilder.SetAnnotation("Sqlite:WalCheckpointMode", "TRUNCATE");
-        migrationBuilder.SetAnnotation("Sqlite:VacuumBeforeCheckpoint", true);
+        if (includeData)
+        {
+            // Enable foreign key constraints to maintain data integrity
+            migrationBuilder.Sql("PRAGMA foreign_keys = ON;");
+        }
+        
+        // Ensure database is in a consistent state
+        migrationBuilder.Sql("PRAGMA integrity_check;");
 
         return migrationBuilder;
     }
@@ -289,20 +286,25 @@ public static class MigrationConfigurationExtensions
             throw new ArgumentOutOfRangeException(nameof(busyTimeout),
                 "Busy timeout must be at least 1000 milliseconds.");
 
-        // Configure performance settings
-        migrationBuilder.SetAnnotation("Sqlite:OptimizedMigrationPerformance", true);
-        migrationBuilder.SetAnnotation("Sqlite:MigrationWalMode", enableWalMode);
-        migrationBuilder.SetAnnotation("Sqlite:MigrationCacheSize", -cacheSize); // Negative for KB
-        migrationBuilder.SetAnnotation("Sqlite:MigrationBusyTimeout", busyTimeout);
+        // Configure SQLite performance settings for migrations
+        if (enableWalMode)
+        {
+            migrationBuilder.Sql("PRAGMA journal_mode = WAL;");
+        }
+        
+        // Set cache size (negative value means KB)
+        migrationBuilder.Sql($"PRAGMA cache_size = -{cacheSize};");
+        
+        // Set busy timeout for handling lock contention
+        migrationBuilder.Sql($"PRAGMA busy_timeout = {busyTimeout};");
         
         // Configure additional performance optimizations
-        migrationBuilder.SetAnnotation("Sqlite:MigrationSynchronousMode", "NORMAL");
-        migrationBuilder.SetAnnotation("Sqlite:MigrationTempStore", "MEMORY");
-        migrationBuilder.SetAnnotation("Sqlite:MigrationMmapSize", 268435456); // 256MB
+        migrationBuilder.Sql("PRAGMA synchronous = NORMAL;");
+        migrationBuilder.Sql("PRAGMA temp_store = MEMORY;");
+        migrationBuilder.Sql("PRAGMA mmap_size = 268435456;"); // 256MB
         
-        // Configure transaction and locking optimizations
-        migrationBuilder.SetAnnotation("Sqlite:MigrationLockingMode", "EXCLUSIVE");
-        migrationBuilder.SetAnnotation("Sqlite:MigrationTransactionMode", "IMMEDIATE");
+        // Configure locking for migration operations
+        migrationBuilder.Sql("PRAGMA locking_mode = EXCLUSIVE;");
         
         return migrationBuilder;
     }
@@ -352,12 +354,12 @@ public static class MigrationConfigurationExtensions
         if (string.IsNullOrWhiteSpace(rollbackPointName))
             throw new ArgumentException("Rollback point name cannot be null or whitespace.", nameof(rollbackPointName));
 
-        // Configure rollback point
-        migrationBuilder.SetAnnotation($"Sqlite:RollbackPoint:{rollbackPointName}", DateTime.UtcNow);
-        migrationBuilder.SetAnnotation($"Sqlite:AutoRollback:{rollbackPointName}", autoRollbackOnFailure);
-        
-        // Create the actual savepoint in SQLite
+        // Create a savepoint for rollback capability
         migrationBuilder.Sql($"SAVEPOINT {rollbackPointName};");
+        
+        // Add a comment to mark the rollback point
+        migrationBuilder.Sql($"-- Rollback Point: {rollbackPointName} created at {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC");
+        migrationBuilder.Sql($"-- Auto-rollback on failure: {autoRollbackOnFailure}");
         
         return migrationBuilder;
     }
