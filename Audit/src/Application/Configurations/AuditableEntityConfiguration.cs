@@ -16,7 +16,7 @@ namespace Wangkanai.Audit.Configurations;
 /// The type of the primary key for the auditable entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
 public abstract class AuditableEntityConfiguration<TEntity, TKey> : IEntityTypeConfiguration<TEntity>
-   where TEntity : class, IAuditableEntity<TKey>
+   where TEntity : class, IAuditableEntity<TKey>, IAuditableEntity
    where TKey : IEquatable<TKey>, IComparable<TKey>
 {
    /// <summary>Configures the base auditable properties for the entity.</summary>
@@ -25,7 +25,6 @@ public abstract class AuditableEntityConfiguration<TEntity, TKey> : IEntityTypeC
    {
       // Note: HasDomainKey requires IEntity<TKey> which IAuditableEntity doesn't implement
       // The key configuration should be handled by the concrete entity configuration
-      builder.HasDefaultCreatedAndUpdated();
-      builder.HasDefaultDeleted();
+      builder.ConfigureAuditableEntity<TEntity>();
    }
 }
