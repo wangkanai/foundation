@@ -2,6 +2,8 @@
 
 using System.Diagnostics;
 
+using Wangkanai.Foundation.Models;
+
 namespace Wangkanai.Foundation;
 
 /// <summary>

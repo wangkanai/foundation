@@ -2,7 +2,7 @@
 
 using Wangkanai.Foundation;
 
-namespace Wangkanai.Audit.Domain;
+namespace Wangkanai.Audit;
 
 /// <summary>
 /// Defines the contract for an audit trail store, capable of managing audit trail entities, including creation operations.

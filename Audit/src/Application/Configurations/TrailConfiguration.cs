@@ -2,10 +2,11 @@
 
 using System.Text.Json;
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.Audit.Domain.Configurations;
+namespace Wangkanai.Audit.Configurations;
 
 /// <summary>
 /// Represents the configuration settings for the <see cref="Trail{TKey, TUserType, TUserKey}"/> entity in the context of Entity Framework Core.
@@ -16,7 +17,7 @@ namespace Wangkanai.Audit.Domain.Configurations;
 /// The type of the primary key for the <see cref="Trail{TKey, TUserType, TUserKey}"/> entity.
 /// </typeparam>
 /// <typeparam name="TUserType">
-/// The type of the user entity associated with the trail. Typically a type derived from <see cref="IdentityUser{TUserKey}"/>.
+/// The type of the user entity associated with the trail. Typically a type derived from <see cref="IdentityUser"/>.
 /// </typeparam>
 /// <typeparam name="TUserKey">
 /// The type of the primary key of the user entity associated with the trail.

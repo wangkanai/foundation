@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Wangkanai.Foundation;
 
-namespace Wangkanai.Audit.Domain;
+namespace Wangkanai.Audit;
 
 /// <summary>Provides an implementation for managing audit trails within a database context.</summary>
 /// <typeparam name="TContext">The type of the database context, which must derive from <see cref="DbContext"/>.</typeparam>
@@ -12,7 +12,7 @@ namespace Wangkanai.Audit.Domain;
 /// The type of the primary key for the audit trail, which must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
 /// <typeparam name="TUserType">
-/// The type of the user associated with the audit trail, which must derive from <see cref="IdentityUser{T}"/>.
+/// The type of the user associated with the audit trail, which must derive from <see cref="IdentityUser"/>.
 /// </typeparam>
 /// <typeparam name="TUserKey">
 /// The type of the key for the user, which must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.

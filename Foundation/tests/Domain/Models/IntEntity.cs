@@ -1,6 +1,6 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Foundation;
+namespace Wangkanai.Foundation.Models;
 
 /// <summary>Represents an entity with an integer-based unique identifier.</summary>
 /// <remarks>

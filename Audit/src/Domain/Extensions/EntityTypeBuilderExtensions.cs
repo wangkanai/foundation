@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.Audit.Domain;
+namespace Wangkanai.Audit;
 
 public static class EntityTypeBuilderExtensions
 {

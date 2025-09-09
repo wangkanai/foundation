@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Audit.Domain;
+namespace Wangkanai.Audit;
 
 /// <summary>
 /// Represents an interface that provides user-specific auditing functionality

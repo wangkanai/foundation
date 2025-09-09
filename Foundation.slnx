@@ -61,6 +61,7 @@
     <Project Path="Foundation\benchmarks\Domain\Wangkanai.Foundation.Domain.Benchmark.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Foundation/tests/">
+    <Project Path="Foundation\tests\Application\Wangkanai.Foundation.Application.Tests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Domain\Wangkanai.Foundation.Domain.Tests.csproj" Type="Classic C#" />
   </Folder>
 </Solution>

@@ -2,7 +2,7 @@
 
 using Wangkanai.Foundation;
 
-namespace Wangkanai.Audit.Domain.Reflections;
+namespace Wangkanai.Audit.Reflections;
 
 /// <summary>
 /// Represents a mapping mechanism to resolve the primary key of transient entities and

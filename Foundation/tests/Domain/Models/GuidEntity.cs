@@ -1,6 +1,6 @@
 ﻿// Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Foundation;
+namespace Wangkanai.Foundation.Models;
 
 /// <summary>Represents an entity with a globally unique identifier (GUID) as its primary key.</summary>
 public class GuidEntity : KeyGuidEntity

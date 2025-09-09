@@ -2,7 +2,7 @@
 
 using Wangkanai.Foundation;
 
-namespace Wangkanai.Audit.Domain;
+namespace Wangkanai.Audit;
 
 /// <summary>Represents an auditable entity with properties for tracking creation and modification timestamps using DateTimeOffset for timezone-aware auditing.</summary>
 /// <typeparam name="T">

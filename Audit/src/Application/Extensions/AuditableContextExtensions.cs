@@ -1,10 +1,11 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-using Wangkanai.Audit.Domain.Configurations;
+using Wangkanai.Audit.Configurations;
 
-namespace Wangkanai.Audit.Domain;
+namespace Wangkanai.Audit.Extensions;
 
 /// <summary>
 /// Provides extension methods for configuring audit-related entity configurations in the Entity Framework model.

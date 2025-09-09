@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.Audit.Domain.Configurations;
+namespace Wangkanai.Audit.Configurations;
 
 /// <summary>
 /// Provides the base configuration for auditable entities with timestamp tracking.

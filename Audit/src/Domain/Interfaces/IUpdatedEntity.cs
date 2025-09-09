@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Audit.Domain;
+namespace Wangkanai.Audit;
 
 /// <summary>Defines an entity that tracks the timezone-aware timestamp of its last update.</summary>
 /// <remarks>
