@@ -5,8 +5,8 @@
 repomix-output.*
 
 # macOS
-#.DS_Store
-#**/.DS_Store
+.DS_Store
+**/.DS_Store
 
 # JetBrains Rider
 
