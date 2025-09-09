@@ -6,4 +6,7 @@
       <PackageTags>wangkanai;domain;ddd;audit;entityframework;dotnet</PackageTags>
       <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
    </PropertyGroup>
+   <ItemGroup Condition="$(MSBuildProjectDirectory.Contains('src'))">
+      <None Include="..\..\README.md" Pack="true" PackagePath="/"/>
+   </ItemGroup>
 </Project>
