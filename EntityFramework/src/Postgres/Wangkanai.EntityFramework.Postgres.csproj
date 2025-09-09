@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+   <PropertyGroup>
+      <Product>Wangkanai EntityFramework Postgres</Product>
+   </PropertyGroup>
+
+   <ItemGroup>
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+   </ItemGroup>
+
+   <ItemGroup>
+      <ProjectReference Include="..\EntityFramework\Wangkanai.EntityFramework.csproj" />
+   </ItemGroup>
+
+</Project>

@@ -1,8 +1,9 @@
 <Project>
    <ItemGroup>
       <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all"/>
-      <PackageReference Include="Microsoft.CodeAnalysis.Common" />
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+      <PackageReference Include="Microsoft.VisualStudio.SlnGen" PrivateAssets="all"/>
+      <PackageReference Include="Microsoft.CodeAnalysis.Common"/>
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp"/>
    </ItemGroup>
 
    <PropertyGroup Condition="$(MSBuildProjectName.Contains('Benchmark'))">

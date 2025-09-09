@@ -26,6 +26,7 @@
   <Folder Name="/Audit/">
     <Project Path="Audit\src\Domain\Wangkanai.Audit.Domain.csproj" Type="Classic C#" />
     <File Path="Audit\Directory.Build.props" />
+    <File Path="Audit\README.md" />
   </Folder>
   <Folder Name="/Audit/benchmarks/">
     <Project Path="Audit\benchmarks\Domain\Wangkanai.Audit.Domain.Benchmark.csproj" Type="Classic C#" />
@@ -35,7 +36,11 @@
   </Folder>
   <Folder Name="/EntityFramework/">
     <Project Path="EntityFramework\src\EntityFramework\Wangkanai.EntityFramework.csproj" Type="Classic C#" />
+    <Project Path="EntityFramework\src\MySql\Wangkanai.EntityFramework.MySql.csproj" Type="Classic C#" />
+    <Project Path="EntityFramework\src\Postgres\Wangkanai.EntityFramework.Postgres.csproj" Type="Classic C#" />
+    <Project Path="EntityFramework\src\SqlServer\Wangkanai.EntityFramework.SqlServer.csproj" Type="Classic C#" />
     <File Path="EntityFramework\Directory.Build.props" />
+    <File Path="EntityFramework\README.md" />
   </Folder>
   <Folder Name="/EntityFramework/benchmarks/">
     <Project Path="EntityFramework\benchmarks\EntityFramework\Wangkanai.EntityFramework.Benchmark.csproj" Type="Classic C#" />
@@ -48,6 +53,7 @@
     <Project Path="Foundation\src\Domain\Wangkanai.Foundation.Domain.csproj" Type="Classic C#" />
     <Project Path="Foundation\src\Infrastructure\Wangkanai.Foundation.Infrastructure.csproj" Type="Classic C#" />
     <File Path="Foundation\Directory.Build.props" />
+    <File Path="Foundation\README.md" />
   </Folder>
   <Folder Name="/Foundation/benchmarks/">
     <Project Path="Foundation\benchmarks\Domain\Wangkanai.Foundation.Domain.Benchmark.csproj" Type="Classic C#" />
