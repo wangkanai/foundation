@@ -2,6 +2,8 @@
 
 using BenchmarkDotNet.Attributes;
 
+using Wangkanai.Foundation.Models;
+
 namespace Wangkanai.Foundation;
 
 /// <summary>

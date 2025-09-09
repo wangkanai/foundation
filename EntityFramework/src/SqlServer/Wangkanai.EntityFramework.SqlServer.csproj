@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
    <PropertyGroup>
-      <Product>Wangkanai EntityFramework Sql Server</Product>
+      <Product>Wangkanai EntityFramework SqlServer</Product>
    </PropertyGroup>
 
    <ItemGroup>

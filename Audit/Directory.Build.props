@@ -1,7 +1,7 @@
 <Project>
    <Import Project="$([MSBuild]::GetDirectoryNameOfFileAbove($(MSBuildThisFileDirectory)..\, Directory.Build.props))\Directory.Build.props"/>
    <PropertyGroup>
-      <VersionPrefix>1.0.0</VersionPrefix>
+      <RootNamespace>Wangkanai.Audit</RootNamespace>
       <Product>Wangkanai Audit</Product>
       <PackageTags>wangkanai;audit;trail;traceability</PackageTags>
    </PropertyGroup>

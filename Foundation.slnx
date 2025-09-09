@@ -24,7 +24,9 @@
     <File Path=".resharper-cleanup.config" />
   </Folder>
   <Folder Name="/Audit/">
+    <Project Path="Audit\src\Application\Wangkanai.Audit.Application.csproj" Type="Classic C#" />
     <Project Path="Audit\src\Domain\Wangkanai.Audit.Domain.csproj" Type="Classic C#" />
+    <Project Path="Audit\src\Infrastructure\Wangkanai.Audit.Infrastructure.csproj" Type="Classic C#" />
     <File Path="Audit\Directory.Build.props" />
     <File Path="Audit\README.md" />
   </Folder>
@@ -59,6 +61,7 @@
     <Project Path="Foundation\benchmarks\Domain\Wangkanai.Foundation.Domain.Benchmark.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/Foundation/tests/">
+    <Project Path="Foundation\tests\Application\Wangkanai.Foundation.Application.Tests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Domain\Wangkanai.Foundation.Domain.Tests.csproj" Type="Classic C#" />
   </Folder>
 </Solution>

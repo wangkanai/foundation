@@ -2,6 +2,8 @@
 
 using Microsoft.EntityFrameworkCore;
 
+using Wangkanai.Foundation.Models;
+
 namespace Wangkanai.Foundation.Mocks;
 
 public class MockContext(DbContextOptions<MockContext> options) : DbContext(options)
