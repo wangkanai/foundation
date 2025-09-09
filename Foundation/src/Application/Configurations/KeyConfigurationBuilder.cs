@@ -13,23 +13,6 @@ public static class KeyConfigurationBuilder
    private const int IndexKeyLength = 450;
 
    /// <summary>
-   /// Configures the primary key for an entity type in a domain-driven design context
-   /// where the entity key is of type <see cref="int"/>.
-   /// </summary>
-   /// <param name="builder">
-   /// The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type.
-   /// The entity type must implement <see cref="IEntity{int}"/>.
-   /// </param>
-   public static void HasDomainKey(this EntityTypeBuilder<IEntity<int>> builder)
-   {
-      builder.HasKey(x => x.Id);
-
-      builder.Property(x => x.Id)
-             .IsRequired()
-             .ApplyKeyOptimizations();
-   }
-
-   /// <summary>
    /// Configures the primary key for an entity type in a domain-driven design context.
    /// </summary>
    /// <typeparam name="T">
@@ -43,7 +26,6 @@ public static class KeyConfigurationBuilder
       where T : IEquatable<T>, IComparable<T>
    {
       builder.HasKey(x => x.Id);
-
       builder.Property(x => x.Id)
              .IsRequired()
              .ApplyKeyOptimizations();
