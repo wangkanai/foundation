@@ -44,8 +44,8 @@ public static class JsonConfigurationExtensions
             .HasAnnotation("Sqlite:JsonColumn", true)
             .HasAnnotation("Sqlite:JsonCompression", compressionEnabled)
             .HasConversion(
-                v => System.Text.Json.JsonSerializer.Serialize(v),
-                v => System.Text.Json.JsonSerializer.Deserialize<TProperty>(v)!);
+                v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions?)null),
+                v => System.Text.Json.JsonSerializer.Deserialize<TProperty>(v, (System.Text.Json.JsonSerializerOptions?)null)!);
     }
 
     /// <summary>
@@ -156,15 +156,16 @@ public static class JsonConfigurationExtensions
             throw new ArgumentException($"Invalid SQLite type: {sqliteType}. Valid types are: {string.Join(", ", validTypes)}", nameof(sqliteType));
         }
 
-        return entityBuilder
+        entityBuilder
             .Property(computedPropertyExpression)
             .HasComputedColumnSql($"json_extract(\"{jsonPropertyName}\", '{jsonPath}')")
             .HasColumnType(sqliteType)
             .HasAnnotation("Sqlite:JsonExtraction", true)
             .HasAnnotation("Sqlite:JsonPath", jsonPath)
             .HasAnnotation("Sqlite:SourceProperty", jsonPropertyName)
-            .HasAnnotation("Sqlite:ExtractedType", sqliteType)
-            .EntityType;
+            .HasAnnotation("Sqlite:ExtractedType", sqliteType);
+        
+        return entityBuilder;
     }
 
     /// <summary>

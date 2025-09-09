@@ -25,7 +25,7 @@ public static class ConfigurationExtensions
    /// <returns>The same builder instance so that multiple configuration calls can be chained.</returns>
    public static PropertyBuilder<string> HasSqliteCollation(this PropertyBuilder<string> builder)
    {
-      return builder.UseCollation("NOCASE");
+      return builder.HasAnnotation("Relational:Collation", "NOCASE");
    }
 
    /// <summary>
@@ -37,7 +37,7 @@ public static class ConfigurationExtensions
    public static PropertyBuilder<string> OptimizeForSqliteSearch(this PropertyBuilder<string> builder)
    {
       return builder
-         .UseCollation("NOCASE")
+         .HasAnnotation("Relational:Collation", "NOCASE")
          .HasAnnotation("Sqlite:InlineFts", true);
    }
 
