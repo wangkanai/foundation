@@ -16,7 +16,7 @@ namespace Wangkanai.Audit.Configurations;
 /// The type of the primary key for the auditable entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
 public abstract class AuditableEntityConfiguration<TEntity, TKey> : IEntityTypeConfiguration<TEntity>
-   where TEntity : class, IAuditableEntity<TKey>, IAuditableEntity
+   where TEntity : class, IAuditableEntity<TKey>
    where TKey : IEquatable<TKey>, IComparable<TKey>
 {
    /// <summary>Configures the base auditable properties for the entity.</summary>
