@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using Wangkanai.Foundation;
 using Wangkanai.Foundation.Configurations;
 
 namespace Wangkanai.Audit.Configurations;
@@ -9,15 +10,15 @@ namespace Wangkanai.Audit.Configurations;
 public static class AuditableConfigurationBuilder
 {
    public static void ConfigureAuditableEntity<TEntity>(this EntityTypeBuilder<TEntity> builder)
-      where TEntity : class, IAuditableEntity
+      where TEntity : Entity<int>, IAuditableEntity
    {
       builder.HasDefaultCreated();
       builder.HasDefaultCreatedAndUpdated();
       builder.HasDefaultDeleted();
    }
 
-   public static void ConfigureAuditableEntity<TEntity, TKey>(this EntityTypeBuilder<TEntity<TKey>> builder)
-      where TEntity : class, IAuditableEntity<TKey>
+   public static void ConfigureAuditableEntity<TEntity, TKey>(this EntityTypeBuilder<TEntity> builder)
+      where TEntity : Entity<TKey>, IAuditableEntity<TKey>
       where TKey : IEquatable<TKey>, IComparable<TKey>
    {
       builder.HasDefaultCreated();
