@@ -26,6 +26,6 @@ public abstract class AuditableEntityConfiguration<TEntity, TKey> : IEntityTypeC
    {
       // Note: HasDomainKey requires IEntity<TKey> which IAuditableEntity doesn't implement
       // The key configuration should be handled by the concrete entity configuration
-      builder.ConfigureAuditableEntity<TEntity>();
+      builder.ConfigureAuditableEntity<TEntity, TKey>();
    }
 }
