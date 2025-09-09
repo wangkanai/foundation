@@ -168,9 +168,9 @@ Add comprehensive audit capabilities to your .NET 9 project:
 
 Audit module is optimized for:
 
-- **High-volume transactions** - Handles millions of changes
-- **Minimal overhead** - Sub-millisecond tracking
-- **Efficient storage** - 40% less space than traditional approaches
+- **High-volume transactions** - Designed to handle millions of changes
+- **Minimal overhead** - Targeting sub-millisecond tracking
+- **Efficient storage** - Aims for 40% less space than traditional approaches
 - **Fast retrieval** - Optimized queries for audit data
 
 ## 💫 Success Stories
