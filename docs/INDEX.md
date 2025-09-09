@@ -1,6 +1,6 @@
 # Wangkanai Foundation - Documentation Index
 
-> **Last Updated**: 2025-09-09
+> **Last Updated**: 2024-06-13
 > **Version**: 1.0.0
 > **Architecture**: Clean Architecture Monorepo with Domain-Driven Design
 
