@@ -46,8 +46,8 @@ Audit module delivers enterprise-grade change tracking that:
 
 **Performance First:**
 
-- **Smart JSON serialization** - 40% memory reduction
-- **Span-based operations** - Zero-allocation for bulk changes
+- **Smart JSON serialization** - Efficient memory usage
+<!-- For details on our bulk change optimizations, see [Technical Documentation](docs/performance.md) -->
 - **Partial value access** - Query specific fields without full deserialization
 - **Optimized storage** - Compact representation without data loss
 
