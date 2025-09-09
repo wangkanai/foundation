@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <ItemGroup>
+      <ProjectReference Include="..\..\..\src\Postgres\Wangkanai.EntityFramework.Postgres.csproj" />
+   </ItemGroup>
+
+</Project>

@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <ItemGroup>
+   </ItemGroup>
+
+   <ItemGroup>
+      <ProjectReference Include="..\..\..\src\SqlServer\Wangkanai.EntityFramework.SqlServer.csproj" />
+   </ItemGroup>
+
+</Project>
