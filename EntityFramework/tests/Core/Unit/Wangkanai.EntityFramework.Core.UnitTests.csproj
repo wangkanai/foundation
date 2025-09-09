@@ -1,12 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-   <PropertyGroup>
-      <Product>Wangkanai EntityFramework Core Unit Tests</Product>
-      <IsPackable>false</IsPackable>
-      <IsTestProject>true</IsTestProject>
-      <RootNamespace>Wangkanai.EntityFramework.Core.Unit.Tests</RootNamespace>
-   </PropertyGroup>
-
    <ItemGroup>
       <ProjectReference Include="..\..\..\src\EntityFramework\Wangkanai.EntityFramework.csproj" />
    </ItemGroup>
