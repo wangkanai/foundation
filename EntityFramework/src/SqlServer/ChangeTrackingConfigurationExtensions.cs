@@ -187,7 +187,7 @@ public static class ChangeTrackingConfigurationExtensions
     /// Gets changes for the specified entity since the last synchronization point using Change Tracking.
     /// </summary>
     /// <typeparam name="T">The entity type to get changes for.</typeparam>
-    /// <param name="dbSet">The database set for the entity.</param>
+    /// <param name="context">The database context.</param>
     /// <param name="lastSyncVersion">The last synchronization version obtained from previous sync operation.</param>
     /// <returns>An <see cref="IQueryable{T}"/> containing only the changed entities since the last sync.</returns>
     /// <remarks>
@@ -217,8 +217,8 @@ public static class ChangeTrackingConfigurationExtensions
     /// long currentVersion = context.Database.ExecuteScalarSql("SELECT CHANGE_TRACKING_CURRENT_VERSION()");
     /// 
     /// // Get changes since last sync
-    /// var changes = await context.Users
-    ///     .GetSqlServerChanges(lastSyncVersion)
+    /// var changes = await context
+    ///     .GetSqlServerChanges&lt;User&gt;(lastSyncVersion)
     ///     .ToListAsync();
     /// 
     /// // Process changes and update lastSyncVersion for next operation
@@ -242,11 +242,10 @@ public static class ChangeTrackingConfigurationExtensions
     /// </remarks>
     /// <exception cref="InvalidOperationException">Thrown when Change Tracking is not enabled for the entity.</exception>
     public static IQueryable<T> GetSqlServerChanges<T>(
-        this DbSet<T> dbSet,
+        this DbContext context,
         long lastSyncVersion)
         where T : class
     {
-        var context = dbSet.GetDbContext();
         var entityType = context.Model.FindEntityType(typeof(T));
         
         if (entityType == null)
@@ -280,7 +279,7 @@ public static class ChangeTrackingConfigurationExtensions
             WHERE ct.SYS_CHANGE_VERSION > {{0}}
             ORDER BY ct.SYS_CHANGE_VERSION";
 
-        return dbSet.FromSqlRaw(sql, lastSyncVersion);
+        return context.Set<T>().FromSqlRaw(sql, lastSyncVersion);
     }
 
     /// <summary>

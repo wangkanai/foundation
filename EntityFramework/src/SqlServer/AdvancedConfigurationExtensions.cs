@@ -111,10 +111,10 @@ public static class AdvancedConfigurationExtensions
             MessageRetentionDays = 7
         };
 
-        builder.UseSqlServer(options =>
-        {
-            options.AddInterceptors(new ServiceBrokerInterceptor(serviceBrokerConfig));
-        });
+        // TODO: Implement ServiceBrokerInterceptor to handle Service Broker initialization and management
+        // builder.AddInterceptors(new ServiceBrokerInterceptor(serviceBrokerConfig));
+        
+        builder.UseSqlServer();
 
         return builder;
     }
@@ -333,10 +333,10 @@ public static class AdvancedConfigurationExtensions
             LogResourceViolations = true
         };
 
-        builder.UseSqlServer(options =>
-        {
-            options.AddInterceptors(new ResourceGovernorInterceptor(resourceGovernorConfig));
-        });
+        // TODO: Implement ResourceGovernorInterceptor to handle Resource Governor workload group assignment
+        // builder.AddInterceptors(new ResourceGovernorInterceptor(resourceGovernorConfig));
+        
+        builder.UseSqlServer();
 
         return builder;
     }

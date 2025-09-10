@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Wangkanai.EntityFramework.SqlServer;
@@ -118,7 +119,65 @@ public static class IndexConfigurationExtensions
         if (includedColumns.Length == 0)
             throw new ArgumentException("At least one included column must be specified.", nameof(includedColumns));
 
-        return builder.IncludeProperties(includedColumns);
+        var propertyNames = ExtractPropertyNames(includedColumns);
+        return builder.IncludeProperties(propertyNames);
+    }
+
+    /// <summary>
+    /// Extracts property names from lambda expressions for use with EF Core configuration methods.
+    /// Handles various expression types including member access, unary expressions, and new expressions.
+    /// </summary>
+    /// <typeparam name="T">The entity type</typeparam>
+    /// <param name="expressions">Array of lambda expressions representing property access</param>
+    /// <returns>Array of property names as strings</returns>
+    /// <exception cref="ArgumentException">Thrown when an unsupported expression type is encountered</exception>
+    private static string[] ExtractPropertyNames<T>(Expression<Func<T, object>>[] expressions)
+    {
+        var propertyNames = new List<string>();
+
+        foreach (var expression in expressions)
+        {
+            var properties = ExtractPropertiesFromExpression(expression.Body);
+            propertyNames.AddRange(properties);
+        }
+
+        return propertyNames.ToArray();
+    }
+
+    /// <summary>
+    /// Recursively extracts property names from different types of expressions.
+    /// </summary>
+    /// <param name="expression">The expression to analyze</param>
+    /// <returns>Collection of property names</returns>
+    /// <exception cref="ArgumentException">Thrown when an unsupported expression type is encountered</exception>
+    private static IEnumerable<string> ExtractPropertiesFromExpression(Expression expression)
+    {
+        return expression switch
+        {
+            // Direct property access: x => x.PropertyName
+            MemberExpression memberExpr => new[] { memberExpr.Member.Name },
+            
+            // Boxing conversion: x => (object)x.PropertyName
+            UnaryExpression { NodeType: ExpressionType.Convert, Operand: MemberExpression memberExpr } => 
+                new[] { memberExpr.Member.Name },
+            
+            // Anonymous object creation: x => new { x.Prop1, x.Prop2 }
+            NewExpression newExpr when newExpr.Arguments.Count > 0 =>
+                newExpr.Arguments.SelectMany(ExtractPropertiesFromExpression),
+            
+            // Member initialization: x => new { x.Prop1, SomeValue = x.Prop2 }
+            MemberInitExpression initExpr =>
+                initExpr.Bindings
+                    .OfType<MemberAssignment>()
+                    .SelectMany(binding => ExtractPropertiesFromExpression(binding.Expression)),
+            
+            _ => throw new ArgumentException(
+                $"Unsupported expression type '{expression.NodeType}' for property extraction. " +
+                $"Supported expressions include direct property access (x => x.Property), " +
+                $"converted property access (x => (object)x.Property), " +
+                $"and anonymous objects (x => new {{ x.Prop1, x.Prop2 }}).", 
+                nameof(expression))
+        };
     }
 
     /// <summary>
@@ -236,7 +295,7 @@ public static class IndexConfigurationExtensions
         ArgumentNullException.ThrowIfNull(builder);
         
         // Apply spatial index configuration
-        var indexName = $"SX_{builder.Metadata.DeclaringEntityType.GetTableName()}_{builder.Metadata.GetColumnName()}";
+        var indexName = $"SX_{((IMutableEntityType)builder.Metadata.DeclaringType).GetTableName()}_{builder.Metadata.GetColumnName()}";
         
         // Configure the spatial index annotation
         builder.Metadata.SetAnnotation("SqlServer:SpatialIndex", settings ?? new SpatialIndexSettings());
