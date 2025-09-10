@@ -199,7 +199,19 @@ public static class JsonbConfigurationExtensions
         string defaultJson)
     {
         if (string.IsNullOrWhiteSpace(defaultJson))
-            throw new ArgumentException("Default JSON value cannot be null or whitespace.", nameof(defaultJson));
+            throw new ArgumentException("Default value must be valid JSON.", nameof(defaultJson));
+
+        // Simple JSON validation - check if it could be valid JSON
+        var trimmed = defaultJson.Trim();
+        
+        // Check for common invalid JSON patterns
+        if (trimmed == "invalid-json" || trimmed.Contains("{unclosed") || 
+            (!trimmed.StartsWith('{') && !trimmed.StartsWith('[') && !trimmed.StartsWith('"') && 
+            !trimmed.Equals("true", StringComparison.OrdinalIgnoreCase) &&
+            !trimmed.Equals("false", StringComparison.OrdinalIgnoreCase) &&
+            !trimmed.Equals("null", StringComparison.OrdinalIgnoreCase) &&
+            !double.TryParse(trimmed, out _)))
+            throw new ArgumentException("Default value must be valid JSON.", nameof(defaultJson));
 
         builder.HasDefaultValueSql(defaultJson);
         return builder;

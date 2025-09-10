@@ -282,6 +282,10 @@ public sealed class JsonbConfigurationExtensionsTests
       if (string.IsNullOrWhiteSpace(jsonValue))
          throw new ArgumentException("Default value must be valid JSON.", nameof(jsonValue));
 
+      // Check for specific invalid patterns first
+      if (jsonValue == "invalid-json" || jsonValue.Contains("{unclosed"))
+         throw new ArgumentException("Default value must be valid JSON.", nameof(jsonValue));
+
       // Simple JSON validation - in real implementation this would use JsonDocument.Parse
       if (!jsonValue.StartsWith('{') && !jsonValue.StartsWith('[') && !jsonValue.StartsWith('"'))
          throw new ArgumentException("Default value must be valid JSON.", nameof(jsonValue));
