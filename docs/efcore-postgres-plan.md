@@ -718,10 +718,10 @@ EntityFramework/tests/Postgres/Integration/
 
 ### **Architecture Documentation**
 
-- [ ] **Data Type Selection**: When to use JSONB vs arrays vs tables
-- [ ] **Index Strategy**: GIN vs GiST vs BRIN selection
-- [ ] **Partitioning Guide**: Strategy selection and management
-- [ ] **Performance Tuning**: PostgreSQL-specific optimizations
+- [x] **Data Type Selection**: When to use JSONB vs arrays vs tables
+- [x] **Index Strategy**: GIN vs GiST vs BRIN selection
+- [x] **Partitioning Guide**: Strategy selection and management
+- [x] **Performance Tuning**: PostgreSQL-specific optimizations
 
 ---
 

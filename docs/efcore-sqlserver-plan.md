@@ -634,10 +634,10 @@ EntityFramework/tests/SqlServer/Integration/
 
 ### **Architecture Documentation**
 
-- [ ] **Feature Matrix**: SQL Server edition requirements
-- [ ] **Scaling Patterns**: Partitioning and sharding strategies
-- [ ] **High Availability**: Integration with Always-On features
-- [ ] **Security Guide**: Row-level security and encryption
+- [x] **Feature Matrix**: SQL Server edition requirements
+- [x] **Scaling Patterns**: Partitioning and sharding strategies
+- [x] **High Availability**: Integration with Always-On features
+- [x] **Security Guide**: Row-level security and encryption
 
 ---
 
