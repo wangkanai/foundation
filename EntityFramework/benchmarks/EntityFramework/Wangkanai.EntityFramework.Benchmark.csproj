@@ -1,7 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
    <ItemGroup>
+      <!-- PostgreSQL-specific packages for benchmarking -->
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+   </ItemGroup>
+
+   <ItemGroup>
       <ProjectReference Include="..\..\src\EntityFramework\Wangkanai.EntityFramework.csproj" />
+      <ProjectReference Include="..\..\src\Postgres\Wangkanai.EntityFramework.Postgres.csproj" />
    </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Wangkanai.EntityFramework.Postgres;
 
@@ -54,4 +55,219 @@ public static class ConfigurationExtensions
    /// <typeparam name="T">The type of the property being configured.</typeparam>
    /// <param name="builder">The property builder used to configure the property.</param>
    public static void NpgValueGeneratedNever<T>(this PropertyBuilder<T> builder) => builder.ValueGeneratedNever();
+
+   /// <summary>
+   /// Configures a property to use the PostgreSQL "NOW()" function as the default value and
+   /// to generate its value using a specified sequence when a new entity is added.
+   /// </summary>
+   /// <typeparam name="T">The type of the property being configured.</typeparam>
+   /// <param name="builder">The property builder used to configure the property.</param>
+   /// <param name="sequenceName">The name of the PostgreSQL sequence to use for value generation.</param>
+   /// <param name="schema">The schema containing the sequence. If null, uses the default schema.</param>
+   /// <returns>The same PropertyBuilder instance for method chaining.</returns>
+   /// <exception cref="ArgumentException">Thrown when sequenceName is null or whitespace.</exception>
+   /// <example>
+   /// <code>
+   /// builder.Property(e => e.Id).NpgValueGeneratedOnAddWithSequence("user_id_seq");
+   /// </code>
+   /// </example>
+   public static PropertyBuilder<T> NpgValueGeneratedOnAddWithSequence<T>(
+       this PropertyBuilder<T> builder,
+       string sequenceName,
+       string? schema = null)
+   {
+       if (string.IsNullOrWhiteSpace(sequenceName))
+           throw new ArgumentException("Sequence name cannot be null or whitespace.", nameof(sequenceName));
+
+       var fullSequenceName = schema != null ? $"{schema}.{sequenceName}" : sequenceName;
+       builder.HasDefaultValueSql($"nextval('{fullSequenceName}')");
+       builder.ValueGeneratedOnAdd();
+       return builder;
+   }
+
+   /// <summary>
+   /// Configures a property to use PostgreSQL timestamp with time zone type.
+   /// This ensures proper handling of timezone information in date/time values.
+   /// </summary>
+   /// <typeparam name="T">The type of the property being configured.</typeparam>
+   /// <param name="builder">The property builder used to configure the property.</param>
+   /// <returns>The same PropertyBuilder instance for method chaining.</returns>
+   /// <example>
+   /// <code>
+   /// builder.Property(e => e.CreatedAt).NpgTimestampWithTimeZone();
+   /// </code>
+   /// </example>
+   public static PropertyBuilder<T> NpgTimestampWithTimeZone<T>(this PropertyBuilder<T> builder)
+   {
+       builder.HasColumnType("timestamptz");
+       return builder;
+   }
+
+   /// <summary>
+   /// Configures an integer property to use PostgreSQL SERIAL type for auto-increment behavior.
+   /// SERIAL is more efficient than sequences for simple auto-increment scenarios.
+   /// </summary>
+   /// <param name="builder">The property builder used to configure the integer property.</param>
+   /// <returns>The same PropertyBuilder instance for method chaining.</returns>
+   /// <example>
+   /// <code>
+   /// builder.Property(e => e.Id).UseNpgsqlSerial();
+   /// </code>
+   /// </example>
+   public static PropertyBuilder<int> UseNpgsqlSerial(this PropertyBuilder<int> builder)
+   {
+       builder.UseSerialColumn();
+       return builder;
+   }
+
+   /// <summary>
+   /// Configures a Guid property to use PostgreSQL native UUID generation with gen_random_uuid() function.
+   /// This provides efficient UUID generation without application-level overhead.
+   /// </summary>
+   /// <param name="builder">The property builder used to configure the Guid property.</param>
+   /// <returns>The same PropertyBuilder instance for method chaining.</returns>
+   /// <example>
+   /// <code>
+   /// builder.Property(e => e.Id).UseNpgsqlUuidGeneration();
+   /// </code>
+   /// </example>
+   public static PropertyBuilder<Guid> UseNpgsqlUuidGeneration(this PropertyBuilder<Guid> builder)
+   {
+       builder.HasDefaultValueSql("gen_random_uuid()");
+       builder.ValueGeneratedOnAdd();
+       return builder;
+   }
+
+   /// <summary>
+   /// Configures a Guid property to use PostgreSQL UUID version 4 generation.
+   /// Alternative UUID generation method using uuid_generate_v4() function.
+   /// </summary>
+   /// <param name="builder">The property builder used to configure the Guid property.</param>
+   /// <returns>The same PropertyBuilder instance for method chaining.</returns>
+   /// <remarks>
+   /// Requires the uuid-ossp extension to be enabled in PostgreSQL.
+   /// Use gen_random_uuid() (UseNpgsqlUuidGeneration) for newer PostgreSQL versions.
+   /// </remarks>
+   /// <example>
+   /// <code>
+   /// builder.Property(e => e.Id).UseNpgsqlUuidV4Generation();
+   /// </code>
+   /// </example>
+   public static PropertyBuilder<Guid> UseNpgsqlUuidV4Generation(this PropertyBuilder<Guid> builder)
+   {
+       builder.HasDefaultValueSql("uuid_generate_v4()");
+       builder.ValueGeneratedOnAdd();
+       return builder;
+   }
+
+   /// <summary>
+   /// Sets a custom collation for text operations on a string property.
+   /// Collations control sorting, comparison, and string matching behavior.
+   /// </summary>
+   /// <param name="builder">The property builder used to configure the string property.</param>
+   /// <param name="collation">The name of the PostgreSQL collation to apply.</param>
+   /// <returns>The same PropertyBuilder instance for method chaining.</returns>
+   /// <exception cref="ArgumentException">Thrown when collation is null or whitespace.</exception>
+   /// <example>
+   /// <code>
+   /// // Case-insensitive collation
+   /// builder.Property(e => e.Name).HasNpgsqlCollation("en-US-x-icu");
+   /// // Accent-insensitive collation
+   /// builder.Property(e => e.Title).HasNpgsqlCollation("und-x-icu");
+   /// </code>
+   /// </example>
+   public static PropertyBuilder<string> HasNpgsqlCollation(
+       this PropertyBuilder<string> builder,
+       string collation)
+   {
+       if (string.IsNullOrWhiteSpace(collation))
+           throw new ArgumentException("Collation cannot be null or whitespace.", nameof(collation));
+
+       builder.UseCollation(collation);
+       return builder;
+   }
+
+   /// <summary>
+   /// Configures a computed column using a PostgreSQL expression.
+   /// Computed columns are calculated fields that can be either virtual or stored.
+   /// </summary>
+   /// <typeparam name="T">The type of the property being configured.</typeparam>
+   /// <param name="builder">The property builder used to configure the property.</param>
+   /// <param name="sql">The PostgreSQL expression used to compute the column value.</param>
+   /// <param name="stored">Whether the computed value should be stored in the table. Default is false (virtual).</param>
+   /// <returns>The same PropertyBuilder instance for method chaining.</returns>
+   /// <exception cref="ArgumentException">Thrown when sql is null or whitespace.</exception>
+   /// <example>
+   /// <code>
+   /// // Virtual computed column
+   /// builder.Property(e => e.FullName)
+   ///        .HasNpgsqlComputedColumn("first_name || ' ' || last_name");
+   /// 
+   /// // Stored computed column
+   /// builder.Property(e => e.TotalPrice)
+   ///        .HasNpgsqlComputedColumn("quantity * unit_price", stored: true);
+   /// </code>
+   /// </example>
+   public static PropertyBuilder<T> HasNpgsqlComputedColumn<T>(
+       this PropertyBuilder<T> builder,
+       string sql,
+       bool stored = false)
+   {
+       if (string.IsNullOrWhiteSpace(sql))
+           throw new ArgumentException("SQL expression cannot be null or whitespace.", nameof(sql));
+
+       builder.HasComputedColumnSql(sql, stored);
+       return builder;
+   }
+
+   /// <summary>
+   /// Configures a string property to use PostgreSQL TEXT type instead of VARCHAR.
+   /// TEXT type is preferred for large or variable-length text content.
+   /// </summary>
+   /// <param name="builder">The property builder used to configure the string property.</param>
+   /// <returns>The same PropertyBuilder instance for method chaining.</returns>
+   /// <example>
+   /// <code>
+   /// builder.Property(e => e.Description).HasNpgsqlTextType();
+   /// </code>
+   /// </example>
+   public static PropertyBuilder<string> HasNpgsqlTextType(this PropertyBuilder<string> builder)
+   {
+       builder.HasColumnType("text");
+       return builder;
+   }
+
+   /// <summary>
+   /// Configures a property to use PostgreSQL BIGSERIAL type for large auto-increment values.
+   /// BIGSERIAL provides 64-bit auto-increment functionality.
+   /// </summary>
+   /// <param name="builder">The property builder used to configure the long property.</param>
+   /// <returns>The same PropertyBuilder instance for method chaining.</returns>
+   /// <example>
+   /// <code>
+   /// builder.Property(e => e.Id).UseNpgsqlBigSerial();
+   /// </code>
+   /// </example>
+   public static PropertyBuilder<long> UseNpgsqlBigSerial(this PropertyBuilder<long> builder)
+   {
+       builder.UseSerialColumn();
+       return builder;
+   }
+
+   /// <summary>
+   /// Configures a property to use PostgreSQL SMALLSERIAL type for small auto-increment values.
+   /// SMALLSERIAL provides 16-bit auto-increment functionality for space efficiency.
+   /// </summary>
+   /// <param name="builder">The property builder used to configure the short property.</param>
+   /// <returns>The same PropertyBuilder instance for method chaining.</returns>
+   /// <example>
+   /// <code>
+   /// builder.Property(e => e.Id).UseNpgsqlSmallSerial();
+   /// </code>
+   /// </example>
+   public static PropertyBuilder<short> UseNpgsqlSmallSerial(this PropertyBuilder<short> builder)
+   {
+       builder.UseSerialColumn();
+       return builder;
+   }
 }
