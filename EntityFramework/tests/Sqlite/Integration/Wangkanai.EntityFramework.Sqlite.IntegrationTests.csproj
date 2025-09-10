@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
    <ItemGroup>
-      <ProjectReference Include="..\..\..\src\Sqlite\Wangkanai.EntityFramework.Sqlite.csproj"/>
+      <ProjectReference Include="..\..\..\src\Sqlite\Wangkanai.EntityFramework.Sqlite.csproj" />
    </ItemGroup>
 </Project>
