@@ -100,7 +100,7 @@ public static class ArrayConfigurationExtensions
     /// </summary>
     /// <typeparam name="T">The array type of the property being configured.</typeparam>
     /// <param name="builder">The property builder used to configure the property.</param>
-    /// <param name="indexName">Optional custom name for the index. If null, EF Core will generate a name.</param>
+    /// <param name="indexName">Custom name for the index.</param>
     /// <returns>The same PropertyBuilder instance for method chaining.</returns>
     /// <example>
     /// <code>
@@ -120,9 +120,9 @@ public static class ArrayConfigurationExtensions
     /// </example>
     public static PropertyBuilder<T> HasArrayGinIndex<T>(
         this PropertyBuilder<T> builder,
-        string? indexName = null)
+        string indexName)
     {
-        if (indexName != null && string.IsNullOrWhiteSpace(indexName))
+        if (string.IsNullOrWhiteSpace(indexName))
             throw new ArgumentException("Index name cannot be null or whitespace.", nameof(indexName));
 
         // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()

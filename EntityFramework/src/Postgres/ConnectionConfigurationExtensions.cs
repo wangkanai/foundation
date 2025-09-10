@@ -237,6 +237,14 @@ public static class ConnectionConfigurationExtensions
         commandTimeout ??= TimeSpan.FromSeconds(30);
         connectionTimeout ??= TimeSpan.FromSeconds(15);
 
+        // Validate commandTimeout parameter
+        if (commandTimeout.Value <= TimeSpan.Zero)
+            throw new ArgumentOutOfRangeException(nameof(commandTimeout), "Statement timeout must be greater than zero.");
+
+        // Validate connectionTimeout parameter  
+        if (connectionTimeout.Value <= TimeSpan.Zero)
+            throw new ArgumentOutOfRangeException(nameof(connectionTimeout), "Connection timeout must be greater than zero.");
+
         return builder
             .ConfigureNpgsqlConnectionPool(minPoolSize, maxPoolSize)
             .EnableNpgsqlPreparedStatements(maxAutoPrepare)

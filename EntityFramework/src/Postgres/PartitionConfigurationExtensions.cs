@@ -312,18 +312,18 @@ public static class PartitionConfigurationExtensions
     public static EntityTypeBuilder<TEntity> HasHashPartition<TEntity>(
         this EntityTypeBuilder<TEntity> builder,
         string partitionColumn,
-        int partitionCount,
+        int modulus,
         string? tablespace = null)
         where TEntity : class
     {
         if (string.IsNullOrWhiteSpace(partitionColumn))
             throw new ArgumentException("Partition column cannot be null or whitespace.", nameof(partitionColumn));
-        if (partitionCount < 2)
-            throw new ArgumentException("Partition count must be at least 2.", nameof(partitionCount));
+        if (modulus <= 1)
+            throw new ArgumentOutOfRangeException(nameof(modulus), "Hash partition modulus must be greater than 1.");
 
         builder.HasAnnotation("Npgsql:PartitionStrategy", "HASH");
         builder.HasAnnotation("Npgsql:PartitionColumns", new[] { partitionColumn });
-        builder.HasAnnotation("Npgsql:HashPartitionCount", partitionCount);
+        builder.HasAnnotation("Npgsql:HashPartitionCount", modulus);
         
         if (!string.IsNullOrWhiteSpace(tablespace))
             builder.HasAnnotation("Npgsql:Tablespace", tablespace);
@@ -376,8 +376,8 @@ public static class PartitionConfigurationExtensions
     {
         if (string.IsNullOrWhiteSpace(partitionName))
             throw new ArgumentException("Partition name cannot be null or whitespace.", nameof(partitionName));
-        if (modulus < 2)
-            throw new ArgumentException("Modulus must be at least 2.", nameof(modulus));
+        if (modulus <= 1)
+            throw new ArgumentOutOfRangeException(nameof(modulus), "Hash partition modulus must be greater than 1.");
         if (remainder < 0 || remainder >= modulus)
             throw new ArgumentException("Remainder must be between 0 and modulus-1.", nameof(remainder));
 
