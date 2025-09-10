@@ -122,6 +122,9 @@ public static class ArrayConfigurationExtensions
         this PropertyBuilder<T> builder,
         string? indexName = null)
     {
+        if (indexName != null && string.IsNullOrWhiteSpace(indexName))
+            throw new ArgumentException("Index name cannot be null or whitespace.", nameof(indexName));
+
         // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
         // This method now only configures the property for array usage
         // Example: entityBuilder.HasIndex(e => e.ArrayProperty).HasMethod("gin");
