@@ -1,8 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
 
 namespace Wangkanai.EntityFramework.Sqlite;
 
@@ -27,9 +26,9 @@ public static class ConnectionConfigurationExtensions
          throw new ArgumentNullException(nameof(connectionString));
 
       var connectionStringBuilder = new SqliteConnectionStringBuilder(connectionString)
-      {
-         Cache = SqliteCacheMode.Shared
-      };
+                                    {
+                                       Cache = SqliteCacheMode.Shared
+                                    };
 
       return optionsBuilder.UseSqlite(connectionStringBuilder.ToString(), options =>
       {
@@ -51,9 +50,9 @@ public static class ConnectionConfigurationExtensions
          throw new ArgumentNullException(nameof(connectionString));
 
       var connectionStringBuilder = new SqliteConnectionStringBuilder(connectionString)
-      {
-         Cache = SqliteCacheMode.Shared
-      };
+                                    {
+                                       Cache = SqliteCacheMode.Shared
+                                    };
 
       return optionsBuilder.UseSqlite(connectionStringBuilder.ToString());
    }
@@ -78,7 +77,7 @@ public static class ConnectionConfigurationExtensions
          throw new ArgumentOutOfRangeException(nameof(cacheSizeKB), "Cache size must be greater than zero.");
 
       var connectionStringBuilder = new SqliteConnectionStringBuilder(connectionString);
-      
+
       return optionsBuilder.UseSqlite(connectionStringBuilder.ToString(), options =>
       {
          options.CommandTimeout(30);
@@ -103,7 +102,7 @@ public static class ConnectionConfigurationExtensions
          throw new ArgumentOutOfRangeException(nameof(cacheSizeKB), "Cache size must be greater than zero.");
 
       var connectionStringBuilder = new SqliteConnectionStringBuilder(connectionString);
-      
+
       return optionsBuilder.UseSqlite(connectionStringBuilder.ToString());
    }
 
@@ -128,7 +127,7 @@ public static class ConnectionConfigurationExtensions
          throw new ArgumentOutOfRangeException(nameof(timeoutMilliseconds), "Timeout cannot be negative.");
 
       var connectionStringBuilder = new SqliteConnectionStringBuilder(connectionString);
-      
+
       return optionsBuilder.UseSqlite(connectionStringBuilder.ToString(), options =>
       {
          options.CommandTimeout(timeoutMilliseconds / 1000); // Convert to seconds for CommandTimeout
@@ -154,7 +153,7 @@ public static class ConnectionConfigurationExtensions
          throw new ArgumentOutOfRangeException(nameof(timeoutMilliseconds), "Timeout cannot be negative.");
 
       var connectionStringBuilder = new SqliteConnectionStringBuilder(connectionString);
-      
+
       return optionsBuilder.UseSqlite(connectionStringBuilder.ToString());
    }
 
@@ -175,9 +174,9 @@ public static class ConnectionConfigurationExtensions
          throw new ArgumentNullException(nameof(connectionString));
 
       var connectionStringBuilder = new SqliteConnectionStringBuilder(connectionString)
-      {
-         ForeignKeys = true
-      };
+                                    {
+                                       ForeignKeys = true
+                                    };
 
       return optionsBuilder.UseSqlite(connectionStringBuilder.ToString(), options =>
       {
@@ -200,9 +199,9 @@ public static class ConnectionConfigurationExtensions
          throw new ArgumentNullException(nameof(connectionString));
 
       var connectionStringBuilder = new SqliteConnectionStringBuilder(connectionString)
-      {
-         ForeignKeys = true
-      };
+                                    {
+                                       ForeignKeys = true
+                                    };
 
       return optionsBuilder.UseSqlite(connectionStringBuilder.ToString());
    }
@@ -220,7 +219,8 @@ public static class ConnectionConfigurationExtensions
    /// <returns>The same builder instance so that multiple configuration calls can be chained.</returns>
    /// <exception cref="ArgumentNullException">Thrown when connectionString is null or empty.</exception>
    /// <exception cref="ArgumentOutOfRangeException">Thrown when cacheSizeKB is less than or equal to zero or timeoutMilliseconds is negative.</exception>
-   public static DbContextOptionsBuilder<T> OptimizeForSqlitePerformance<T>(this DbContextOptionsBuilder<T> optionsBuilder, string connectionString, int cacheSizeKB = 65536, int timeoutMilliseconds = 30000)
+   public static DbContextOptionsBuilder<T> OptimizeForSqlitePerformance<T>(this DbContextOptionsBuilder<T> optionsBuilder, string connectionString, int cacheSizeKB = 65536,
+                                                                            int                             timeoutMilliseconds = 30000)
       where T : DbContext
    {
       if (string.IsNullOrEmpty(connectionString))
@@ -231,10 +231,10 @@ public static class ConnectionConfigurationExtensions
          throw new ArgumentOutOfRangeException(nameof(timeoutMilliseconds), "Timeout cannot be negative.");
 
       var connectionStringBuilder = new SqliteConnectionStringBuilder(connectionString)
-      {
-         Cache = SqliteCacheMode.Shared,
-         ForeignKeys = true
-      };
+                                    {
+                                       Cache       = SqliteCacheMode.Shared,
+                                       ForeignKeys = true
+                                    };
 
       return optionsBuilder.UseSqlite(connectionStringBuilder.ToString(), options =>
       {
@@ -264,10 +264,10 @@ public static class ConnectionConfigurationExtensions
          throw new ArgumentOutOfRangeException(nameof(timeoutMilliseconds), "Timeout cannot be negative.");
 
       var connectionStringBuilder = new SqliteConnectionStringBuilder(connectionString)
-      {
-         Cache = SqliteCacheMode.Shared,
-         ForeignKeys = true
-      };
+                                    {
+                                       Cache       = SqliteCacheMode.Shared,
+                                       ForeignKeys = true
+                                    };
 
       return optionsBuilder.UseSqlite(connectionStringBuilder.ToString());
    }
