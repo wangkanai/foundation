@@ -4,10 +4,10 @@
    </PropertyGroup>
 
    <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite"/>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" />
    </ItemGroup>
 
    <ItemGroup>
-      <ProjectReference Include="..\EntityFramework\Wangkanai.EntityFramework.csproj"/>
+      <ProjectReference Include="..\EntityFramework\Wangkanai.EntityFramework.csproj" />
    </ItemGroup>
 </Project>
