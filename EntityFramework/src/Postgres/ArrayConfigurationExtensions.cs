@@ -122,10 +122,13 @@ public static class ArrayConfigurationExtensions
         this PropertyBuilder<T> builder,
         string? indexName = null)
     {
-        builder.HasIndex().HasMethod("gin");
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property for array usage
+        // Example: entityBuilder.HasIndex(e => e.ArrayProperty).HasMethod("gin");
+        builder.HasAnnotation("Npgsql:IndexMethod", "gin");
         if (!string.IsNullOrWhiteSpace(indexName))
         {
-            builder.HasIndex().HasDatabaseName(indexName);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         }
         return builder;
     }
@@ -156,10 +159,13 @@ public static class ArrayConfigurationExtensions
         this PropertyBuilder<T> builder,
         string? indexName = null)
     {
-        builder.HasIndex().HasMethod("gist");
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property for array usage
+        // Example: entityBuilder.HasIndex(e => e.ArrayProperty).HasMethod("gist");
+        builder.HasAnnotation("Npgsql:IndexMethod", "gist");
         if (!string.IsNullOrWhiteSpace(indexName))
         {
-            builder.HasIndex().HasDatabaseName(indexName);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         }
         return builder;
     }

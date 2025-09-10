@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using System.Collections.Concurrent;
+using System.Text;
 using System.Text.Json;
 
 namespace Wangkanai.EntityFramework.Postgres;
@@ -753,7 +754,7 @@ internal class LogicalReplicationEventStreamer
                 while (await reader.ReadAsync(cancellationToken))
                 {
                     var lsn = reader.GetString(0);
-                    var xid = reader.GetUInt32(1);
+                    var xid = reader.GetFieldValue<uint>(1);
                     var data = reader.GetString(2);
 
                     var changeEvent = ParseChangeEvent(data);

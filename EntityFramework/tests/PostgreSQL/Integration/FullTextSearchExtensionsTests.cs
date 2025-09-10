@@ -12,8 +12,8 @@ namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 /// </summary>
 public sealed class FullTextSearchExtensionsTests : PostgreSqlIntegrationTestBase
 {
-    public FullTextSearchExtensionsTests(PostgreSqlTestFixture fixture, ITestOutputHelper output)
-        : base(fixture, output)
+    public FullTextSearchExtensionsTests(PostgreSqlTestFixture fixture)
+        : base(fixture)
     {
     }
 

@@ -11,8 +11,8 @@ namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 /// </summary>
 public sealed class RealTimeFeatureTests : PostgreSqlIntegrationTestBase
 {
-    public RealTimeFeatureTests(PostgreSqlTestFixture fixture, ITestOutputHelper output)
-        : base(fixture, output)
+    public RealTimeFeatureTests(PostgreSqlTestFixture fixture)
+        : base(fixture)
     {
     }
 

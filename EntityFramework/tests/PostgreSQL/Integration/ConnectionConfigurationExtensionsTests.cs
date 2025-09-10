@@ -11,8 +11,8 @@ namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 /// </summary>
 public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrationTestBase
 {
-    public ConnectionConfigurationExtensionsTests(PostgreSqlTestFixture fixture, ITestOutputHelper output)
-        : base(fixture, output)
+    public ConnectionConfigurationExtensionsTests(PostgreSqlTestFixture fixture)
+        : base(fixture)
     {
     }
 
@@ -195,7 +195,7 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
         catch (Npgsql.PostgresException)
         {
             // SSL might not be configured on test container, which is expected
-            Output.WriteLine("SSL not available on test container - this is expected in test environment");
+            Console.WriteLine("SSL not available on test container - this is expected in test environment");
         }
     }
 
@@ -420,7 +420,7 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
         stopwatch.Stop();
 
         // Assert
-        Output.WriteLine($"Concurrent operations completed in {stopwatch.ElapsedMilliseconds}ms");
+        Console.WriteLine($"Concurrent operations completed in {stopwatch.ElapsedMilliseconds}ms");
         
         await using var verifyContext = new TestDbContext(options);
         var count = await verifyContext.TestEntities.CountAsync(e => e.Name.StartsWith("Perf Test"));
@@ -469,7 +469,7 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
         stopwatch.Stop();
 
         // Assert
-        Output.WriteLine($"Prepared statement queries completed in {stopwatch.ElapsedMilliseconds}ms");
+        Console.WriteLine($"Prepared statement queries completed in {stopwatch.ElapsedMilliseconds}ms");
         
         // With prepared statements, this should be faster than without
         stopwatch.ElapsedMilliseconds.Should().BeLessThan(10000); // 10 seconds max

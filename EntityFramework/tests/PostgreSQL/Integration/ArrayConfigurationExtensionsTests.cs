@@ -11,8 +11,8 @@ namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 /// </summary>
 public sealed class ArrayConfigurationExtensionsTests : PostgreSqlIntegrationTestBase
 {
-    public ArrayConfigurationExtensionsTests(PostgreSqlTestFixture fixture, ITestOutputHelper output)
-        : base(fixture, output)
+    public ArrayConfigurationExtensionsTests(PostgreSqlTestFixture fixture)
+        : base(fixture)
     {
     }
 
@@ -660,13 +660,13 @@ public sealed class ArrayConfigurationExtensionsTests : PostgreSqlIntegrationTes
         stopwatch.Stop();
 
         // Assert
-        Output.WriteLine($"Array performance test completed in {stopwatch.ElapsedMilliseconds}ms");
-        Output.WriteLine($"High scorers: {highScorers}");
-        Output.WriteLine($"Common tags: {commonTags}");
-        Output.WriteLine($"Total elements: {totalElements}");
-        Output.WriteLine($"Average array size: {avgArraySize}");
+        Console.WriteLine($"Array performance test completed in {stopwatch.ElapsedMilliseconds}ms");
+        Console.WriteLine($"High scorers: {highScorers}");
+        Console.WriteLine($"Common tags: {commonTags}");
+        Console.WriteLine($"Total elements: {totalElements}");
+        Console.WriteLine($"Average array size: {avgArraySize}");
 
-        highScorers.Should().BeGreaterOrEqualTo(0);
+        highScorers.Should().BeGreaterThanOrEqualTo(0);
         commonTags.Should().BeGreaterThan(0);
         totalElements.Should().BeGreaterThan(recordCount * 5); // At least 5 scores per entity
         avgArraySize.Should().BeGreaterThan(3);

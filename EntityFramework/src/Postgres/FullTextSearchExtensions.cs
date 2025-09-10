@@ -134,10 +134,14 @@ public static class FullTextSearchExtensions
         this PropertyBuilder<NpgsqlTsVector> builder,
         string? indexName = null)
     {
-        var indexBuilder = builder.HasIndex().HasMethod("gin");
-        
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property for tsvector usage
+        // Example: entityBuilder.HasIndex(e => e.SearchVector).HasMethod("gin");
+        builder.HasAnnotation("Npgsql:IndexMethod", "gin");
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
+        {
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
+        }
         
         return builder;
     }

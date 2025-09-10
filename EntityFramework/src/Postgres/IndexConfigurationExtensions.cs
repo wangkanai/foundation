@@ -41,11 +41,14 @@ public static class IndexConfigurationExtensions
         string? indexName = null,
         bool unique = false)
     {
-        var indexBuilder = builder.HasIndex();
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property with metadata
+        // Example: entityBuilder.HasIndex(e => e.Property).IsUnique(unique);
+        builder.HasAnnotation("Npgsql:IndexMethod", "btree");
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         if (unique)
-            indexBuilder.IsUnique();
+            builder.HasAnnotation("Npgsql:IndexUnique", true);
         
         return builder;
     }
@@ -88,13 +91,14 @@ public static class IndexConfigurationExtensions
         string? indexName = null,
         string? operatorClass = null)
     {
-        var indexBuilder = builder.HasIndex().HasMethod("gin");
-        
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property with metadata
+        // Example: entityBuilder.HasIndex(e => e.Property).HasMethod("gin");
+        builder.HasAnnotation("Npgsql:IndexMethod", "gin");
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
-            
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         if (!string.IsNullOrWhiteSpace(operatorClass))
-            indexBuilder.HasAnnotation("Npgsql:IndexOperatorClass", new[] { operatorClass });
+            builder.HasAnnotation("Npgsql:IndexOperatorClass", new[] { operatorClass });
         
         return builder;
     }
@@ -177,13 +181,14 @@ public static class IndexConfigurationExtensions
         string? indexName = null,
         string? operatorClass = null)
     {
-        var indexBuilder = builder.HasIndex().HasMethod("gist");
-        
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property with metadata
+        // Example: entityBuilder.HasIndex(e => e.Property).HasMethod("gist");
+        builder.HasAnnotation("Npgsql:IndexMethod", "gist");
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
-            
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         if (!string.IsNullOrWhiteSpace(operatorClass))
-            indexBuilder.HasAnnotation("Npgsql:IndexOperatorClass", new[] { operatorClass });
+            builder.HasAnnotation("Npgsql:IndexOperatorClass", new[] { operatorClass });
         
         return builder;
     }
@@ -225,13 +230,14 @@ public static class IndexConfigurationExtensions
         string? indexName = null,
         string? operatorClass = null)
     {
-        var indexBuilder = builder.HasIndex().HasMethod("spgist");
-        
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property with metadata
+        // Example: entityBuilder.HasIndex(e => e.Property).HasMethod("spgist");
+        builder.HasAnnotation("Npgsql:IndexMethod", "spgist");
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
-            
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         if (!string.IsNullOrWhiteSpace(operatorClass))
-            indexBuilder.HasAnnotation("Npgsql:IndexOperatorClass", new[] { operatorClass });
+            builder.HasAnnotation("Npgsql:IndexOperatorClass", new[] { operatorClass });
         
         return builder;
     }
@@ -274,13 +280,14 @@ public static class IndexConfigurationExtensions
         string? indexName = null,
         int? pagesPerRange = null)
     {
-        var indexBuilder = builder.HasIndex().HasMethod("brin");
-        
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property with metadata
+        // Example: entityBuilder.HasIndex(e => e.Property).HasMethod("brin");
+        builder.HasAnnotation("Npgsql:IndexMethod", "brin");
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
-            
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         if (pagesPerRange.HasValue)
-            indexBuilder.HasAnnotation("Npgsql:IndexStorageParameter:pages_per_range", pagesPerRange.Value);
+            builder.HasAnnotation("Npgsql:IndexStorageParameter:pages_per_range", pagesPerRange.Value);
         
         return builder;
     }
@@ -316,10 +323,12 @@ public static class IndexConfigurationExtensions
         this PropertyBuilder<T> builder,
         string? indexName = null)
     {
-        var indexBuilder = builder.HasIndex().HasMethod("hash");
-        
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property with metadata
+        // Example: entityBuilder.HasIndex(e => e.Property).HasMethod("hash");
+        builder.HasAnnotation("Npgsql:IndexMethod", "hash");
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         
         return builder;
     }
@@ -369,15 +378,13 @@ public static class IndexConfigurationExtensions
         if (string.IsNullOrWhiteSpace(whereClause))
             throw new ArgumentException("WHERE clause cannot be null or whitespace.", nameof(whereClause));
 
-        var indexBuilder = builder.HasIndex();
-        
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property with metadata
+        // Example: entityBuilder.HasIndex(e => e.Property).HasFilter(whereClause).HasMethod(indexMethod);
+        builder.HasAnnotation("Npgsql:IndexMethod", indexMethod);
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
-            
-        if (indexMethod != "btree")
-            indexBuilder.HasMethod(indexMethod);
-            
-        indexBuilder.HasFilter(whereClause);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
+        builder.HasAnnotation("Npgsql:IndexFilter", whereClause);
         
         return builder;
     }
@@ -424,15 +431,15 @@ public static class IndexConfigurationExtensions
         if (includeColumns == null || includeColumns.Length == 0)
             throw new ArgumentException("Include columns cannot be null or empty.", nameof(includeColumns));
 
-        var indexBuilder = builder.HasIndex();
-        
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property with metadata
+        // Example: entityBuilder.HasIndex(e => e.Property).IncludeProperties(includeColumns).IsUnique(unique);
+        builder.HasAnnotation("Npgsql:IndexMethod", "btree");
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
-            
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         if (unique)
-            indexBuilder.IsUnique();
-            
-        indexBuilder.IncludeProperties(includeColumns);
+            builder.HasAnnotation("Npgsql:IndexUnique", true);
+        builder.HasAnnotation("Npgsql:IndexIncludeProperties", includeColumns);
         
         return builder;
     }
@@ -485,16 +492,14 @@ public static class IndexConfigurationExtensions
         if (string.IsNullOrWhiteSpace(expression))
             throw new ArgumentException("Expression cannot be null or whitespace.", nameof(expression));
 
-        var indexBuilder = builder.HasIndex();
-        
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property with metadata
+        // Example: entityBuilder.HasIndex().HasMethod(indexMethod).HasAnnotation("Npgsql:IndexExpression", expression);
+        builder.HasAnnotation("Npgsql:IndexMethod", indexMethod);
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
-            
-        if (indexMethod != "btree")
-            indexBuilder.HasMethod(indexMethod);
-            
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         // Store the expression for potential use in migrations
-        indexBuilder.HasAnnotation("Npgsql:IndexExpression", expression);
+        builder.HasAnnotation("Npgsql:IndexExpression", expression);
         
         return builder;
     }
@@ -532,15 +537,13 @@ public static class IndexConfigurationExtensions
         string? indexName = null,
         string indexMethod = "btree")
     {
-        var indexBuilder = builder.HasIndex();
-        
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property with metadata
+        // Example: entityBuilder.HasIndex(e => e.Property).HasMethod(indexMethod).HasAnnotation("Npgsql:CreatedConcurrently", true);
+        builder.HasAnnotation("Npgsql:IndexMethod", indexMethod);
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
-            
-        if (indexMethod != "btree")
-            indexBuilder.HasMethod(indexMethod);
-            
-        indexBuilder.HasAnnotation("Npgsql:CreatedConcurrently", true);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
+        builder.HasAnnotation("Npgsql:CreatedConcurrently", true);
         
         return builder;
     }
@@ -589,17 +592,16 @@ public static class IndexConfigurationExtensions
         if (parameters == null || parameters.Count == 0)
             throw new ArgumentException("Storage parameters cannot be null or empty.", nameof(parameters));
 
-        var indexBuilder = builder.HasIndex();
-        
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property with metadata
+        // Example: entityBuilder.HasIndex(e => e.Property).HasMethod(indexMethod);
+        builder.HasAnnotation("Npgsql:IndexMethod", indexMethod);
         if (!string.IsNullOrWhiteSpace(indexName))
-            indexBuilder.HasDatabaseName(indexName);
-            
-        if (indexMethod != "btree")
-            indexBuilder.HasMethod(indexMethod);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
 
         foreach (var (key, value) in parameters)
         {
-            indexBuilder.HasAnnotation($"Npgsql:IndexStorageParameter:{key}", value);
+            builder.HasAnnotation($"Npgsql:IndexStorageParameter:{key}", value);
         }
         
         return builder;

@@ -11,8 +11,8 @@ namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 /// </summary>
 public sealed class BulkOperationsTests : PostgreSqlIntegrationTestBase
 {
-    public BulkOperationsTests(PostgreSqlTestFixture fixture, ITestOutputHelper output)
-        : base(fixture, output)
+    public BulkOperationsTests(PostgreSqlTestFixture fixture)
+        : base(fixture)
     {
     }
 
@@ -48,7 +48,7 @@ public sealed class BulkOperationsTests : PostgreSqlIntegrationTestBase
         stopwatch.Stop();
 
         // Assert
-        Output.WriteLine($"Bulk insert of {recordCount} records completed in {stopwatch.ElapsedMilliseconds}ms");
+        Console.WriteLine($"Bulk insert of {recordCount} records completed in {stopwatch.ElapsedMilliseconds}ms");
         
         var count = await context.BulkEntities.CountAsync();
         count.Should().Be(recordCount);
@@ -135,7 +135,7 @@ public sealed class BulkOperationsTests : PostgreSqlIntegrationTestBase
         stopwatch.Stop();
 
         // Assert
-        Output.WriteLine($"Bulk update completed in {stopwatch.ElapsedMilliseconds}ms");
+        Console.WriteLine($"Bulk update completed in {stopwatch.ElapsedMilliseconds}ms");
         
         var processedCount = await context.BulkEntities
             .CountAsync(e => e.Status == "Processed");

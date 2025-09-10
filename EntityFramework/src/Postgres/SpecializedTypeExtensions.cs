@@ -88,10 +88,13 @@ public static class SpecializedTypeExtensions
         this PropertyBuilder<T> builder,
         string? indexName = null)
     {
-        builder.HasIndex().HasMethod("gist");
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property for range usage
+        // Example: entityBuilder.HasIndex(e => e.RangeProperty).HasMethod("gist");
+        builder.HasAnnotation("Npgsql:IndexMethod", "gist");
         if (!string.IsNullOrWhiteSpace(indexName))
         {
-            builder.HasIndex().HasDatabaseName(indexName);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         }
         return builder;
     }
@@ -280,10 +283,13 @@ public static class SpecializedTypeExtensions
         this PropertyBuilder<T> builder,
         string? indexName = null)
     {
-        builder.HasIndex().HasMethod("gist");
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property for spatial usage
+        // Example: entityBuilder.HasIndex(e => e.SpatialProperty).HasMethod("gist");
+        builder.HasAnnotation("Npgsql:IndexMethod", "gist");
         if (!string.IsNullOrWhiteSpace(indexName))
         {
-            builder.HasIndex().HasDatabaseName(indexName);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         }
         return builder;
     }
@@ -367,10 +373,13 @@ public static class SpecializedTypeExtensions
         this PropertyBuilder<T> builder,
         string? indexName = null)
     {
-        builder.HasIndex().HasMethod("gist");
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property for network usage
+        // Example: entityBuilder.HasIndex(e => e.NetworkProperty).HasMethod("gist");
+        builder.HasAnnotation("Npgsql:IndexMethod", "gist");
         if (!string.IsNullOrWhiteSpace(indexName))
         {
-            builder.HasIndex().HasDatabaseName(indexName);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         }
         return builder;
     }

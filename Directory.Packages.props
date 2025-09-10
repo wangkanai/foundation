@@ -43,6 +43,7 @@
       <PackageVersion Include="FluentAssertions" Version="8.6.0"/>
       <!--benchmarking-->
       <PackageVersion Include="BenchmarkDotNet" Version="0.15.2"/>
+      <!--annotations removed - automatically referenced by EF Core-->
       <!--wangkanai-->
       <PackageVersion Include="Wangkanai.System" Version="5.8.0"/>
       <PackageVersion Include="Wangkanai.Validation" Version="4.6.0"/>

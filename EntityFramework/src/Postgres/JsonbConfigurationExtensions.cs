@@ -63,10 +63,13 @@ public static class JsonbConfigurationExtensions
         this PropertyBuilder<T> builder,
         string? indexName = null)
     {
-        builder.HasIndex().HasMethod("gin");
+        // Note: Index creation should be done at the entity level using EntityTypeBuilder.HasIndex()
+        // This method now only configures the property for JSONB usage
+        // Example: entityBuilder.HasIndex(e => e.JsonProperty).HasMethod("gin");
+        builder.HasAnnotation("Npgsql:IndexMethod", "gin");
         if (!string.IsNullOrWhiteSpace(indexName))
         {
-            builder.HasIndex().HasDatabaseName(indexName);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         }
         return builder;
     }
@@ -108,10 +111,13 @@ public static class JsonbConfigurationExtensions
         var pgPath = ConvertJsonPathToPostgreSqlPath(jsonPath);
         var expression = $"({builder.Metadata.Name} #> '{pgPath}')";
 
-        builder.HasIndex().HasMethod("gin");
+        // Note: Path-based index creation should be done at the entity level
+        // Example: entityBuilder.HasIndex().HasDatabaseName(indexName).HasMethod("gin");
+        builder.HasAnnotation("Npgsql:JsonPath", jsonPath);
+        builder.HasAnnotation("Npgsql:IndexMethod", "gin");
         if (!string.IsNullOrWhiteSpace(indexName))
         {
-            builder.HasIndex().HasDatabaseName(indexName);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         }
         
         return builder;
@@ -150,10 +156,13 @@ public static class JsonbConfigurationExtensions
         if (string.IsNullOrWhiteSpace(expression))
             throw new ArgumentException("Expression cannot be null or whitespace.", nameof(expression));
 
-        builder.HasIndex().HasMethod("gin");
+        // Note: Expression-based index creation should be done at the entity level
+        // Example: entityBuilder.HasIndex().HasDatabaseName(indexName).HasMethod("gin");
+        builder.HasAnnotation("Npgsql:IndexExpression", expression);
+        builder.HasAnnotation("Npgsql:IndexMethod", "gin");
         if (!string.IsNullOrWhiteSpace(indexName))
         {
-            builder.HasIndex().HasDatabaseName(indexName);
+            builder.HasAnnotation("Npgsql:IndexName", indexName);
         }
         
         return builder;

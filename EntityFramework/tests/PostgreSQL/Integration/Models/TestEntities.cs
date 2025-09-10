@@ -1,5 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
+using Wangkanai.Foundation;
+
 namespace Wangkanai.EntityFramework.PostgreSQL.Integration.Models;
 
 /// <summary>

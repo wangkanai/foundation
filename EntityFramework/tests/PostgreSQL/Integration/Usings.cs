@@ -20,7 +20,6 @@ global using FluentAssertions;
 global using Testcontainers.PostgreSql;
 
 global using Wangkanai.EntityFramework.Postgres;
-global using Wangkanai.Foundation.Domain;
+global using Wangkanai.Foundation;
 
 global using Xunit;
-global using Xunit.Abstractions;

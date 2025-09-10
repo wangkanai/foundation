@@ -11,8 +11,8 @@ namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 /// </summary>
 public sealed class PartitioningTests : PostgreSqlIntegrationTestBase
 {
-    public PartitioningTests(PostgreSqlTestFixture fixture, ITestOutputHelper output)
-        : base(fixture, output)
+    public PartitioningTests(PostgreSqlTestFixture fixture)
+        : base(fixture)
     {
     }
 
@@ -208,7 +208,7 @@ public sealed class PartitioningTests : PostgreSqlIntegrationTestBase
         // The distribution might not be perfectly even due to hash function, but should be reasonable
         var maxCount = counts.Max();
         var minCount = counts.Min();
-        (maxCount - minCount).Should().BeLessOrEqualTo(10); // Difference shouldn't be too large
+        (maxCount - minCount).Should().BeLessThanOrEqualTo(10); // Difference shouldn't be too large
     }
 
     [Fact]
@@ -285,12 +285,12 @@ public sealed class PartitioningTests : PostgreSqlIntegrationTestBase
         count2024.Should().Be(recordsPerYear);
         totalCount.Should().Be(recordsPerYear * 2);
         
-        Output.WriteLine($"Pruned query time: {prunedQueryTime}ms");
-        Output.WriteLine($"Full scan time: {fullScanTime}ms");
+        Console.WriteLine($"Pruned query time: {prunedQueryTime}ms");
+        Console.WriteLine($"Full scan time: {fullScanTime}ms");
         
         // The pruned query should be faster or at least not significantly slower
         // Note: With small datasets, the difference might not be noticeable
-        prunedQueryTime.Should().BeLessOrEqualTo(fullScanTime + 100); // Allow some variance
+        prunedQueryTime.Should().BeLessThanOrEqualTo(fullScanTime + 100); // Allow some variance
     }
 }
 

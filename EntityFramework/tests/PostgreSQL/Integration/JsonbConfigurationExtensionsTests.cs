@@ -12,8 +12,8 @@ namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 /// </summary>
 public sealed class JsonbConfigurationExtensionsTests : PostgreSqlIntegrationTestBase
 {
-    public JsonbConfigurationExtensionsTests(PostgreSqlTestFixture fixture, ITestOutputHelper output)
-        : base(fixture, output)
+    public JsonbConfigurationExtensionsTests(PostgreSqlTestFixture fixture)
+        : base(fixture)
     {
     }
 
@@ -500,10 +500,10 @@ public sealed class JsonbConfigurationExtensionsTests : PostgreSqlIntegrationTes
         stopwatch.Stop();
 
         // Assert
-        Output.WriteLine($"Performance test completed in {stopwatch.ElapsedMilliseconds}ms");
-        Output.WriteLine($"Premium entities: {premiumCount}");
-        Output.WriteLine($"High score entities: {highScoreCount}");
-        Output.WriteLine($"Unique tags: {tagDistribution}");
+        Console.WriteLine($"Performance test completed in {stopwatch.ElapsedMilliseconds}ms");
+        Console.WriteLine($"Premium entities: {premiumCount}");
+        Console.WriteLine($"High score entities: {highScoreCount}");
+        Console.WriteLine($"Unique tags: {tagDistribution}");
 
         premiumCount.Should().Be(recordCount / 10); // Every 10th entity is premium
         highScoreCount.Should().BeGreaterThan(0);

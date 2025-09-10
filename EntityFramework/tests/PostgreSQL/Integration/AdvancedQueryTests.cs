@@ -11,8 +11,8 @@ namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 /// </summary>
 public sealed class AdvancedQueryTests : PostgreSqlIntegrationTestBase
 {
-    public AdvancedQueryTests(PostgreSqlTestFixture fixture, ITestOutputHelper output)
-        : base(fixture, output)
+    public AdvancedQueryTests(PostgreSqlTestFixture fixture)
+        : base(fixture)
     {
     }
 
@@ -287,11 +287,11 @@ public sealed class AdvancedQueryTests : PostgreSqlIntegrationTestBase
         mvResult.Should().Be(baseResult); // Results should be identical
         mvResult.Should().BeGreaterThan(0);
         
-        Output.WriteLine($"Materialized view query time: {mvQueryTime}ms");
-        Output.WriteLine($"Base table query time: {baseQueryTime}ms");
+        Console.WriteLine($"Materialized view query time: {mvQueryTime}ms");
+        Console.WriteLine($"Base table query time: {baseQueryTime}ms");
         
         // Materialized view should be faster or comparable
-        mvQueryTime.Should().BeLessOrEqualTo(baseQueryTime + 50); // Allow some variance
+        mvQueryTime.Should().BeLessThanOrEqualTo(baseQueryTime + 50); // Allow some variance
 
         // Test materialized view refresh
         await ExecuteSqlAsync("REFRESH MATERIALIZED VIEW customer_summary;");

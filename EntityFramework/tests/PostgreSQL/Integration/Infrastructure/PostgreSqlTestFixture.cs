@@ -23,7 +23,7 @@ public sealed class PostgreSqlTestFixture : IAsyncLifetime
 
     public string ConnectionString => _container.GetConnectionString();
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         await _container.StartAsync();
 
@@ -33,7 +33,7 @@ public sealed class PostgreSqlTestFixture : IAsyncLifetime
         await connection.CloseAsync();
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         await _container.DisposeAsync();
     }
@@ -54,17 +54,15 @@ public sealed class PostgreSqlTestCollection : ICollectionFixture<PostgreSqlTest
 public abstract class PostgreSqlIntegrationTestBase : IAsyncLifetime
 {
     protected readonly PostgreSqlTestFixture Fixture;
-    protected readonly ITestOutputHelper Output;
     protected string ConnectionString => Fixture.ConnectionString;
 
-    protected PostgreSqlIntegrationTestBase(PostgreSqlTestFixture fixture, ITestOutputHelper output)
+    protected PostgreSqlIntegrationTestBase(PostgreSqlTestFixture fixture)
     {
         Fixture = fixture;
-        Output = output;
     }
 
-    public virtual Task InitializeAsync() => Task.CompletedTask;
-    public virtual Task DisposeAsync() => Task.CompletedTask;
+    public virtual ValueTask InitializeAsync() => ValueTask.CompletedTask;
+    public virtual ValueTask DisposeAsync() => ValueTask.CompletedTask;
 
     /// <summary>
     /// Creates a new DbContextOptions with PostgreSQL configuration.
@@ -73,7 +71,7 @@ public abstract class PostgreSqlIntegrationTestBase : IAsyncLifetime
     {
         return new DbContextOptionsBuilder<T>()
             .UseNpgsql(ConnectionString)
-            .LogTo(Output.WriteLine, LogLevel.Information)
+            .LogTo(Console.WriteLine, LogLevel.Information)
             .EnableSensitiveDataLogging()
             .EnableDetailedErrors()
             .Options;
@@ -86,7 +84,7 @@ public abstract class PostgreSqlIntegrationTestBase : IAsyncLifetime
     {
         return new DbContextOptionsBuilder<T>()
             .UseNpgsql(ConnectionString)
-            .LogTo(Output.WriteLine, LogLevel.Information)
+            .LogTo(Console.WriteLine, LogLevel.Information)
             .EnableSensitiveDataLogging()
             .EnableDetailedErrors();
     }
