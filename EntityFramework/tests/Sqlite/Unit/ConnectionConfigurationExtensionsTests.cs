@@ -6,6 +6,17 @@ public class ConnectionConfigurationExtensionsTests
 {
     private const string ValidConnectionString = "Data Source=test.db";
     
+    /// <summary>
+    /// Creates a DbContextOptionsBuilder for unit tests that don't need a real database connection.
+    /// </summary>
+    private static DbContextOptionsBuilder<T> CreateUnitTestDbContextOptionsBuilder<T>() where T : DbContext
+    {
+        return new DbContextOptionsBuilder<T>()
+            .UseSqlite("Data Source=:memory:")
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors();
+    }
+    
     #region Test Context Classes
     
     public class TestDbContext : DbContext
@@ -21,7 +32,7 @@ public class ConnectionConfigurationExtensionsTests
     public void EnableSqliteWAL_Generic_WithValidConnectionString_ShouldConfigureWAL()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act
         var result = optionsBuilder.EnableSqliteWAL(ValidConnectionString);
@@ -37,7 +48,7 @@ public class ConnectionConfigurationExtensionsTests
     public void EnableSqliteWAL_Generic_WithNullConnectionString_ShouldThrowArgumentNullException()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() => optionsBuilder.EnableSqliteWAL(null!));
@@ -47,7 +58,7 @@ public class ConnectionConfigurationExtensionsTests
     public void EnableSqliteWAL_Generic_WithEmptyConnectionString_ShouldThrowArgumentNullException()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() => optionsBuilder.EnableSqliteWAL(string.Empty));
@@ -87,7 +98,7 @@ public class ConnectionConfigurationExtensionsTests
     public void SetSqliteCacheSize_Generic_WithValidParameters_ShouldSetCacheSize()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
         const int cacheSize = 32768;
 
         // Act
@@ -102,7 +113,7 @@ public class ConnectionConfigurationExtensionsTests
     public void SetSqliteCacheSize_Generic_WithDefaultCacheSize_ShouldUseDefault()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act
         var result = optionsBuilder.SetSqliteCacheSize(ValidConnectionString);
@@ -116,7 +127,7 @@ public class ConnectionConfigurationExtensionsTests
     public void SetSqliteCacheSize_Generic_WithZeroCacheSize_ShouldThrowArgumentOutOfRangeException()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => 
@@ -127,7 +138,7 @@ public class ConnectionConfigurationExtensionsTests
     public void SetSqliteCacheSize_Generic_WithNegativeCacheSize_ShouldThrowArgumentOutOfRangeException()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => 
@@ -157,7 +168,7 @@ public class ConnectionConfigurationExtensionsTests
     public void SetSqliteBusyTimeout_Generic_WithValidTimeout_ShouldSetTimeout()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
         const int timeout = 15000;
 
         // Act
@@ -172,7 +183,7 @@ public class ConnectionConfigurationExtensionsTests
     public void SetSqliteBusyTimeout_Generic_WithDefaultTimeout_ShouldUseDefault()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act
         var result = optionsBuilder.SetSqliteBusyTimeout(ValidConnectionString);
@@ -186,7 +197,7 @@ public class ConnectionConfigurationExtensionsTests
     public void SetSqliteBusyTimeout_Generic_WithNegativeTimeout_ShouldThrowArgumentOutOfRangeException()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => 
@@ -216,7 +227,7 @@ public class ConnectionConfigurationExtensionsTests
     public void EnableSqliteForeignKeys_Generic_WithValidConnectionString_ShouldEnableForeignKeys()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act
         var result = optionsBuilder.EnableSqliteForeignKeys(ValidConnectionString);
@@ -230,7 +241,7 @@ public class ConnectionConfigurationExtensionsTests
     public void EnableSqliteForeignKeys_Generic_WithNullConnectionString_ShouldThrowArgumentNullException()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() => optionsBuilder.EnableSqliteForeignKeys(null!));
@@ -258,7 +269,7 @@ public class ConnectionConfigurationExtensionsTests
     public void OptimizeForSqlitePerformance_Generic_WithValidParameters_ShouldApplyOptimizations()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
         const int cacheSize = 32768;
         const int timeout = 15000;
 
@@ -274,7 +285,7 @@ public class ConnectionConfigurationExtensionsTests
     public void OptimizeForSqlitePerformance_Generic_WithDefaultParameters_ShouldUseDefaults()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act
         var result = optionsBuilder.OptimizeForSqlitePerformance(ValidConnectionString);
@@ -288,7 +299,7 @@ public class ConnectionConfigurationExtensionsTests
     public void OptimizeForSqlitePerformance_Generic_WithInvalidCacheSize_ShouldThrowArgumentOutOfRangeException()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => 
@@ -299,7 +310,7 @@ public class ConnectionConfigurationExtensionsTests
     public void OptimizeForSqlitePerformance_Generic_WithInvalidTimeout_ShouldThrowArgumentOutOfRangeException()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act & Assert
         Assert.Throws<ArgumentOutOfRangeException>(() => 
@@ -333,7 +344,7 @@ public class ConnectionConfigurationExtensionsTests
     public void ConnectionStringMethods_WithVariousValidConnectionStrings_ShouldSucceed(string connectionString)
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act & Assert - Should not throw
         var walResult = optionsBuilder.EnableSqliteWAL(connectionString);
@@ -360,7 +371,7 @@ public class ConnectionConfigurationExtensionsTests
     public void SqliteConfigurationMethods_ShouldSupportMethodChaining()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act
         var result = optionsBuilder
@@ -375,7 +386,7 @@ public class ConnectionConfigurationExtensionsTests
     public void MultipleConfigurationMethods_ShouldWorkTogether()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act & Assert - Should not throw when called in sequence
         optionsBuilder.EnableSqliteWAL(ValidConnectionString);
@@ -392,7 +403,7 @@ public class ConnectionConfigurationExtensionsTests
     public void EnableSqliteWAL_WithWhitespaceConnectionString_ShouldThrowArgumentNullException()
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() => optionsBuilder.EnableSqliteWAL("   "));
@@ -405,7 +416,7 @@ public class ConnectionConfigurationExtensionsTests
     public void SetSqliteCacheSize_WithValidCacheSizes_ShouldSucceed(int cacheSize)
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act
         var result = optionsBuilder.SetSqliteCacheSize(ValidConnectionString, cacheSize);
@@ -422,7 +433,7 @@ public class ConnectionConfigurationExtensionsTests
     public void SetSqliteBusyTimeout_WithValidTimeouts_ShouldSucceed(int timeout)
     {
         // Arrange
-        var optionsBuilder = new DbContextOptionsBuilder<TestDbContext>();
+        var optionsBuilder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
 
         // Act
         var result = optionsBuilder.SetSqliteBusyTimeout(ValidConnectionString, timeout);
