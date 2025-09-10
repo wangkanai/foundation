@@ -13,12 +13,13 @@
       <PackageVersion Include="Microsoft.CodeAnalysis.Common" Version="4.14.0"/>
       <PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="4.14.0"/>
       <!--extensions-->
-      <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0"/>
-      <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.0"/>
-      <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.0"/>
+      <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="9.0.0"/>
+      <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.0"/>
+      <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.0"/>
+      <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.0"/>
       <!--entityframework-->
       <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0"/>
@@ -33,8 +34,6 @@
       <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
       <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="8.0.18"/>
       <PackageVersion Include="Moq" Version="4.20.72"/>
-      <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.0"/>
-
       <PackageVersion Include="xunit.v3" Version="3.0.1"/>
       <PackageVersion Include="xunit.analyzers" Version="1.24.0" PrivateAssets="all"/>
       <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" PrivateAssets="all"/>
