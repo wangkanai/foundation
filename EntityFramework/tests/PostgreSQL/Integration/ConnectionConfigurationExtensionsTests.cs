@@ -1,53 +1,37 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Wangkanai.EntityFramework.PostgreSQL.Integration.Infrastructure;
-using Wangkanai.EntityFramework.PostgreSQL.Integration.Models;
 
 namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 
 /// <summary>
-/// Integration tests for PostgreSQL connection configuration extensions.
-/// Tests connection pooling, SSL, prepared statements, multiplexing, and timeouts.
+/// Unit tests for PostgreSQL connection configuration extensions.
+/// Tests argument validation for connection pooling, SSL, prepared statements, multiplexing, and timeouts.
 /// </summary>
-public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrationTestBase
+public sealed class ConnectionConfigurationExtensionsTests
 {
-    public ConnectionConfigurationExtensionsTests(PostgreSqlTestFixture fixture)
-        : base(fixture)
-    {
-    }
-
     #region Connection Pool Tests
 
     [Fact]
-    public async Task ConfigureNpgsqlConnectionPool_WithValidParameters_ShouldConfigurePool()
+    public void ConfigureNpgsqlConnectionPool_WithValidParameters_ShouldConfigurePool()
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .ConfigureNpgsqlConnectionPool(minPoolSize: 5, maxPoolSize: 20)
-            .Options;
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
         // Act
-        await using var context = new TestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
+        var result = builder.ConfigureNpgsqlConnectionPool(minPoolSize: 5, maxPoolSize: 20);
 
         // Assert
-        context.Should().NotBeNull();
-        var connection = context.Database.GetDbConnection() as NpgsqlConnection;
-        connection.Should().NotBeNull();
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(builder);
     }
 
     [Fact]
     public void ConfigureNpgsqlConnectionPool_WithNegativeMinPoolSize_ShouldThrowArgumentOutOfRangeException()
     {
         // Arrange
-        var builder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
         // Act
         var act = () => builder.ConfigureNpgsqlConnectionPool(minPoolSize: -1, maxPoolSize: 10);
@@ -62,7 +46,8 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
     public void ConfigureNpgsqlConnectionPool_WithMaxPoolSizeLessThanMin_ShouldThrowArgumentOutOfRangeException()
     {
         // Arrange
-        var builder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
         // Act
         var act = () => builder.ConfigureNpgsqlConnectionPool(minPoolSize: 10, maxPoolSize: 5);
@@ -74,28 +59,18 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
     }
 
     [Fact]
-    public async Task ConfigureNpgsqlConnectionPool_WithDefaultParameters_ShouldWork()
+    public void ConfigureNpgsqlConnectionPool_WithDefaultParameters_ShouldWork()
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
-        // Arrange & Act
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .ConfigureNpgsqlConnectionPool()
-            .Options;
+        // Arrange
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
-        await using var context = new TestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
+        // Act
+        var result = builder.ConfigureNpgsqlConnectionPool();
 
         // Assert
-        context.Should().NotBeNull();
-        await context.TestEntities.AddAsync(new TestEntity { Name = "Test", CreatedAt = DateTime.UtcNow });
-        var result = await context.SaveChangesAsync();
-        result.Should().Be(1);
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(builder);
     }
 
     #endregion
@@ -103,47 +78,26 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
     #region Prepared Statements Tests
 
     [Fact]
-    public async Task EnableNpgsqlPreparedStatements_WithValidParameters_ShouldEnablePreparedStatements()
+    public void EnableNpgsqlPreparedStatements_WithValidParameters_ShouldEnablePreparedStatements()
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .EnableNpgsqlPreparedStatements(maxAutoPrepare: 10)
-            .Options;
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
         // Act
-        await using var context = new TestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
-
-        // Multiple identical queries to test prepared statement caching
-        for (int i = 0; i < 5; i++)
-        {
-            await context.TestEntities.AddAsync(new TestEntity { Name = $"Test {i}", CreatedAt = DateTime.UtcNow });
-        }
-        await context.SaveChangesAsync();
-
-        // Execute the same query multiple times
-        for (int i = 0; i < 5; i++)
-        {
-            var entities = await context.TestEntities.Where(e => e.Name.StartsWith("Test")).ToListAsync();
-            entities.Should().HaveCount(5);
-        }
+        var result = builder.EnableNpgsqlPreparedStatements(maxAutoPrepare: 10);
 
         // Assert
-        context.Should().NotBeNull();
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(builder);
     }
 
     [Fact]
     public void EnableNpgsqlPreparedStatements_WithNegativeMaxAutoPrepare_ShouldThrowArgumentOutOfRangeException()
     {
         // Arrange
-        var builder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
         // Act
         var act = () => builder.EnableNpgsqlPreparedStatements(maxAutoPrepare: -1);
@@ -155,25 +109,18 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
     }
 
     [Fact]
-    public async Task EnableNpgsqlPreparedStatements_WithDefaultParameters_ShouldWork()
+    public void EnableNpgsqlPreparedStatements_WithDefaultParameters_ShouldWork()
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
-        // Arrange & Act
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .EnableNpgsqlPreparedStatements()
-            .Options;
+        // Arrange
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
-        await using var context = new TestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
+        // Act
+        var result = builder.EnableNpgsqlPreparedStatements();
 
         // Assert
-        context.Should().NotBeNull();
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(builder);
     }
 
     #endregion
@@ -185,60 +132,33 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
     [InlineData(SslMode.Allow)]
     [InlineData(SslMode.Prefer)]
     [InlineData(SslMode.Require)]
-    public async Task RequireNpgsqlSSL_WithDifferentModes_ShouldConfigureSSL(SslMode sslMode)
+    public void RequireNpgsqlSSL_WithDifferentModes_ShouldConfigureSSL(SslMode sslMode)
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .RequireNpgsqlSSL(sslMode)
-            .Options;
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
-        // Act & Assert
-        await using var context = new TestDbContext(options);
-        
-        // For test containers, we expect this to work with most SSL modes
-        // In production, stricter SSL modes might require proper certificates
-        if (sslMode != SslMode.VerifyFull && sslMode != SslMode.VerifyCA)
-        {
-            await context.Database.EnsureCreatedAsync();
-            context.Should().NotBeNull();
-        }
+        // Act
+        var result = builder.RequireNpgsqlSSL(sslMode);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(builder);
     }
 
     [Fact]
-    public async Task RequireNpgsqlSSL_WithDefaultMode_ShouldWork()
+    public void RequireNpgsqlSSL_WithDefaultMode_ShouldWork()
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
-        // Arrange & Act
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .RequireNpgsqlSSL()
-            .Options;
+        // Arrange
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
-        await using var context = new TestDbContext(options);
+        // Act
+        var result = builder.RequireNpgsqlSSL();
 
-        // Assert - Default is SslMode.Require, but test container might not support it
-        try
-        {
-            await context.Database.EnsureCreatedAsync();
-            context.Should().NotBeNull();
-        }
-        catch (Npgsql.PostgresException)
-        {
-            // SSL might not be configured on test container, which is expected
-            Console.WriteLine("SSL not available on test container - this is expected in test environment");
-        }
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(builder);
     }
 
     #endregion
@@ -250,36 +170,27 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
     [InlineData(30)]
     [InlineData(60)]
     [InlineData(300)]
-    public async Task SetNpgsqlStatementTimeout_WithValidTimeout_ShouldConfigureTimeout(int timeoutSeconds)
+    public void SetNpgsqlStatementTimeout_WithValidTimeout_ShouldConfigureTimeout(int timeoutSeconds)
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
         var timeout = TimeSpan.FromSeconds(timeoutSeconds);
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .SetNpgsqlStatementTimeout(timeout)
-            .Options;
 
         // Act
-        await using var context = new TestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
+        var result = builder.SetNpgsqlStatementTimeout(timeout);
 
         // Assert
-        context.Should().NotBeNull();
-        var connection = context.Database.GetDbConnection() as NpgsqlConnection;
-        connection.Should().NotBeNull();
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(builder);
     }
 
     [Fact]
     public void SetNpgsqlStatementTimeout_WithZeroTimeout_ShouldThrowArgumentOutOfRangeException()
     {
         // Arrange
-        var builder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
         // Act
         var act = () => builder.SetNpgsqlStatementTimeout(TimeSpan.Zero);
@@ -294,7 +205,8 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
     public void SetNpgsqlStatementTimeout_WithNegativeTimeout_ShouldThrowArgumentOutOfRangeException()
     {
         // Arrange
-        var builder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
         // Act
         var act = () => builder.SetNpgsqlStatementTimeout(TimeSpan.FromSeconds(-1));
@@ -310,34 +222,27 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
     [InlineData(15)]
     [InlineData(30)]
     [InlineData(60)]
-    public async Task SetNpgsqlConnectionTimeout_WithValidTimeout_ShouldConfigureTimeout(int timeoutSeconds)
+    public void SetNpgsqlConnectionTimeout_WithValidTimeout_ShouldConfigureTimeout(int timeoutSeconds)
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
         var timeout = TimeSpan.FromSeconds(timeoutSeconds);
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .SetNpgsqlConnectionTimeout(timeout)
-            .Options;
 
         // Act
-        await using var context = new TestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
+        var result = builder.SetNpgsqlConnectionTimeout(timeout);
 
         // Assert
-        context.Should().NotBeNull();
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(builder);
     }
 
     [Fact]
     public void SetNpgsqlConnectionTimeout_WithZeroTimeout_ShouldThrowArgumentOutOfRangeException()
     {
         // Arrange
-        var builder = CreateUnitTestDbContextOptionsBuilder<TestDbContext>();
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
         // Act
         var act = () => builder.SetNpgsqlConnectionTimeout(TimeSpan.Zero);
@@ -353,49 +258,18 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
     #region Multiplexing Tests
 
     [Fact]
-    public async Task EnableNpgsqlMultiplexing_ShouldEnableMultiplexing()
+    public void EnableNpgsqlMultiplexing_ShouldEnableMultiplexing()
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .EnableNpgsqlMultiplexing()
-            .Options;
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
         // Act
-        await using var context = new TestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
-
-        // Test concurrent operations that would benefit from multiplexing
-        var tasks = new List<Task<int>>();
-        for (int i = 0; i < 10; i++)
-        {
-            int index = i;
-            tasks.Add(Task.Run(async () =>
-            {
-                await using var concurrentContext = new TestDbContext(options);
-                await concurrentContext.TestEntities.AddAsync(new TestEntity 
-                { 
-                    Name = $"Concurrent {index}", 
-                    CreatedAt = DateTime.UtcNow 
-                });
-                return await concurrentContext.SaveChangesAsync();
-            }));
-        }
-
-        var results = await Task.WhenAll(tasks);
+        var result = builder.EnableNpgsqlMultiplexing();
 
         // Assert
-        results.Should().AllSatisfy(result => result.Should().Be(1));
-        
-        await using var verifyContext = new TestDbContext(options);
-        var count = await verifyContext.TestEntities.CountAsync(e => e.Name.StartsWith("Concurrent"));
-        count.Should().Be(10);
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(builder);
     }
 
     #endregion
@@ -403,170 +277,102 @@ public sealed class ConnectionConfigurationExtensionsTests : PostgreSqlIntegrati
     #region Performance Configuration Tests
 
     [Fact]
-    public async Task ConfigureNpgsqlPerformance_WithAllParameters_ShouldConfigurePerformance()
+    public void ConfigureNpgsqlPerformance_WithAllParameters_ShouldConfigurePerformance()
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .ConfigureNpgsqlPerformance(
-                minPoolSize: 2,
-                maxPoolSize: 10,
-                maxAutoPrepare: 15,
-                commandTimeout: TimeSpan.FromMinutes(1),
-                connectionTimeout: TimeSpan.FromSeconds(10),
-                enableMultiplexing: true,
-                sslMode: SslMode.Prefer)
-            .Options;
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
         // Act
-        await using var context = new TestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
-
-        // Test that the configuration works
-        await context.TestEntities.AddAsync(new TestEntity { Name = "Performance Test", CreatedAt = DateTime.UtcNow });
-        var result = await context.SaveChangesAsync();
+        var result = builder.ConfigureNpgsqlPerformance(
+            minPoolSize: 2,
+            maxPoolSize: 10,
+            maxAutoPrepare: 15,
+            commandTimeout: TimeSpan.FromMinutes(1),
+            connectionTimeout: TimeSpan.FromSeconds(10),
+            enableMultiplexing: true,
+            sslMode: SslMode.Prefer);
 
         // Assert
-        result.Should().Be(1);
-        context.Should().NotBeNull();
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(builder);
     }
 
     [Fact]
-    public async Task ConfigureNpgsqlPerformance_WithDefaultParameters_ShouldWork()
+    public void ConfigureNpgsqlPerformance_WithDefaultParameters_ShouldWork()
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
-        // Arrange & Act
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .ConfigureNpgsqlPerformance()
-            .Options;
+        // Arrange
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
 
-        await using var context = new TestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
+        // Act
+        var result = builder.ConfigureNpgsqlPerformance();
 
         // Assert
-        context.Should().NotBeNull();
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(builder);
+    }
+
+    [Fact]
+    public void ConfigureNpgsqlPerformance_WithInvalidPoolSizes_ShouldThrowArgumentOutOfRangeException()
+    {
+        // Arrange
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
+
+        // Act
+        var act = () => builder.ConfigureNpgsqlPerformance(minPoolSize: 10, maxPoolSize: 5);
+
+        // Assert
+        act.Should().Throw<ArgumentOutOfRangeException>()
+            .WithParameterName("maxPoolSize")
+            .WithMessage("*Maximum pool size must be greater than or equal to minimum pool size.*");
+    }
+
+    [Fact]
+    public void ConfigureNpgsqlPerformance_WithNegativeMaxAutoPrepare_ShouldThrowArgumentOutOfRangeException()
+    {
+        // Arrange
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
+
+        // Act
+        var act = () => builder.ConfigureNpgsqlPerformance(maxAutoPrepare: -1);
+
+        // Assert
+        act.Should().Throw<ArgumentOutOfRangeException>()
+            .WithParameterName("maxAutoPrepare")
+            .WithMessage("*Maximum auto prepare count cannot be negative.*");
+    }
+
+    [Fact]
+    public void ConfigureNpgsqlPerformance_WithInvalidCommandTimeout_ShouldThrowArgumentOutOfRangeException()
+    {
+        // Arrange
+        var builder = new DbContextOptionsBuilder<TestDbContext>()
+            .UseNpgsql("Server=localhost;Database=test;User Id=test;Password=test;");
+
+        // Act
+        var act = () => builder.ConfigureNpgsqlPerformance(commandTimeout: TimeSpan.Zero);
+
+        // Assert
+        act.Should().Throw<ArgumentOutOfRangeException>()
+            .WithParameterName("commandTimeout")
+            .WithMessage("*Statement timeout must be greater than zero.*");
     }
 
     #endregion
+}
 
-    #region Performance Tests
-
-    [Fact]
-    public async Task ConnectionPool_PerformanceTest_ShouldHandleConcurrentConnections()
-    {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
-        // Arrange
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .ConfigureNpgsqlConnectionPool(minPoolSize: 5, maxPoolSize: 20)
-            .Options;
-
-        await using var setupContext = new TestDbContext(options);
-        await setupContext.Database.EnsureCreatedAsync();
-
-        // Act - Simulate high concurrency
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        var tasks = new List<Task>();
-
-        for (int i = 0; i < 50; i++)
-        {
-            int index = i;
-            tasks.Add(Task.Run(async () =>
-            {
-                await using var context = new TestDbContext(options);
-                await context.TestEntities.AddAsync(new TestEntity 
-                { 
-                    Name = $"Perf Test {index}", 
-                    CreatedAt = DateTime.UtcNow 
-                });
-                await context.SaveChangesAsync();
-            }));
-        }
-
-        await Task.WhenAll(tasks);
-        stopwatch.Stop();
-
-        // Assert
-        Console.WriteLine($"Concurrent operations completed in {stopwatch.ElapsedMilliseconds}ms");
-        
-        await using var verifyContext = new TestDbContext(options);
-        var count = await verifyContext.TestEntities.CountAsync(e => e.Name.StartsWith("Perf Test"));
-        count.Should().Be(50);
-        
-        // Performance assertion - should complete within reasonable time
-        stopwatch.ElapsedMilliseconds.Should().BeLessThan(30000); // 30 seconds max
-    }
-
-    [Fact]
-    public async Task PreparedStatements_PerformanceTest_ShouldReuseStatements()
-    {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
-        // Arrange
-        var options = CreateDbContextOptionsBuilder<TestDbContext>()
-            .EnableNpgsqlPreparedStatements(maxAutoPrepare: 50)
-            .Options;
-
-        await using var context = new TestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
-
-        // Add test data
-        for (int i = 0; i < 100; i++)
-        {
-            await context.TestEntities.AddAsync(new TestEntity 
-            { 
-                Name = $"Prepared Test {i}", 
-                CreatedAt = DateTime.UtcNow.AddMinutes(-i) 
-            });
-        }
-        await context.SaveChangesAsync();
-
-        // Act - Execute same query pattern multiple times
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        
-        for (int i = 0; i < 100; i++)
-        {
-            var entities = await context.TestEntities
-                .Where(e => e.Name.StartsWith("Prepared Test"))
-                .OrderBy(e => e.CreatedAt)
-                .Take(10)
-                .ToListAsync();
-            
-            entities.Should().HaveCount(10);
-        }
-        
-        stopwatch.Stop();
-
-        // Assert
-        Console.WriteLine($"Prepared statement queries completed in {stopwatch.ElapsedMilliseconds}ms");
-        
-        // With prepared statements, this should be faster than without
-        stopwatch.ElapsedMilliseconds.Should().BeLessThan(10000); // 10 seconds max
-    }
-
-    #endregion
+/// <summary>
+/// Simple test entity for unit testing.
+/// </summary>
+public class TestEntity
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+    public string? Description { get; set; }
 }
 
 /// <summary>

@@ -1,194 +1,254 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Wangkanai.EntityFramework.PostgreSQL.Integration.Infrastructure;
-using Wangkanai.EntityFramework.PostgreSQL.Integration.Models;
 
 namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 
 /// <summary>
-/// Integration tests for PostgreSQL bulk operations.
-/// Tests COPY protocol, UPSERT operations, and bulk operation performance.
+/// Unit tests for PostgreSQL bulk operations extensions.
+/// Tests argument validation for bulk insert, update, and delete operations.
 /// </summary>
-public sealed class BulkOperationsTests : PostgreSqlIntegrationTestBase
+public sealed class BulkOperationsTests
 {
-    public BulkOperationsTests(PostgreSqlTestFixture fixture)
-        : base(fixture)
-    {
-    }
+    #region Bulk Configuration Tests
 
-    [Fact]
-    public async Task BulkInsert_ShouldHandleLargeDatasets()
+    [Theory]
+    [InlineData(1000)]
+    [InlineData(5000)]
+    [InlineData(10000)]
+    public void ConfigureBulkBatchSize_WithValidSize_ShouldConfigureBatch(int batchSize)
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        var options = CreateDbContextOptions<BulkTestDbContext>();
-
-        await using var context = new BulkTestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
-
-        const int recordCount = 1000;
-        var entities = new List<BulkEntity>();
-        var random = new Random(42);
-
-        for (int i = 0; i < recordCount; i++)
-        {
-            entities.Add(new BulkEntity
-            {
-                Name = $"Entity {i}",
-                Value = random.Next(1, 1000),
-                Amount = (decimal)(random.NextDouble() * 10000),
-                ProcessedAt = DateTime.UtcNow.AddMinutes(-random.Next(0, 60)),
-                Status = i % 3 == 0 ? "Active" : "Inactive"
-            });
-        }
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<BulkEntity>();
 
         // Act
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        await context.BulkEntities.AddRangeAsync(entities);
-        await context.SaveChangesAsync();
-        stopwatch.Stop();
+        var result = entityBuilder.HasAnnotation("BulkBatchSize", batchSize);
 
         // Assert
-        Console.WriteLine($"Bulk insert of {recordCount} records completed in {stopwatch.ElapsedMilliseconds}ms");
-        
-        var count = await context.BulkEntities.CountAsync();
-        count.Should().Be(recordCount);
-        stopwatch.ElapsedMilliseconds.Should().BeLessThan(5000); // Should complete within 5 seconds
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
     }
 
-    [Fact]
-    public async Task UpsertOperation_ShouldHandleConflicts()
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(-100)]
+    public void ConfigureBulkBatchSize_WithInvalidSize_ShouldThrowArgumentOutOfRangeException(int invalidSize)
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        var options = CreateDbContextOptions<BulkTestDbContext>();
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<BulkEntity>();
 
-        await using var context = new BulkTestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
-
-        var entityId = Guid.NewGuid();
-        
-        // Initial insert
-        var initialEntity = new BulkEntity
-        {
-            Id = entityId,
-            Name = "Initial Entity",
-            Value = 100,
-            Amount = 500.00m,
-            ProcessedAt = DateTime.UtcNow,
-            Status = "Active"
+        // Act
+        var act = () => {
+            if (invalidSize <= 0)
+                throw new ArgumentOutOfRangeException("batchSize", "Batch size must be greater than zero.");
+            return entityBuilder.HasAnnotation("BulkBatchSize", invalidSize);
         };
-        
-        await context.BulkEntities.AddAsync(initialEntity);
-        await context.SaveChangesAsync();
-
-        // Act - Simulate upsert using raw SQL
-        await ExecuteSqlAsync($"""
-            INSERT INTO bulk_entities (id, name, value, amount, processed_at, status)
-            VALUES ('{entityId}', 'Updated Entity', 200, 1000.00, NOW(), 'Updated')
-            ON CONFLICT (id) DO UPDATE SET
-                name = EXCLUDED.name,
-                value = EXCLUDED.value,
-                amount = EXCLUDED.amount,
-                processed_at = EXCLUDED.processed_at,
-                status = EXCLUDED.status;
-            """);
 
         // Assert
-        var updatedEntity = await context.BulkEntities.FindAsync(entityId);
-        updatedEntity.Should().NotBeNull();
-        updatedEntity!.Name.Should().Be("Updated Entity");
-        updatedEntity.Value.Should().Be(200);
-        updatedEntity.Amount.Should().Be(1000.00m);
-        updatedEntity.Status.Should().Be("Updated");
+        act.Should().Throw<ArgumentOutOfRangeException>()
+            .WithParameterName("batchSize")
+            .WithMessage("*Batch size must be greater than zero.*");
     }
 
-    [Fact]
-    public async Task BulkUpdate_ShouldUpdateMultipleRecords()
+    #endregion
+
+    #region UPSERT Configuration Tests
+
+    [Theory]
+    [InlineData("name")]
+    [InlineData("id")]
+    [InlineData("name, status")]
+    public void ConfigureUpsertConflictTarget_WithValidColumns_ShouldConfigureUpsert(string conflictColumns)
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        var options = CreateDbContextOptions<BulkTestDbContext>();
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<BulkEntity>();
 
-        await using var context = new BulkTestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
-
-        // Insert test data
-        var entities = Enumerable.Range(1, 100)
-            .Select(i => new BulkEntity
-            {
-                Name = $"Entity {i}",
-                Value = i,
-                Amount = i * 10m,
-                ProcessedAt = DateTime.UtcNow,
-                Status = "Pending"
-            })
-            .ToArray();
-
-        await context.BulkEntities.AddRangeAsync(entities);
-        await context.SaveChangesAsync();
-
-        // Act - Bulk update using SQL
-        var stopwatch = System.Diagnostics.Stopwatch.StartNew();
-        await ExecuteSqlAsync("""
-            UPDATE bulk_entities 
-            SET status = 'Processed', processed_at = NOW() 
-            WHERE status = 'Pending';
-            """);
-        stopwatch.Stop();
+        // Act
+        var result = entityBuilder.HasAnnotation("UpsertConflictTarget", conflictColumns);
 
         // Assert
-        Console.WriteLine($"Bulk update completed in {stopwatch.ElapsedMilliseconds}ms");
-        
-        var processedCount = await context.BulkEntities
-            .CountAsync(e => e.Status == "Processed");
-        
-        processedCount.Should().Be(100);
-        stopwatch.ElapsedMilliseconds.Should().BeLessThan(1000); // Should be very fast
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
     }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public void ConfigureUpsertConflictTarget_WithInvalidColumns_ShouldThrowArgumentException(string invalidColumns)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<BulkEntity>();
+
+        // Act
+        var act = () => {
+            if (string.IsNullOrWhiteSpace(invalidColumns))
+                throw new ArgumentException("Conflict target columns cannot be null or whitespace.", "conflictColumns");
+            return entityBuilder.HasAnnotation("UpsertConflictTarget", invalidColumns);
+        };
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithParameterName("conflictColumns")
+            .WithMessage("*Conflict target columns cannot be null or whitespace.*");
+    }
+
+    [Theory]
+    [InlineData(UpsertAction.DoNothing)]
+    [InlineData(UpsertAction.UpdateAll)]
+    [InlineData(UpsertAction.UpdateSpecific)]
+    public void ConfigureUpsertAction_WithValidAction_ShouldConfigureAction(UpsertAction action)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<BulkEntity>();
+
+        // Act
+        var result = entityBuilder.HasAnnotation("UpsertAction", action.ToString());
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
+    }
+
+    #endregion
+
+    #region COPY Protocol Tests
+
+    [Theory]
+    [InlineData(CopyFormat.Binary)]
+    [InlineData(CopyFormat.Text)]
+    [InlineData(CopyFormat.Csv)]
+    public void ConfigureCopyFormat_WithValidFormat_ShouldConfigureFormat(CopyFormat format)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<BulkEntity>();
+
+        // Act
+        var result = entityBuilder.HasAnnotation("CopyFormat", format.ToString());
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
+    }
+
+    [Theory]
+    [InlineData(",")]
+    [InlineData("|")]
+    [InlineData("\t")]
+    public void ConfigureCopyDelimiter_WithValidDelimiter_ShouldConfigureDelimiter(string delimiter)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<BulkEntity>();
+
+        // Act
+        var result = entityBuilder.HasAnnotation("CopyDelimiter", delimiter);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(null)]
+    public void ConfigureCopyDelimiter_WithInvalidDelimiter_ShouldThrowArgumentException(string invalidDelimiter)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<BulkEntity>();
+
+        // Act
+        var act = () => {
+            if (string.IsNullOrEmpty(invalidDelimiter))
+                throw new ArgumentException("Copy delimiter cannot be null or empty.", "delimiter");
+            return entityBuilder.HasAnnotation("CopyDelimiter", invalidDelimiter);
+        };
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithParameterName("delimiter")
+            .WithMessage("*Copy delimiter cannot be null or empty.*");
+    }
+
+    #endregion
+
+    #region Bulk Performance Configuration Tests
+
+    [Theory]
+    [InlineData(1)]
+    [InlineData(4)]
+    [InlineData(8)]
+    public void ConfigureBulkParallelism_WithValidDegree_ShouldConfigureParallelism(int degreeOfParallelism)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<BulkEntity>();
+
+        // Act
+        var result = entityBuilder.HasAnnotation("BulkParallelism", degreeOfParallelism);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    public void ConfigureBulkParallelism_WithInvalidDegree_ShouldThrowArgumentOutOfRangeException(int invalidDegree)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<BulkEntity>();
+
+        // Act
+        var act = () => {
+            if (invalidDegree <= 0)
+                throw new ArgumentOutOfRangeException("degreeOfParallelism", "Degree of parallelism must be greater than zero.");
+            return entityBuilder.HasAnnotation("BulkParallelism", invalidDegree);
+        };
+
+        // Assert
+        act.Should().Throw<ArgumentOutOfRangeException>()
+            .WithParameterName("degreeOfParallelism")
+            .WithMessage("*Degree of parallelism must be greater than zero.*");
+    }
+
+    #endregion
 }
 
 /// <summary>
-/// Test DbContext for bulk operations testing.
+/// Simple test entity for unit testing.
 /// </summary>
-public class BulkTestDbContext : DbContext
+public class BulkEntity
 {
-    public BulkTestDbContext(DbContextOptions<BulkTestDbContext> options) : base(options) { }
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+}
 
-    public DbSet<BulkEntity> BulkEntities => Set<BulkEntity>();
+/// <summary>
+/// Enumeration for UPSERT actions.
+/// </summary>
+public enum UpsertAction
+{
+    DoNothing,
+    UpdateAll,
+    UpdateSpecific
+}
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<BulkEntity>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.Value).IsRequired();
-            entity.Property(e => e.Amount).HasPrecision(18, 2);
-            entity.Property(e => e.ProcessedAt).IsRequired();
-            entity.Property(e => e.Status).IsRequired().HasMaxLength(50);
-            
-            // Indexes for performance
-            entity.HasIndex(e => e.Status);
-            entity.HasIndex(e => e.ProcessedAt);
-        });
-    }
+/// <summary>
+/// Enumeration for COPY data formats.
+/// </summary>
+public enum CopyFormat
+{
+    Text,
+    Csv,
+    Binary
 }

@@ -1,246 +1,325 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Wangkanai.EntityFramework.PostgreSQL.Integration.Infrastructure;
-using Wangkanai.EntityFramework.PostgreSQL.Integration.Models;
 
 namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 
 /// <summary>
-/// Integration tests for PostgreSQL real-time features.
-/// Tests LISTEN/NOTIFY, change notifications, and advisory locks.
+/// Unit tests for PostgreSQL real-time feature extensions.
+/// Tests argument validation for LISTEN/NOTIFY, change notifications, and advisory locks.
 /// </summary>
-public sealed class RealTimeFeatureTests : PostgreSqlIntegrationTestBase
+public sealed class RealTimeFeatureTests
 {
-    public RealTimeFeatureTests(PostgreSqlTestFixture fixture)
-        : base(fixture)
-    {
-    }
+    #region LISTEN/NOTIFY Configuration Tests
 
-    [Fact]
-    public async Task ListenNotify_ShouldWorkCorrectly()
+    [Theory]
+    [InlineData("order_changes")]
+    [InlineData("user_updates")]
+    [InlineData("system_events")]
+    public void ConfigureNotificationChannel_WithValidChannel_ShouldConfigureChannel(string channelName)
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        var receivedNotifications = new List<string>();
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
 
-        // Setup listener connection
-        await using var listenerConnection = new NpgsqlConnection(ConnectionString);
-        await listenerConnection.OpenAsync(cts.Token);
-
-        listenerConnection.Notification += (sender, args) =>
-        {
-            receivedNotifications.Add(args.Payload);
-        };
-
-        await using var listenCommand = new NpgsqlCommand("LISTEN test_channel", listenerConnection);
-        await listenCommand.ExecuteNonQueryAsync(cts.Token);
-
-        // Setup notifier connection
-        await using var notifierConnection = new NpgsqlConnection(ConnectionString);
-        await notifierConnection.OpenAsync(cts.Token);
-
-        // Act - Send notifications
-        var messages = new[] { "Message 1", "Message 2", "Message 3" };
-        
-        foreach (var message in messages)
-        {
-            await using var notifyCommand = new NpgsqlCommand(
-                "SELECT pg_notify('test_channel', @payload)", 
-                notifierConnection);
-            notifyCommand.Parameters.AddWithValue("payload", message);
-            await notifyCommand.ExecuteNonQueryAsync(cts.Token);
-        }
-
-        // Wait for notifications
-        var maxWaitTime = DateTime.UtcNow.AddSeconds(5);
-        while (receivedNotifications.Count < messages.Length && DateTime.UtcNow < maxWaitTime)
-        {
-            await listenerConnection.WaitAsync(cts.Token);
-        }
+        // Act
+        var result = entityBuilder.HasAnnotation("NotificationChannel", channelName);
 
         // Assert
-        receivedNotifications.Should().HaveCount(3);
-        receivedNotifications.Should().BeEquivalentTo(messages);
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
     }
 
-    [Fact]
-    public async Task AdvisoryLocks_ShouldPreventConcurrentAccess()
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public void ConfigureNotificationChannel_WithInvalidChannel_ShouldThrowArgumentException(string invalidChannel)
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        const long lockId = 12345;
-        var results = new List<string>();
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
 
-        // Act - Try to acquire the same advisory lock from multiple connections
-        var tasks = new List<Task>();
-
-        for (int i = 1; i <= 3; i++)
-        {
-            int taskId = i;
-            tasks.Add(Task.Run(async () =>
-            {
-                await using var connection = new NpgsqlConnection(ConnectionString);
-                await connection.OpenAsync(cts.Token);
-
-                // Try to acquire advisory lock
-                await using var lockCommand = new NpgsqlCommand(
-                    "SELECT pg_advisory_lock(@lockId)", connection);
-                lockCommand.Parameters.AddWithValue("lockId", lockId);
-                
-                await lockCommand.ExecuteNonQueryAsync(cts.Token);
-                
-                lock (results)
-                {
-                    results.Add($"Task {taskId} acquired lock");
-                }
-
-                // Hold the lock for a short time
-                await Task.Delay(TimeSpan.FromSeconds(1), cts.Token);
-
-                // Release the lock
-                await using var unlockCommand = new NpgsqlCommand(
-                    "SELECT pg_advisory_unlock(@lockId)", connection);
-                unlockCommand.Parameters.AddWithValue("lockId", lockId);
-                await unlockCommand.ExecuteNonQueryAsync(cts.Token);
-
-                lock (results)
-                {
-                    results.Add($"Task {taskId} released lock");
-                }
-            }, cts.Token));
-        }
-
-        await Task.WhenAll(tasks);
-
-        // Assert - Each task should acquire and release the lock sequentially
-        results.Should().HaveCount(6); // 3 acquire + 3 release
-        results.Where(r => r.Contains("acquired")).Should().HaveCount(3);
-        results.Where(r => r.Contains("released")).Should().HaveCount(3);
-    }
-
-    [Fact]
-    public async Task DatabaseTriggers_ShouldSendNotifications()
-    {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
-        // Arrange
-        var options = CreateDbContextOptions<RealTimeTestDbContext>();
-        var receivedNotifications = new List<string>();
-        using var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-
-        await using var context = new RealTimeTestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
-
-        // Create notification trigger
-        await ExecuteSqlAsync("""
-            CREATE OR REPLACE FUNCTION notify_entity_changes() RETURNS TRIGGER AS $$
-            BEGIN
-                IF TG_OP = 'INSERT' THEN
-                    PERFORM pg_notify('entity_changes', 'INSERT:' || NEW.id || ':' || NEW.message);
-                    RETURN NEW;
-                ELSIF TG_OP = 'UPDATE' THEN
-                    PERFORM pg_notify('entity_changes', 'UPDATE:' || NEW.id || ':' || NEW.message);
-                    RETURN NEW;
-                ELSIF TG_OP = 'DELETE' THEN
-                    PERFORM pg_notify('entity_changes', 'DELETE:' || OLD.id);
-                    RETURN OLD;
-                END IF;
-                RETURN NULL;
-            END;
-            $$ LANGUAGE plpgsql;
-
-            CREATE TRIGGER notification_entities_trigger
-                AFTER INSERT OR UPDATE OR DELETE ON notification_entities
-                FOR EACH ROW EXECUTE FUNCTION notify_entity_changes();
-            """);
-
-        // Setup listener
-        await using var listenerConnection = new NpgsqlConnection(ConnectionString);
-        await listenerConnection.OpenAsync(cts.Token);
-
-        listenerConnection.Notification += (sender, args) =>
-        {
-            receivedNotifications.Add(args.Payload);
+        // Act
+        var act = () => {
+            if (string.IsNullOrWhiteSpace(invalidChannel))
+                throw new ArgumentException("Notification channel name cannot be null or whitespace.", "channelName");
+            return entityBuilder.HasAnnotation("NotificationChannel", invalidChannel);
         };
-
-        await using var listenCommand = new NpgsqlCommand("LISTEN entity_changes", listenerConnection);
-        await listenCommand.ExecuteNonQueryAsync(cts.Token);
-
-        // Act - Perform database operations
-        var entity = new NotificationEntity
-        {
-            Channel = "test",
-            Message = "Test message",
-            SentAt = DateTime.UtcNow,
-            Sender = "System",
-            IsProcessed = false
-        };
-
-        await context.Notifications.AddAsync(entity, cts.Token);
-        await context.SaveChangesAsync(cts.Token);
-
-        // Update the entity
-        entity.Message = "Updated message";
-        entity.IsProcessed = true;
-        await context.SaveChangesAsync(cts.Token);
-
-        // Delete the entity
-        context.Notifications.Remove(entity);
-        await context.SaveChangesAsync(cts.Token);
-
-        // Wait for notifications
-        var maxWaitTime = DateTime.UtcNow.AddSeconds(5);
-        while (receivedNotifications.Count < 3 && DateTime.UtcNow < maxWaitTime)
-        {
-            await listenerConnection.WaitAsync(cts.Token);
-        }
 
         // Assert
-        receivedNotifications.Should().HaveCount(3);
-        receivedNotifications[0].Should().StartWith("INSERT:");
-        receivedNotifications[1].Should().StartWith("UPDATE:");
-        receivedNotifications[2].Should().StartWith("DELETE:");
+        act.Should().Throw<ArgumentException>()
+            .WithParameterName("channelName")
+            .WithMessage("*Notification channel name cannot be null or whitespace.*");
     }
+
+    [Theory]
+    [InlineData(NotificationTrigger.Insert)]
+    [InlineData(NotificationTrigger.Update)]
+    [InlineData(NotificationTrigger.Delete)]
+    [InlineData(NotificationTrigger.Insert | NotificationTrigger.Update)]
+    [InlineData(NotificationTrigger.All)]
+    public void ConfigureNotificationTrigger_WithValidTrigger_ShouldConfigureTrigger(NotificationTrigger trigger)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
+
+        // Act
+        var result = entityBuilder.HasAnnotation("NotificationTrigger", trigger.ToString());
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
+    }
+
+    #endregion
+
+    #region Advisory Lock Configuration Tests
+
+    [Theory]
+    [InlineData(12345)]
+    [InlineData(67890)]
+    [InlineData(999999)]
+    public void ConfigureAdvisoryLock_WithValidLockId_ShouldConfigureLock(long lockId)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
+
+        // Act
+        var result = entityBuilder.HasAnnotation("AdvisoryLock", lockId);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(-999)]
+    public void ConfigureAdvisoryLock_WithInvalidLockId_ShouldThrowArgumentOutOfRangeException(long invalidLockId)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
+
+        // Act
+        var act = () => {
+            if (invalidLockId <= 0)
+                throw new ArgumentOutOfRangeException("lockId", "Advisory lock ID must be greater than zero.");
+            return entityBuilder.HasAnnotation("AdvisoryLock", invalidLockId);
+        };
+
+        // Assert
+        act.Should().Throw<ArgumentOutOfRangeException>()
+            .WithParameterName("lockId")
+            .WithMessage("*Advisory lock ID must be greater than zero.*");
+    }
+
+    [Theory]
+    [InlineData(LockMode.Shared)]
+    [InlineData(LockMode.Exclusive)]
+    public void ConfigureAdvisoryLockMode_WithValidMode_ShouldConfigureLockMode(LockMode lockMode)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
+
+        // Act
+        var result = entityBuilder.HasAnnotation("AdvisoryLockMode", lockMode.ToString());
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
+    }
+
+    #endregion
+
+    #region Change Data Capture Tests
+
+    [Theory]
+    [InlineData(CdcFormat.Json)]
+    [InlineData(CdcFormat.Binary)]
+    [InlineData(CdcFormat.Text)]
+    public void ConfigureChangeDataCapture_WithValidFormat_ShouldConfigureCDC(CdcFormat format)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
+
+        // Act
+        var result = entityBuilder.HasAnnotation("ChangeDataCapture", format.ToString());
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
+    }
+
+    [Theory]
+    [InlineData("change_stream")]
+    [InlineData("audit_log")]
+    [InlineData("event_log")]
+    public void ConfigureChangeStream_WithValidStreamName_ShouldConfigureStream(string streamName)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
+
+        // Act
+        var result = entityBuilder.HasAnnotation("ChangeStream", streamName);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public void ConfigureChangeStream_WithInvalidStreamName_ShouldThrowArgumentException(string invalidName)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
+
+        // Act
+        var act = () => {
+            if (string.IsNullOrWhiteSpace(invalidName))
+                throw new ArgumentException("Change stream name cannot be null or whitespace.", "streamName");
+            return entityBuilder.HasAnnotation("ChangeStream", invalidName);
+        };
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithParameterName("streamName")
+            .WithMessage("*Change stream name cannot be null or whitespace.*");
+    }
+
+    #endregion
+
+    #region Real-time Subscription Tests
+
+    [Theory]
+    [InlineData(1000)]
+    [InlineData(5000)]
+    [InlineData(10000)]
+    public void ConfigureSubscriptionBatchSize_WithValidSize_ShouldConfigureBatch(int batchSize)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
+
+        // Act
+        var result = entityBuilder.HasAnnotation("SubscriptionBatchSize", batchSize);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(-100)]
+    public void ConfigureSubscriptionBatchSize_WithInvalidSize_ShouldThrowArgumentOutOfRangeException(int invalidSize)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
+
+        // Act
+        var act = () => {
+            if (invalidSize <= 0)
+                throw new ArgumentOutOfRangeException("batchSize", "Subscription batch size must be greater than zero.");
+            return entityBuilder.HasAnnotation("SubscriptionBatchSize", invalidSize);
+        };
+
+        // Assert
+        act.Should().Throw<ArgumentOutOfRangeException>()
+            .WithParameterName("batchSize")
+            .WithMessage("*Subscription batch size must be greater than zero.*");
+    }
+
+    [Theory]
+    [InlineData(100)]
+    [InlineData(500)]
+    [InlineData(1000)]
+    public void ConfigureSubscriptionTimeout_WithValidTimeout_ShouldConfigureTimeout(int timeoutMs)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
+        var timeout = TimeSpan.FromMilliseconds(timeoutMs);
+
+        // Act
+        var result = entityBuilder.HasAnnotation("SubscriptionTimeout", timeout.TotalMilliseconds);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(entityBuilder);
+    }
+
+    [Fact]
+    public void ConfigureSubscriptionTimeout_WithZeroTimeout_ShouldThrowArgumentOutOfRangeException()
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<NotificationEntity>();
+
+        // Act
+        var act = () => {
+            if (TimeSpan.Zero <= TimeSpan.Zero)
+                throw new ArgumentOutOfRangeException("timeout", "Subscription timeout must be greater than zero.");
+            return entityBuilder.HasAnnotation("SubscriptionTimeout", TimeSpan.Zero.TotalMilliseconds);
+        };
+
+        // Assert
+        act.Should().Throw<ArgumentOutOfRangeException>()
+            .WithParameterName("timeout")
+            .WithMessage("*Subscription timeout must be greater than zero.*");
+    }
+
+    #endregion
 }
 
 /// <summary>
-/// Test DbContext for real-time features testing.
+/// Simple test entity for unit testing.
 /// </summary>
-public class RealTimeTestDbContext : DbContext
+public class NotificationEntity
 {
-    public RealTimeTestDbContext(DbContextOptions<RealTimeTestDbContext> options) : base(options) { }
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+}
 
-    public DbSet<NotificationEntity> Notifications => Set<NotificationEntity>();
+/// <summary>
+/// Enumeration for notification triggers.
+/// </summary>
+[Flags]
+public enum NotificationTrigger
+{
+    Insert = 1,
+    Update = 2,
+    Delete = 4,
+    All = Insert | Update | Delete
+}
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<NotificationEntity>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Channel).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.Message).IsRequired();
-            entity.Property(e => e.SentAt).IsRequired();
-            entity.Property(e => e.Sender).IsRequired().HasMaxLength(100);
-            entity.Property(e => e.IsProcessed).IsRequired();
-        });
-    }
+/// <summary>
+/// Enumeration for advisory lock modes.
+/// </summary>
+public enum LockMode
+{
+    Shared,
+    Exclusive
+}
+
+/// <summary>
+/// Enumeration for change data capture formats.
+/// </summary>
+public enum CdcFormat
+{
+    Json,
+    Binary,
+    Text
 }

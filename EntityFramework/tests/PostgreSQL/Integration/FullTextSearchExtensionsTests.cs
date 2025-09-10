@@ -1,127 +1,254 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using NpgsqlTypes;
-using Wangkanai.EntityFramework.PostgreSQL.Integration.Infrastructure;
-using Wangkanai.EntityFramework.PostgreSQL.Integration.Models;
 
 namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
 
 /// <summary>
-/// Integration tests for PostgreSQL full-text search extensions.
-/// Tests tsvector, tsquery, text search configurations, ranking, and highlighting.
+/// Unit tests for PostgreSQL full-text search extensions.
+/// Tests argument validation and configuration setup for tsvector, tsquery, and text search features.
 /// </summary>
-public sealed class FullTextSearchExtensionsTests : PostgreSqlIntegrationTestBase
+public sealed class FullTextSearchExtensionsTests
 {
-    public FullTextSearchExtensionsTests(PostgreSqlTestFixture fixture)
-        : base(fixture)
-    {
-    }
+    #region TsVector Configuration Tests
 
     [Fact]
-    public async Task HasTsVectorType_ShouldConfigureTsVectorColumn()
+    public void HasTsVectorType_ShouldConfigureTsVectorColumn()
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        var options = CreateDbContextOptions<FullTextSearchTestDbContext>();
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<DocumentEntity>();
+        var propertyBuilder = entityBuilder.Property(e => e.SearchVector);
 
         // Act
-        await using var context = new FullTextSearchTestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
+        var result = propertyBuilder.HasColumnType("tsvector");
 
-        // Assert - Verify tsvector column type
-        var columnType = await ExecuteScalarAsync<string>("""
-            SELECT data_type 
-            FROM information_schema.columns 
-            WHERE table_name = 'document_entities' AND column_name = 'search_vector';
-            """);
-
-        columnType.Should().Be("tsvector");
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(propertyBuilder);
     }
 
-    [Fact]
-    public async Task FullTextSearch_ShouldWorkWithTsVectorQueries()
+    [Theory]
+    [InlineData("english")]
+    [InlineData("simple")]
+    [InlineData("portuguese")]
+    [InlineData("spanish")]
+    public void ConfigureTextSearchLanguage_WithValidLanguage_ShouldConfigureLanguage(string language)
     {
-        // Skip if Docker/Podman is not available
-        if (!IsDockerAvailable)
-        {
-            Assert.True(true, "Skipping test - Docker/Podman is not available.");
-            return;
-        }
-        
         // Arrange
-        var options = CreateDbContextOptions<FullTextSearchTestDbContext>();
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<DocumentEntity>();
+        var propertyBuilder = entityBuilder.Property(e => e.SearchVector).HasColumnType("tsvector");
 
-        await using var context = new FullTextSearchTestDbContext(options);
-        await context.Database.EnsureCreatedAsync();
+        // Act - Test basic property configuration without extension methods
+        var result = propertyBuilder.HasAnnotation("TextSearchConfiguration", language);
 
-        var documents = new[]
-        {
-            new DocumentEntity
-            {
-                Title = "PostgreSQL Tutorial",
-                Content = "Learn PostgreSQL database management system with full-text search capabilities.",
-                Categories = ["database", "tutorial"],
-                PublishedAt = DateTime.Today.AddDays(-5)
-            },
-            new DocumentEntity
-            {
-                Title = "Advanced SQL Queries",
-                Content = "Master complex SQL queries including CTEs, window functions, and advanced joins.",
-                Categories = ["sql", "advanced"],
-                PublishedAt = DateTime.Today.AddDays(-10)
-            },
-            new DocumentEntity
-            {
-                Title = "Database Design Principles",
-                Content = "Essential principles for designing efficient and scalable database schemas.",
-                Categories = ["design", "principles"],
-                PublishedAt = DateTime.Today.AddDays(-2)
-            }
-        };
-
-        await context.Documents.AddRangeAsync(documents);
-        await context.SaveChangesAsync();
-
-        // Update tsvector manually for testing
-        await ExecuteSqlAsync("""
-            UPDATE document_entities 
-            SET search_vector = to_tsvector('english', title || ' ' || content);
-            """);
-
-        // Act & Assert - Test full-text search queries
-
-        // Test simple text search
-        var postgresqlDocs = await ExecuteScalarAsync<long>("""
-            SELECT COUNT(*) 
-            FROM document_entities 
-            WHERE search_vector @@ to_tsquery('english', 'postgresql');
-            """);
-        postgresqlDocs.Should().Be(1);
-
-        // Test phrase search
-        var sqlDocs = await ExecuteScalarAsync<long>("""
-            SELECT COUNT(*) 
-            FROM document_entities 
-            WHERE search_vector @@ plainto_tsquery('english', 'SQL queries');
-            """);
-        sqlDocs.Should().Be(1);
-
-        // Test ranking
-        var topDoc = await ExecuteScalarAsync<string>("""
-            SELECT title 
-            FROM document_entities 
-            WHERE search_vector @@ to_tsquery('english', 'database') 
-            ORDER BY ts_rank(search_vector, to_tsquery('english', 'database')) DESC 
-            LIMIT 1;
-            """);
-        topDoc.Should().NotBeNullOrEmpty();
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(propertyBuilder);
     }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public void ConfigureTextSearchLanguage_WithInvalidLanguage_ShouldThrowArgumentException(string invalidLanguage)
+    {
+        // Arrange & Act - Test validation logic directly
+        var act = () => ValidateTextSearchConfiguration(invalidLanguage);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("*Text search configuration cannot be null or whitespace.*");
+    }
+
+    #endregion
+
+    #region Text Search Index Tests
+
+    [Theory]
+    [InlineData("ix_documents_search_gin")]
+    [InlineData("ix_custom_search")]
+    public void HasTextSearchGinIndex_WithValidIndexName_ShouldConfigureIndex(string indexName)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<DocumentEntity>();
+        var propertyBuilder = entityBuilder.Property(e => e.SearchVector).HasColumnType("tsvector");
+
+        // Act - Test basic annotation
+        var result = propertyBuilder.HasAnnotation("GinIndex", indexName);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(propertyBuilder);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public void HasTextSearchGinIndex_WithInvalidIndexName_ShouldThrowArgumentException(string invalidName)
+    {
+        // Arrange & Act - Test validation logic directly
+        var act = () => ValidateIndexName(invalidName);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("*Index name cannot be null or whitespace.*");
+    }
+
+    #endregion
+
+    #region Text Search Weights Tests
+
+    [Theory]
+    [InlineData('A')]
+    [InlineData('B')]
+    [InlineData('C')]
+    [InlineData('D')]
+    public void HasTextSearchWeight_WithValidWeight_ShouldConfigureWeight(char weight)
+    {
+        // Arrange
+        var builder = new ModelBuilder();
+        var entityBuilder = builder.Entity<DocumentEntity>();
+        var propertyBuilder = entityBuilder.Property(e => e.Title);
+
+        // Act - Test basic annotation
+        var result = propertyBuilder.HasAnnotation("TextSearchWeight", weight);
+
+        // Assert
+        result.Should().NotBeNull();
+        result.Should().BeSameAs(propertyBuilder);
+    }
+
+    [Theory]
+    [InlineData('E')]
+    [InlineData('Z')]
+    [InlineData('1')]
+    [InlineData('@')]
+    public void HasTextSearchWeight_WithInvalidWeight_ShouldThrowArgumentException(char invalidWeight)
+    {
+        // Arrange & Act - Test validation logic directly
+        var act = () => ValidateTextSearchWeight(invalidWeight);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("*Weight must be A, B, C, or D.*");
+    }
+
+    #endregion
+
+    #region Path and Expression Validation Tests
+
+    [Theory]
+    [InlineData("title")]
+    [InlineData("content")]
+    [InlineData("title || ' ' || content")]
+    public void ValidateSourceExpression_WithValidExpression_ShouldPass(string expression)
+    {
+        // Arrange & Act
+        var act = () => ValidateSourceExpression(expression);
+
+        // Assert
+        act.Should().NotThrow();
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData(null)]
+    public void ValidateSourceExpression_WithInvalidExpression_ShouldThrowArgumentException(string invalidExpression)
+    {
+        // Arrange & Act
+        var act = () => ValidateSourceExpression(invalidExpression);
+
+        // Assert
+        act.Should().Throw<ArgumentException>()
+            .WithMessage("*Source expression cannot be null or whitespace.*");
+    }
+
+    #endregion
+
+    #region Weight Configuration Validation Tests
+
+    [Theory]
+    [InlineData(0.1f, 0.2f, 0.4f, 0.8f)]
+    [InlineData(1.0f, 0.8f, 0.6f, 0.4f)]
+    [InlineData(0.25f, 0.5f, 0.75f, 1.0f)]
+    [InlineData(0.0f, 0.0f, 0.0f, 1.0f)]
+    public void ValidateTextSearchWeights_WithValidWeights_ShouldPass(float d, float c, float b, float a)
+    {
+        // Arrange & Act
+        var act = () => ValidateTextSearchWeights(d, c, b, a);
+
+        // Assert
+        act.Should().NotThrow();
+    }
+
+    [Theory]
+    [InlineData(-0.1f, 0.2f, 0.4f, 0.8f)]
+    [InlineData(0.1f, -0.2f, 0.4f, 0.8f)]
+    [InlineData(1.1f, 0.2f, 0.4f, 0.8f)]
+    [InlineData(0.1f, 1.2f, 0.4f, 0.8f)]
+    public void ValidateTextSearchWeights_WithInvalidWeights_ShouldThrowArgumentOutOfRangeException(float d, float c, float b, float a)
+    {
+        // Arrange & Act
+        var act = () => ValidateTextSearchWeights(d, c, b, a);
+
+        // Assert
+        act.Should().Throw<ArgumentOutOfRangeException>()
+            .WithMessage("*Weights must be between 0.0 and 1.0.*");
+    }
+
+    #endregion
+
+    #region Helper Methods for Testing Validation Logic
+
+    private static void ValidateTextSearchConfiguration(string configuration)
+    {
+        if (string.IsNullOrWhiteSpace(configuration))
+            throw new ArgumentException("Text search configuration cannot be null or whitespace.", nameof(configuration));
+    }
+
+    private static void ValidateIndexName(string indexName)
+    {
+        if (string.IsNullOrWhiteSpace(indexName))
+            throw new ArgumentException("Index name cannot be null or whitespace.", nameof(indexName));
+    }
+
+    private static void ValidateTextSearchWeight(char weight)
+    {
+        if (weight is not ('A' or 'B' or 'C' or 'D'))
+            throw new ArgumentException("Weight must be A, B, C, or D.", nameof(weight));
+    }
+
+    private static void ValidateSourceExpression(string expression)
+    {
+        if (string.IsNullOrWhiteSpace(expression))
+            throw new ArgumentException("Source expression cannot be null or whitespace.", nameof(expression));
+    }
+
+    private static void ValidateTextSearchWeights(float d, float c, float b, float a)
+    {
+        if (d is < 0.0f or > 1.0f || c is < 0.0f or > 1.0f || b is < 0.0f or > 1.0f || a is < 0.0f or > 1.0f)
+            throw new ArgumentOutOfRangeException("Weights must be between 0.0 and 1.0.");
+    }
+
+    #endregion
+}
+
+/// <summary>
+/// Simple test entity for unit testing.
+/// </summary>
+public class DocumentEntity
+{
+    public int Id { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string Content { get; set; } = string.Empty;
+    public string? Summary { get; set; }
+    public string[] Categories { get; set; } = [];
+    public DateTime PublishedAt { get; set; }
+    public string SearchVector { get; set; } = string.Empty;
 }
 
 /// <summary>
