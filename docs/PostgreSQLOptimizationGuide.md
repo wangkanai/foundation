@@ -1,6 +1,7 @@
 # PostgreSQL Optimization Guide for Entity Framework Core
 
-This comprehensive guide covers PostgreSQL-specific optimizations available in the Wangkanai.EntityFramework.Postgres package, providing detailed examples and best practices for maximizing performance in .NET applications.
+This comprehensive guide covers PostgreSQL-specific optimizations available in the Wangkanai.EntityFramework.Postgres package,
+providing detailed examples and best practices for maximizing performance in .NET applications.
 
 ## Table of Contents
 
@@ -16,7 +17,8 @@ This comprehensive guide covers PostgreSQL-specific optimizations available in t
 
 ## Overview
 
-PostgreSQL offers unique features that can significantly improve application performance when used correctly. This guide demonstrates how to leverage these features through Entity Framework Core with our optimized extensions.
+PostgreSQL offers unique features that can significantly improve application performance when used correctly. This guide
+demonstrates how to leverage these features through Entity Framework Core with our optimized extensions.
 
 ### Key Performance Features
 
@@ -28,7 +30,8 @@ PostgreSQL offers unique features that can significantly improve application per
 
 ## JSONB Optimizations
 
-JSONB provides efficient JSON storage and querying capabilities that often outperform traditional relational approaches for semi-structured data.
+JSONB provides efficient JSON storage and querying capabilities that often outperform traditional relational approaches for
+semi-structured data.
 
 ### Basic JSONB Configuration
 
@@ -37,7 +40,7 @@ public class Product
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    
+
     [Column(TypeName = "jsonb")]
     public string Specifications { get; set; }
 }
@@ -68,7 +71,7 @@ modelBuilder.Entity<Product>(entity =>
     entity.HasJsonbPathOpsIndex(
         e => e.Specifications,
         "IX_products_specs_path_ops");
-    
+
     // Expression index for nested paths
     entity.HasJsonbExpressionIndex(
         "(specifications -> 'technical' -> 'cpu')",
@@ -108,7 +111,7 @@ var activeProducts = await context.Products
 ```csharp
 // Find products with specific features
 var gamingProducts = await context.Products
-    .Where(p => EF.Functions.JsonContains(p.Specifications, 
+    .Where(p => EF.Functions.JsonContains(p.Specifications,
         JsonSerializer.Serialize(new { category = "gaming", features = new[] { "rgb", "wireless" } })))
     .ToListAsync();
 ```
@@ -134,7 +137,8 @@ var premiumProducts = await context.Products
 
 ## Full-Text Search
 
-PostgreSQL's full-text search capabilities provide powerful and efficient text searching with ranking, highlighting, and language-specific features.
+PostgreSQL's full-text search capabilities provide powerful and efficient text searching with ranking, highlighting, and
+language-specific features.
 
 ### Basic Full-Text Search Setup
 
@@ -144,7 +148,7 @@ public class Article
     public int Id { get; set; }
     public string Title { get; set; }
     public string Content { get; set; }
-    
+
     [Column(TypeName = "tsvector")]
     public NpgsqlTsVector SearchVector { get; set; }
 }
@@ -158,7 +162,7 @@ modelBuilder.Entity<Article>(entity =>
             new[] { "title", "content" },
             "english",
             new[] { TsVectorWeight.A, TsVectorWeight.D });
-    
+
     // GIN index for fast searching
     entity.Property(e => e.SearchVector)
         .HasTsVectorGinIndex("IX_articles_search_gin");
@@ -240,7 +244,7 @@ var highlightedResults = await context.Articles
     {
         a.Id,
         a.Title,
-        HighlightedContent = EF.Functions.TsHeadline("english", a.Content, query, 
+        HighlightedContent = EF.Functions.TsHeadline("english", a.Content, query,
             "StartSel=<mark>, StopSel=</mark>, MaxWords=50, MinWords=15"),
         Rank = a.SearchVector.Rank(query)
     })
@@ -272,7 +276,7 @@ modelBuilder.Entity<Product>(entity =>
     entity.HasIndex(e => e.Tags)
         .HasMethod("gin")
         .HasDatabaseName("IX_products_tags_gin");
-    
+
     entity.HasIndex(e => e.Ratings)
         .HasMethod("gin")
         .HasDatabaseName("IX_products_ratings_gin");
@@ -334,7 +338,7 @@ modelBuilder.Entity<Order>(entity =>
 {
     entity.HasIndex(e => e.CreatedAt)
         .HasDatabaseName("IX_orders_created_at");
-    
+
     // Composite index for multiple column queries
     entity.HasIndex(e => new { e.CustomerId, e.Status, e.CreatedAt })
         .HasDatabaseName("IX_orders_customer_status_date");
@@ -350,7 +354,7 @@ modelBuilder.Entity<User>(entity =>
     entity.HasIndex(e => e.Email)
         .HasDatabaseName("IX_users_active_email")
         .HasFilter("is_active = true");
-    
+
     entity.HasIndex(e => e.LastLoginAt)
         .HasDatabaseName("IX_users_recent_login")
         .HasFilter("last_login_at >= NOW() - INTERVAL '30 days'");
@@ -366,7 +370,7 @@ modelBuilder.Entity<User>(entity =>
     // Case-insensitive email searches
     entity.HasIndex("lower(email)")
         .HasDatabaseName("IX_users_email_lower");
-    
+
     // Full name search
     entity.HasIndex("first_name || ' ' || last_name")
         .HasDatabaseName("IX_users_full_name");
@@ -380,7 +384,7 @@ public class Location
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    
+
     [Column(TypeName = "point")]
     public NpgsqlPoint Coordinates { get; set; }
 }
@@ -396,7 +400,8 @@ modelBuilder.Entity<Location>(entity =>
 
 ## Bulk Operations
 
-For high-throughput scenarios, PostgreSQL's COPY protocol provides significant performance improvements over standard INSERT operations.
+For high-throughput scenarios, PostgreSQL's COPY protocol provides significant performance improvements over standard INSERT
+operations.
 
 ### Bulk Insert with COPY Protocol
 
@@ -405,10 +410,10 @@ public async Task<long> BulkInsertProductsAsync(IEnumerable<Product> products)
 {
     using var connection = new NpgsqlConnection(connectionString);
     await connection.OpenAsync();
-    
+
     using var writer = await connection.BeginBinaryImportAsync(
         "COPY products (name, category, price, specifications, tags) FROM STDIN (FORMAT BINARY)");
-    
+
     foreach (var product in products)
     {
         await writer.StartRowAsync();
@@ -418,7 +423,7 @@ public async Task<long> BulkInsertProductsAsync(IEnumerable<Product> products)
         await writer.WriteAsync(product.Specifications, NpgsqlDbType.Jsonb);
         await writer.WriteAsync(product.Tags);
     }
-    
+
     return await writer.CompleteAsync();
 }
 ```
@@ -434,17 +439,17 @@ public async Task BulkUpdatePricesAsync(Dictionary<int, decimal> priceUpdates)
             product_id INT,
             new_price DECIMAL(10,2)
         ) ON COMMIT DROP";
-    
+
     await context.Database.ExecuteSqlRawAsync(tempTableSql);
-    
+
     // Bulk insert to temp table using COPY
     using var connection = (NpgsqlConnection)context.Database.GetDbConnection();
     if (connection.State != ConnectionState.Open)
         await connection.OpenAsync();
-    
+
     using var writer = await connection.BeginBinaryImportAsync(
         "COPY temp_price_updates (product_id, new_price) FROM STDIN (FORMAT BINARY)");
-    
+
     foreach (var (productId, price) in priceUpdates)
     {
         await writer.StartRowAsync();
@@ -452,14 +457,14 @@ public async Task BulkUpdatePricesAsync(Dictionary<int, decimal> priceUpdates)
         await writer.WriteAsync(price);
     }
     await writer.CompleteAsync();
-    
+
     // Bulk update from temp table
     var updateSql = @"
-        UPDATE products 
+        UPDATE products
         SET price = temp.new_price
         FROM temp_price_updates temp
         WHERE products.id = temp.product_id";
-    
+
     await context.Database.ExecuteSqlRawAsync(updateSql);
 }
 ```
@@ -472,15 +477,16 @@ Use PostgreSQL's query analysis tools to optimize performance:
 
 ```sql
 -- Analyze query execution plan
-EXPLAIN (ANALYZE, BUFFERS) 
-SELECT * FROM products 
-WHERE specifications @> '{"category": "gaming"}' 
-ORDER BY price DESC 
+EXPLAIN (ANALYZE, BUFFERS)
+SELECT *
+FROM products
+WHERE specifications @> '{"category": "gaming"}'
+ORDER BY price DESC
 LIMIT 20;
 
 -- Check index usage
-SELECT schemaname, tablename, attname, n_distinct, correlation 
-FROM pg_stats 
+SELECT schemaname, tablename, attname, n_distinct, correlation
+FROM pg_stats
 WHERE tablename = 'products';
 ```
 
@@ -534,24 +540,22 @@ var ordersWithDetails = await context.Orders
 
 ```sql
 -- Monitor query performance
-SELECT 
-    query,
-    calls,
-    total_time,
-    mean_time,
-    rows
+SELECT query,
+       calls,
+       total_time,
+       mean_time,
+       rows
 FROM pg_stat_statements
 ORDER BY total_time DESC
 LIMIT 10;
 
 -- Monitor index usage
-SELECT 
-    schemaname,
-    tablename,
-    indexname,
-    idx_scan,
-    idx_tup_read,
-    idx_tup_fetch
+SELECT schemaname,
+       tablename,
+       indexname,
+       idx_scan,
+       idx_tup_read,
+       idx_tup_fetch
 FROM pg_stat_user_indexes
 ORDER BY idx_scan DESC;
 ```
@@ -623,9 +627,12 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
 ## Conclusion
 
-PostgreSQL's advanced features provide significant performance benefits when properly utilized with Entity Framework Core. By implementing these optimization strategies, you can achieve substantial improvements in query performance, data throughput, and overall application responsiveness.
+PostgreSQL's advanced features provide significant performance benefits when properly utilized with Entity Framework Core. By
+implementing these optimization strategies, you can achieve substantial improvements in query performance, data throughput, and
+overall application responsiveness.
 
 Key takeaways:
+
 - **JSONB** excels for semi-structured data with complex queries
 - **Full-text search** provides powerful text searching capabilities
 - **Array operations** offer efficient collection handling
@@ -633,4 +640,5 @@ Key takeaways:
 - **Bulk operations** dramatically increase data throughput
 - **Proper monitoring** ensures continued optimization
 
-Regular performance monitoring and query analysis will help you identify optimization opportunities and maintain optimal performance as your application grows.
+Regular performance monitoring and query analysis will help you identify optimization opportunities and maintain optimal
+performance as your application grows.
