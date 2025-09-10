@@ -87,9 +87,6 @@ public static class JsonConfigurationExtensions
         ArgumentException.ThrowIfNullOrWhiteSpace(extractedColumnName);
 
         ValidateJsonPath(jsonPath);
-
-        var storageType = stored ? "STORED" : "VIRTUAL";
-        var columnType = InferColumnTypeFromPath(jsonPath, typeof(T));
         
         return builder
             .HasColumnType("json")

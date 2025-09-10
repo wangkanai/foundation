@@ -11,6 +11,7 @@ namespace Wangkanai.EntityFramework.MySql;
 public static class ConfigurationExtensions
 {
    private const string Now = "NOW()";
+   private const string MySqlStorageEngine = "MySql:StorageEngine";
 
    /// <summary>
    /// Configures a property to use the MySQL "NOW()" function as the default value and
@@ -62,7 +63,7 @@ public static class ConfigurationExtensions
    {
        ArgumentNullException.ThrowIfNull(builder);
 
-       builder.HasAnnotation("MySql:StorageEngine", "InnoDB");
+       builder.HasAnnotation(MySqlStorageEngine, "InnoDB");
        
        var rowFormatString = rowFormat switch
        {
@@ -113,7 +114,7 @@ public static class ConfigurationExtensions
    {
        ArgumentNullException.ThrowIfNull(builder);
 
-       builder.HasAnnotation("MySql:StorageEngine", "MyISAM");
+       builder.HasAnnotation(MySqlStorageEngine, "MyISAM");
 
        return builder;
    }
@@ -154,7 +155,7 @@ public static class ConfigurationExtensions
    {
        ArgumentNullException.ThrowIfNull(builder);
 
-       builder.HasAnnotation("MySql:StorageEngine", "MEMORY");
+       builder.HasAnnotation(MySqlStorageEngine, "MEMORY");
 
        return builder;
    }
@@ -197,7 +198,7 @@ public static class ConfigurationExtensions
    {
        ArgumentNullException.ThrowIfNull(builder);
 
-       builder.HasAnnotation("MySql:StorageEngine", "ARCHIVE");
+       builder.HasAnnotation(MySqlStorageEngine, "ARCHIVE");
 
        return builder;
    }

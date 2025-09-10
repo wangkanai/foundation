@@ -63,7 +63,7 @@ public static class ConnectionConfigurationExtensions
             ConnectionLifeTime = connectionLifeTime
         };
 
-        return optionsBuilder.UseMySql(connectionStringBuilder.ConnectionString, ServerVersion.AutoDetect);
+        return optionsBuilder.UseMySql(connectionStringBuilder.ConnectionString, ServerVersion.AutoDetect(connectionStringBuilder.ConnectionString));
     }
 
     /// <summary>
@@ -99,7 +99,7 @@ public static class ConnectionConfigurationExtensions
             SslMode = sslMode
         };
 
-        return optionsBuilder.UseMySql(connectionStringBuilder.ConnectionString, ServerVersion.AutoDetect);
+        return optionsBuilder.UseMySql(connectionStringBuilder.ConnectionString, ServerVersion.AutoDetect(connectionStringBuilder.ConnectionString));
     }
 
     /// <summary>
@@ -146,7 +146,7 @@ public static class ConnectionConfigurationExtensions
             DefaultCommandTimeout = defaultCommandTimeout
         };
 
-        return optionsBuilder.UseMySql(connectionStringBuilder.ConnectionString, ServerVersion.AutoDetect);
+        return optionsBuilder.UseMySql(connectionStringBuilder.ConnectionString, ServerVersion.AutoDetect(connectionStringBuilder.ConnectionString));
     }
 
     /// <summary>
@@ -157,7 +157,6 @@ public static class ConnectionConfigurationExtensions
     /// <typeparam name="T">The type of DbContext being configured.</typeparam>
     /// <param name="optionsBuilder">The DbContext options builder.</param>
     /// <param name="connectionString">The MySQL connection string to configure.</param>
-    /// <param name="cachePreparedStatements">Whether to cache prepared statements for reuse (default: true).</param>
     /// <returns>The same DbContext options builder for method chaining.</returns>
     /// <remarks>
     /// <para>Benefits of prepared statements:</para>
@@ -184,8 +183,7 @@ public static class ConnectionConfigurationExtensions
     /// </remarks>
     public static DbContextOptionsBuilder<T> EnableMySqlPreparedStatements<T>(
         this DbContextOptionsBuilder<T> optionsBuilder,
-        string connectionString,
-        bool cachePreparedStatements = true) where T : DbContext
+        string connectionString) where T : DbContext
     {
         ArgumentNullException.ThrowIfNull(optionsBuilder);
         ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
@@ -193,12 +191,10 @@ public static class ConnectionConfigurationExtensions
         var connectionStringBuilder = new MySqlConnectionStringBuilder(connectionString)
         {
             UseAffectedRows = false,
-            AllowBatch = true,
-            UseCompression = true,
-            CachePreparedStatements = cachePreparedStatements
+            UseCompression = true
         };
 
-        return optionsBuilder.UseMySql(connectionStringBuilder.ConnectionString, ServerVersion.AutoDetect, 
+        return optionsBuilder.UseMySql(connectionStringBuilder.ConnectionString, ServerVersion.AutoDetect(connectionStringBuilder.ConnectionString), 
             mySqlOptions => mySqlOptions.EnableRetryOnFailure());
     }
 
@@ -241,13 +237,11 @@ public static class ConnectionConfigurationExtensions
             ConnectionLifeTime = 7200, // 2 hours
             ConnectionTimeout = 30,
             DefaultCommandTimeout = 60,
-            AllowBatch = true,
             UseCompression = true,
-            CachePreparedStatements = true,
             UseAffectedRows = false
         };
 
-        return optionsBuilder.UseMySql(connectionStringBuilder.ConnectionString, ServerVersion.AutoDetect,
+        return optionsBuilder.UseMySql(connectionStringBuilder.ConnectionString, ServerVersion.AutoDetect(connectionStringBuilder.ConnectionString),
             mySqlOptions => 
             {
                 mySqlOptions.EnableRetryOnFailure(
