@@ -2,12 +2,12 @@
 
    <ItemGroup>
       <!-- PostgreSQL-specific packages for unit testing -->
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL"/>
    </ItemGroup>
 
    <ItemGroup>
-      <ProjectReference Include="..\..\..\src\Postgres\Wangkanai.EntityFramework.Postgres.csproj" />
-      <ProjectReference Include="..\..\..\..\Foundation\src\Domain\Wangkanai.Foundation.Domain.csproj" />
+      <ProjectReference Include="..\..\..\src\Postgres\Wangkanai.EntityFramework.Postgres.csproj"/>
+      <ProjectReference Include="..\..\..\..\Foundation\src\Domain\Wangkanai.Foundation.Domain.csproj"/>
    </ItemGroup>
 
 </Project>
