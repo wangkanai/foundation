@@ -12,7 +12,9 @@ env:
 
 jobs:
   build-dotnet:
-    runs-on: ubuntu-latest
+    runs-on:
+      - self-hosted
+      - Linux
 
     steps:
       - name: Checkout code
@@ -35,13 +37,16 @@ jobs:
         id: cache-sonar-scanner
         uses: actions/cache@v4
         with:
-          path: .\.sonar\scanner
+          path: ./.sonar/scanner
           key: ${{ runner.os }}-sonar-scanner
           restore-keys: ${{ runner.os }}-sonar-scanner
 
       - name: Install SonarCloud scanner
         if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
         run: dotnet tool install --global dotnet-sonarscanner
+
+      - name: Ensure dotnet global tools are in PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
 
       - name: Restore dependencies
         run: dotnet restore Foundation.slnx
