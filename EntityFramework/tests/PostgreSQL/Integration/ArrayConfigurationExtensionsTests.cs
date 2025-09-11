@@ -352,6 +352,6 @@ public sealed class ArrayConfigurationExtensionsTests
 public class ArrayEntity
 {
    public int      Id     { get; set; }
-   public int[]    Values { get; set; } = [};
-   public string[] Tags   { get; set; } = [};
+   public int[]    Values { get; set; } = [];
+   public string[] Tags   { get; set; } = [];
 }
