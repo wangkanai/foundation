@@ -16,22 +16,16 @@ namespace Wangkanai.Foundation;
 /// <typeparam name="T">
 /// The type of the unique identifier for the entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
-public abstract class Entity<T>
-   : IEntity<T>
+public abstract class Entity<T> : IEntity<T>
    where T : IEquatable<T>, IComparable<T>
 {
-   // Constants for EF proxy detection
    private const int    EfProxyNamespaceLength = 35;
    private const string EfProxyNamespace       = "System.Data.Entity.DynamicProxies";
+   private const int    MaxCacheSize           = 1000;
 
-   // Cache management for memory safety (LRU eviction threshold)
-   private const int MaxCacheSize = 1000;
-
-   // Performance optimization: Cache type mappings for EF dynamic proxies
    private static readonly ConcurrentDictionary<Type, Type> _realTypeCache    = new();
    private static readonly ConcurrentDictionary<Type, bool> _isProxyTypeCache = new();
 
-   // Performance monitoring
    private static long _cacheHits;
    private static long _cacheMisses;
 
@@ -190,9 +184,7 @@ public abstract class Entity<T>
    /// <returns>An integer representing the hash code of the entity.</returns>
    [SuppressMessage("ReSharper", "HeapView.PossibleBoxingAllocation")]
    public override int GetHashCode()
-      => IsTransient()
-         ? base.GetHashCode()
-         : Id.GetHashCode();
+      => IsTransient() ? base.GetHashCode() : Id.GetHashCode();
 
    /// <summary>
    /// Determines whether the current entity is equal to another object.
@@ -209,7 +201,6 @@ public abstract class Entity<T>
       if (ReferenceEquals(null, obj))
          return false;
 
-      // Optimized type checking with caching
       if (GetRealObjectTypeOptimized(this) != GetRealObjectTypeOptimized(obj))
          return false;
 

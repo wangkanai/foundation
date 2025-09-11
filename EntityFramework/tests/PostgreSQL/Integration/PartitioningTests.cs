@@ -32,7 +32,7 @@ public sealed class PartitioningTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void ConfigureRangePartitioning_WithInvalidColumn_ShouldThrowArgumentException(string invalidColumn)
+   public void ConfigureRangePartitioning_WithInvalidColumn_ShouldThrowArgumentException(string? invalidColumn)
    {
       // Arrange
       var builder       = new ModelBuilder();
@@ -116,7 +116,7 @@ public sealed class PartitioningTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void ConfigureListPartitioning_WithInvalidColumn_ShouldThrowArgumentException(string invalidColumn)
+   public void ConfigureListPartitioning_WithInvalidColumn_ShouldThrowArgumentException(string? invalidColumn)
    {
       // Arrange
       var builder       = new ModelBuilder();
@@ -252,7 +252,7 @@ public sealed class PartitioningTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void ConfigurePartitionMaintenanceStrategy_WithInvalidStrategy_ShouldThrowArgumentException(string invalidStrategy)
+   public void ConfigurePartitionMaintenanceStrategy_WithInvalidStrategy_ShouldThrowArgumentException(string? invalidStrategy)
    {
       // Arrange
       var builder       = new ModelBuilder();

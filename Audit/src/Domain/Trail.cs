@@ -3,6 +3,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
 
 using Wangkanai.Foundation;
 
@@ -17,6 +18,15 @@ public class Trail<TKey, TUserType, TUserKey> : Entity<TKey>
    where TUserType : IdentityUser<TUserKey>
    where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
 {
+   /// <summary>Initializes a new instance of the <see cref="Trail{TKey, TUserType, TUserKey}"/> class.</summary>
+   public Trail()
+   {
+      // Initialize Id with a new value if TKey is Guid
+      if (typeof(TKey) == typeof(Guid))
+      {
+         Id = (TKey)(object)Guid.NewGuid();
+      }
+   }
    /// <summary>Gets or sets the type of trail associated with an audit action.</summary>
    /// <remarks>
    /// The <see cref="TrailType"/> property indicates the nature of the change that occurred in an entity.
@@ -91,7 +101,7 @@ public class Trail<TKey, TUserType, TUserKey> : Entity<TKey>
    {
       get => string.IsNullOrEmpty(OldValuesJson)
          ? new()
-         : JsonSerializer.Deserialize<Dictionary<string, object>>(OldValuesJson) ?? new Dictionary<string, object>();
+         : DeserializeValues(OldValuesJson);
       set => OldValuesJson = value.Count == 0 ? null : JsonSerializer.Serialize(value);
    }
 
@@ -102,8 +112,46 @@ public class Trail<TKey, TUserType, TUserKey> : Entity<TKey>
    {
       get => string.IsNullOrEmpty(NewValuesJson)
          ? new()
-         : JsonSerializer.Deserialize<Dictionary<string, object>>(NewValuesJson) ?? new Dictionary<string, object>();
+         : DeserializeValues(NewValuesJson);
       set => NewValuesJson = value.Count == 0 ? null : JsonSerializer.Serialize(value);
+   }
+
+   /// <summary>Deserializes JSON values and converts JsonElement values to their appropriate CLR types.</summary>
+   private static Dictionary<string, object> DeserializeValues(string json)
+   {
+      try
+      {
+         var result = new Dictionary<string, object>();
+         using var doc = JsonDocument.Parse(json);
+         
+         foreach (var property in doc.RootElement.EnumerateObject())
+         {
+            result[property.Name] = ConvertJsonElement(property.Value);
+         }
+         
+         return result;
+      }
+      catch (JsonException)
+      {
+         // Return empty dictionary for invalid JSON
+         return new Dictionary<string, object>();
+      }
+   }
+
+   /// <summary>Converts a JsonElement to the appropriate CLR type.</summary>
+   private static object ConvertJsonElement(JsonElement element)
+   {
+      return element.ValueKind switch
+      {
+         JsonValueKind.String => element.GetString()!,
+         JsonValueKind.Number when element.TryGetInt32(out var intValue) => intValue,
+         JsonValueKind.Number when element.TryGetInt64(out var longValue) => longValue,
+         JsonValueKind.Number => element.GetDouble(),
+         JsonValueKind.True => true,
+         JsonValueKind.False => false,
+         JsonValueKind.Null => null!,
+         _ => element.ToString()
+      };
    }
 
    /// <summary>Sets the old and new values efficiently using pre-serialized JSON strings.</summary>
@@ -206,11 +254,19 @@ public class Trail<TKey, TUserType, TUserKey> : Entity<TKey>
       if (string.IsNullOrEmpty(OldValuesJson))
          return null;
 
-      // For simple lookups, use JSON parsing instead of full deserialization
-      using var document = JsonDocument.Parse(OldValuesJson);
-      return document.RootElement.TryGetProperty(columnName, out var element)
-         ? GetJsonElementValue(element)
-         : null;
+      try
+      {
+         // For simple lookups, use JSON parsing instead of full deserialization
+         using var document = JsonDocument.Parse(OldValuesJson);
+         return document.RootElement.TryGetProperty(columnName, out var element)
+            ? GetJsonElementValue(element)
+            : null;
+      }
+      catch (JsonException)
+      {
+         // Return null for invalid JSON
+         return null;
+      }
    }
 
    /// <summary>Gets a specific new value by column name without deserializing the entire dictionary.</summary>
@@ -222,11 +278,19 @@ public class Trail<TKey, TUserType, TUserKey> : Entity<TKey>
       if (string.IsNullOrEmpty(NewValuesJson))
          return null;
 
-      // For simple lookups, use JSON parsing instead of full deserialization
-      using var document = JsonDocument.Parse(NewValuesJson);
-      return document.RootElement.TryGetProperty(columnName, out var element)
-         ? GetJsonElementValue(element)
-         : null;
+      try
+      {
+         // For simple lookups, use JSON parsing instead of full deserialization
+         using var document = JsonDocument.Parse(NewValuesJson);
+         return document.RootElement.TryGetProperty(columnName, out var element)
+            ? GetJsonElementValue(element)
+            : null;
+      }
+      catch (JsonException)
+      {
+         // Return null for invalid JSON
+         return null;
+      }
    }
 
    /// <summary>Extracts a value from a JsonElement efficiently.</summary>

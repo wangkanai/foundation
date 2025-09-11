@@ -82,7 +82,7 @@ public static class IndexConfigurationExtensions
     /// // CREATE INDEX ix_entity_metadata_gin ON entities USING gin (metadata jsonb_ops);
     /// 
     /// // Optimizes queries like:
-    /// // SELECT * FROM entities WHERE tags @> ARRAY['important'];
+    /// // SELECT * FROM entities WHERE tags @> ARRAY['important'};
     /// // SELECT * FROM entities WHERE metadata @> '{"status": "active"}';
     /// </code>
     /// </example>

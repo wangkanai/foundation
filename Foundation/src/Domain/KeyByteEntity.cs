@@ -11,5 +11,4 @@ namespace Wangkanai.Foundation;
 /// scenarios where a small numeric identifier is used. Instances of this class or its derived classes can
 /// determine whether they are transient (not yet persisted) through the inherited <see cref="Entity{T}.IsTransient"/> method.
 /// </remarks>
-public abstract class KeyByteEntity
-   : Entity<byte>;
+public abstract class KeyByteEntity : Entity<byte>;

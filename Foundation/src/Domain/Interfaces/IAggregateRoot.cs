@@ -13,5 +13,4 @@ public interface IAggregateRoot : IAggregateRoot<int>, IKeyIntEntity;
 /// Defines a contract for aggregate roots in a domain-driven design context with a primary key of type int.
 /// Ensures all operations on the aggregate are controlled and consistent through the aggregate root.
 /// </summary>
-public interface IAggregateRoot<T> : IEntity<T>
-   where T : IComparable<T>, IEquatable<T>;
+public interface IAggregateRoot<T> : IEntity<T> where T : IComparable<T>, IEquatable<T>;

@@ -85,7 +85,7 @@ public class AuditPerformanceBenchmark
    public void OptimizedSpan_SmallChangeSet()
    {
       var                  audit       = new Trail<int, IdentityUser<int>, int>();
-      ReadOnlySpan<string> columnNames = ["Name", "Age", "IsActive"];
+      var columnNames = new string[] { "Name", "Age", "IsActive"};
       ReadOnlySpan<object> oldValues   = ["John Doe", 30, true];
       ReadOnlySpan<object> newValues   = ["Jane Doe", 31, false];
 

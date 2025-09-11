@@ -18,9 +18,12 @@
       <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.Identity.Stores" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.Logging" Version="9.0.0"/>
+      <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.Logging.Console" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.Extensions.Options" Version="9.0.0"/>
+      <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0"/>
       <!--entityframework-->
+      <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.0"/>
       <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0"/>
@@ -42,7 +45,6 @@
       <PackageVersion Include="FluentAssertions" Version="8.6.0"/>
       <!--benchmarking-->
       <PackageVersion Include="BenchmarkDotNet" Version="0.15.2"/>
-      <!--annotations removed - automatically referenced by EF Core-->
       <!--wangkanai-->
       <PackageVersion Include="Wangkanai.System" Version="5.8.0"/>
       <PackageVersion Include="Wangkanai.Validation" Version="4.6.0"/>

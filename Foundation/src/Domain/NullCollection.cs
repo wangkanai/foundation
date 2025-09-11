@@ -10,5 +10,4 @@ namespace Wangkanai.Foundation;
 /// and can be used as a placeholder or default implementation where an empty collection might be needed.
 /// </summary>
 /// <typeparam name="T">The type of elements contained in the collection.</typeparam>
-public class NullCollection<T>
-   : ObservableCollection<T>;
+public class NullCollection<T> : ObservableCollection<T>;

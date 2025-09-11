@@ -14,6 +14,5 @@ public interface IDomainEventPublisher
    /// <param name="event">The domain event to be published.</param>
    /// <param name="token">An optional cancellation token to cancel the publish operation.</param>
    /// <returns>A task representing the asynchronous operation of publishing the event.</returns>
-   Task Publish<T>(T @event, CancellationToken token = default)
-      where T : class, IGuidDomainEvent;
+   Task Publish<T>(T @event, CancellationToken token = default) where T : class, IGuidDomainEvent;
 }

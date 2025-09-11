@@ -333,7 +333,7 @@ public static class PartitionConfigurationExtensions
     /// Example T-SQL for automated partition management:
     /// <code>
     /// -- Create new partition for next month
-    /// ALTER PARTITION SCHEME ps_ApplicationLogs NEXT USED [fg_2024_04];
+    /// ALTER PARTITION SCHEME ps_ApplicationLogs NEXT USED [fg_2024_04};
     /// ALTER PARTITION FUNCTION pf_LogTimestamp() SPLIT RANGE ('2024-04-01');
     /// 
     /// -- Archive old partition (automated by sliding window)
