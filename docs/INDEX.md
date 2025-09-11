@@ -67,7 +67,8 @@ Foundation/
 ### Current Architecture
 
 - **[Architecture Overview](archives/2025-09-09/ARCHITECTURE_OVERVIEW.md)** - Comprehensive system architecture
-- **[Clean Architecture Evolution](archives/2025-09-09/CLEAN_ARCHITECTURE_EVOLUTION.md)** - Clean Architecture implementation details
+- **[Clean Architecture Evolution](archives/2025-09-09/CLEAN_ARCHITECTURE_EVOLUTION.md)** - Clean Architecture implementation
+  details
 - **[Final Architecture Report](archives/2025-09-09/FINAL_ARCHITECTURE_REPORT.md)** - Latest architectural state
 
 ### Design & Patterns
