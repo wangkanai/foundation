@@ -27,7 +27,7 @@ public interface IUnitOfWork
 /// This interface is designed to support scenarios where tasks, such as saving changes,
 /// need to be performed asynchronously to improve responsiveness and scalability.
 /// </remarks>
-public interface IUnitOfWorkAsync
+public interface IAsyncUnitOfWork
 {
    /// <summary>Asynchronously persist all changes made within the unit of work to the underlying data storage.</summary>
    /// <returns>

@@ -13,5 +13,4 @@ namespace Wangkanai.Foundation;
 /// <see cref="KeyIntEntity"/> gain the ability to handle integer-based identifiers as
 /// well as inherit the core functionality of <see cref="Entity{T}"/>.
 /// </remarks>
-public abstract class KeyIntEntity
-   : Entity<int>;
+public abstract class KeyIntEntity : Entity<int>;

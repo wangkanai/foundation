@@ -11,5 +11,4 @@ namespace Wangkanai.Foundation;
 /// tailored to operate with a string identifier.
 /// It serves as a common base for entities in domain-driven design that require a string key for identification.
 /// </remarks>
-public abstract class KeyStringEntity
-   : Entity<string>;
+public abstract class KeyStringEntity : Entity<string>;

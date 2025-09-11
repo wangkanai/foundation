@@ -10,5 +10,4 @@ namespace Wangkanai.Foundation;
 /// Inherits from <see cref="Entity{T}"/> with a generic parameter of type <see cref="long"/>.
 /// Provides default implementations for equality comparison, transient state detection, and hash code generation.
 /// </remarks>
-public abstract class KeyLongEntity
-   : Entity<long>;
+public abstract class KeyLongEntity : Entity<long>;

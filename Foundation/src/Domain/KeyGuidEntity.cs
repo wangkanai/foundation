@@ -11,5 +11,4 @@ namespace Wangkanai.Foundation;
 /// The <see cref="KeyGuidEntity"/> class inherits from <see cref="Entity{T}"/>, where "T" is a <see cref="Guid"/>.
 /// T provides functionality related to identity-based operations and equality comparisons for domain models.
 /// </remarks>
-public abstract class KeyGuidEntity
-   : Entity<Guid>;
+public abstract class KeyGuidEntity : Entity<Guid>;

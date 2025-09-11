@@ -48,8 +48,7 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
    /// For value objects, this results in a distinct object that maintains the same property values as the original.
    /// </summary>
    /// <returns>A new instance of the value object with the same property values as the current instance.</returns>
-   public object Clone()
-      => MemberwiseClone();
+   public object Clone() => MemberwiseClone();
 
    /// <summary>
    /// Determines whether the specified object is equal to the current value object.
@@ -242,7 +241,18 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
          {
             yield return '[';
             foreach (var item in enumerable)
-               yield return item;
+            {
+               // Recursively handle nested enumerables
+               if (item is IEnumerable nestedEnumerable && item is not string)
+               {
+                  yield return '[';
+                  foreach (var nestedItem in nestedEnumerable)
+                     yield return nestedItem;
+                  yield return ']';
+               }
+               else
+                  yield return item;
+            }
             yield return ']';
          }
          else

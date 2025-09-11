@@ -61,11 +61,11 @@ public interface IAsyncRepository<T> : IAsyncDisposable where T : class
    /// Provides a property for accessing the transactional unit-of-work implementation within repository operations.
    /// </summary>
    /// <remarks>
-   /// This property delivers an instance of <see cref="IUnitOfWork"/> or <see cref="IUnitOfWorkAsync"/>,
+   /// This property delivers an instance of <see cref="IUnitOfWork"/> or <see cref="IAsyncUnitOfWork"/>,
    /// facilitating the coordination and persistence of entity changes within a transactional context.
    /// The unit-of-work instance ensures atomicity and consistency for related database operations.
    /// </remarks>
-   IUnitOfWorkAsync UnitOfWork { get; }
+   IAsyncUnitOfWork UnitOfWork { get; }
 
    /// <summary>
    /// Asynchronously attaches the specified entity to the repository context.

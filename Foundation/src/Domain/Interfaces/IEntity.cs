@@ -10,8 +10,7 @@ namespace Wangkanai.Foundation;
 /// <typeparam name="T">The type of the unique identifier for the entity. It must implement
 /// <see cref="IComparable{T}"/> and <see cref="IEquatable{T}"/>.
 /// </typeparam>
-public interface IEntity<T>
-   where T : IComparable<T>, IEquatable<T>
+public interface IEntity<T> where T : IComparable<T>, IEquatable<T>
 {
    /// <summary>
    /// Gets or sets the unique identifier for the entity.
