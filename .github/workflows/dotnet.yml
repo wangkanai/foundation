@@ -24,8 +24,20 @@ jobs:
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
+        env:
+          DOTNET_INSTALL_DIR: ${{ runner.temp }}/dotnet
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Ensure dotnet is in PATH (self-hosted)
+        run: |
+          echo "DOTNET_ROOT=${{ runner.temp }}/dotnet" >> "$GITHUB_ENV"
+          echo "${{ runner.temp }}/dotnet" >> "$GITHUB_PATH"
+
+      - name: Verify dotnet installation
+        run: |
+          which dotnet || true
+          dotnet --info
 
       - name: Set up JDK 17
         uses: actions/setup-java@v3
