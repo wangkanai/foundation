@@ -1,3 +1,7 @@
+// BACKUP OF ORIGINAL FILE - FOR REFERENCE DURING REFACTORING
+// This file contains the original complex generic implementation
+// Remove this file after successful refactoring and testing
+
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
 using System.Text;
@@ -9,18 +13,17 @@ using Wangkanai.Foundation;
 
 namespace Wangkanai.Audit;
 
-/// <summary>
-/// Represents an audit trail record for tracking entity changes in the system.
-/// This refactored version reduces generic type complexity by using a single type parameter
-/// and dependency injection for user-related type information.
-/// </summary>
+/// <summary>Represents an audit trail record for tracking entity changes in the system.</summary>
 /// <typeparam name="TKey">The type of the unique identifier for the audit trail.</typeparam>
-public class Trail<TKey> : Entity<TKey>
+/// <typeparam name="TUserType">The type of the user associated with the audit action.</typeparam>
+/// <typeparam name="TUserKey">The type of the user's unique identifier.</typeparam>
+[Obsolete("Use Trail<TKey> with AuditConfiguration instead. This class will be removed in a future version.")]
+public class Trail<TKey, TUserType, TUserKey> : Entity<TKey>
    where TKey : IEquatable<TKey>, IComparable<TKey>
+   where TUserType : IdentityUser<TUserKey>
+   where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
 {
-   /// <summary>
-   /// Initializes a new instance of the <see cref="Trail{TKey}"/> class.
-   /// </summary>
+   /// <summary>Initializes a new instance of the <see cref="Trail{TKey, TUserType, TUserKey}"/> class.</summary>
    public Trail()
    {
       // Initialize Id with a new value if TKey is Guid
@@ -29,15 +32,6 @@ public class Trail<TKey> : Entity<TKey>
          Id = (TKey)(object)Guid.NewGuid();
       }
    }
-
-   /// <summary>
-   /// Initializes a new instance of the <see cref="Trail{TKey}"/> class with audit configuration.
-   /// </summary>
-   /// <param name="auditConfiguration">The audit configuration for user-related type handling.</param>
-   public Trail(IAuditConfiguration? auditConfiguration) : this()
-   {
-      AuditConfiguration = auditConfiguration;
-   }
    /// <summary>Gets or sets the type of trail associated with an audit action.</summary>
    /// <remarks>
    /// The <see cref="TrailType"/> property indicates the nature of the change that occurred in an entity.
@@ -45,32 +39,19 @@ public class Trail<TKey> : Entity<TKey>
    /// </remarks>
    public TrailType TrailType { get; set; }
 
-   /// <summary>
-   /// Gets or sets the audit configuration used for type-safe user operations.
-   /// This configuration encapsulates user-related type information without requiring generic parameters.
-   /// </summary>
-   [JsonIgnore]
-   public IAuditConfiguration? AuditConfiguration { get; set; }
-
-   /// <summary>
-   /// Gets or sets the unique identifier of the user associated with the audit action.
-   /// The actual type is determined by the AuditConfiguration at runtime.
-   /// </summary>
+   /// <summary>Gets or sets the unique identifier of the user associated with the audit action.</summary>
    /// <remarks>
-   /// This property stores the user ID as an object to support multiple user key types.
-   /// Use the AuditConfiguration to safely cast to the appropriate type.
+   /// The <see cref="UserId"/> property records the primary key of the user who performed the action being tracked.
+   /// This property may be null if the action was performed in a context where a user is not available or applicable.
    /// </remarks>
-   public object? UserId { get; set; }
+   public TUserKey? UserId { get; set; }
 
-   /// <summary>
-   /// Gets or sets the user associated with the audit action.
-   /// The actual type is determined by the AuditConfiguration at runtime.
-   /// </summary>
+   /// <summary>Gets or sets the user associated with the audit action.</summary>
    /// <remarks>
-   /// This property stores the user as an object to support multiple user types.
-   /// Use the AuditConfiguration to safely cast to the appropriate type.
+   /// The User property represents the user who performed the action being tracked in the audit trail.
+   /// It is of a generic type derived from <see cref="IdentityUser{TKey}"/> to allow flexibility in user representation.
    /// </remarks>
-   public object? User { get; set; }
+   public TUserType? User { get; set; }
 
    /// <summary>Gets or sets the timestamp for the audit trail entry.</summary>
    /// <remarks>
@@ -328,93 +309,4 @@ public class Trail<TKey> : Entity<TKey>
          JsonValueKind.Null   => null,
          _                    => element.GetRawText()
       };
-
-   #region Type-Safe User Operations
-
-   /// <summary>
-   /// Gets the user ID cast to the specified type using the audit configuration.
-   /// </summary>
-   /// <typeparam name="TUserKey">The expected type of the user key.</typeparam>
-   /// <returns>The user ID cast to the specified type, or default if casting fails.</returns>
-   public TUserKey? GetUserId<TUserKey>() 
-      where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
-   {
-      if (UserId is TUserKey userKey)
-         return userKey;
-      
-      // Try conversion for common types
-      if (UserId is not null && typeof(TUserKey) != UserId.GetType())
-      {
-         try
-         {
-            return (TUserKey)Convert.ChangeType(UserId, typeof(TUserKey));
-         }
-         catch
-         {
-            // Return default if conversion fails
-         }
-      }
-
-      return default;
-   }
-
-   /// <summary>
-   /// Gets the user cast to the specified type using the audit configuration.
-   /// </summary>
-   /// <typeparam name="TUser">The expected type of the user.</typeparam>
-   /// <returns>The user cast to the specified type, or null if casting fails.</returns>
-   public TUser? GetUser<TUser>() 
-      where TUser : class
-   {
-      return User as TUser;
-   }
-
-   /// <summary>
-   /// Sets the user ID with type validation using the audit configuration.
-   /// </summary>
-   /// <typeparam name="TUserKey">The type of the user key.</typeparam>
-   /// <param name="userId">The user ID to set.</param>
-   /// <returns>True if the user ID was set successfully; otherwise, false.</returns>
-   public bool SetUserId<TUserKey>(TUserKey? userId)
-      where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
-   {
-      if (AuditConfiguration?.IsValidUserKey(userId) == false)
-         return false;
-
-      UserId = userId;
-      return true;
-   }
-
-   /// <summary>
-   /// Sets the user with type validation using the audit configuration.
-   /// </summary>
-   /// <typeparam name="TUser">The type of the user.</typeparam>
-   /// <param name="user">The user to set.</param>
-   /// <returns>True if the user was set successfully; otherwise, false.</returns>
-   public bool SetUser<TUser>(TUser? user) 
-      where TUser : class
-   {
-      if (AuditConfiguration?.IsValidUser(user) == false)
-         return false;
-
-      User = user;
-      return true;
-   }
-
-   /// <summary>
-   /// Validates that the current user ID and user are compatible with the audit configuration.
-   /// </summary>
-   /// <returns>True if the user data is valid; otherwise, false.</returns>
-   public bool ValidateUserData()
-   {
-      if (AuditConfiguration == null)
-         return true; // No configuration means no validation constraints
-
-      var userIdValid = UserId == null || AuditConfiguration.IsValidUserKey(UserId);
-      var userValid = User == null || AuditConfiguration.IsValidUser(User);
-
-      return userIdValid && userValid;
-   }
-
-   #endregion
 }

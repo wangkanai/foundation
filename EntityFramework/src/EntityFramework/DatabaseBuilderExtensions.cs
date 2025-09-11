@@ -21,7 +21,7 @@ public static class DatabaseBuilderExtensions
       return app;
    }
 
-   public static async Task<IApplicationBuilder> CreateDatabaseAsync<T>(this IApplicationBuilder app)
+   public static async Task<IApplicationBuilder> CreateDatabaseAsync<T>(this IApplicationBuilder app, CancellationToken cancellationToken = default)
       where T : DbContext
    {
       await using var scope   = app.ApplicationServices.CreateAsyncScope();
@@ -29,7 +29,7 @@ public static class DatabaseBuilderExtensions
 
       context.ThrowIfNull();
 
-      await context.Database.EnsureCreatedAsync();
+      await context.Database.EnsureCreatedAsync(cancellationToken);
 
       return app;
    }
@@ -47,7 +47,7 @@ public static class DatabaseBuilderExtensions
       return app;
    }
 
-   public static async Task<IApplicationBuilder> MigrateDatabaseAsync<T>(this IApplicationBuilder app)
+   public static async Task<IApplicationBuilder> MigrateDatabaseAsync<T>(this IApplicationBuilder app, CancellationToken cancellationToken = default)
       where T : DbContext
    {
       await using var scope   = app.ApplicationServices.CreateAsyncScope();
@@ -55,7 +55,7 @@ public static class DatabaseBuilderExtensions
 
       context.ThrowIfNull();
 
-      await context.Database.MigrateAsync();
+      await context.Database.MigrateAsync(cancellationToken);
 
       return app;
    }
