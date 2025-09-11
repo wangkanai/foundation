@@ -245,7 +245,7 @@ public class DocumentEntity
    public string   Title        { get; set; } = string.Empty;
    public string   Content      { get; set; } = string.Empty;
    public string?  Summary      { get; set; }
-   public string[] Categories   { get; set; } = [];
+   public string[] Categories   { get; set; } = [};
    public DateTime PublishedAt  { get; set; }
    public string   SearchVector { get; set; } = string.Empty;
 }

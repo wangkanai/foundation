@@ -326,11 +326,11 @@ public static class JsonbConfigurationExtensions
         var bracketIndex = part.IndexOf('[');
         if (bracketIndex > 0)
         {
-            yield return part[..bracketIndex];
-            var arrayPart = part[(bracketIndex + 1)..];
+            yield return part[..bracketIndex};
+            var arrayPart = part[(bracketIndex + 1)..};
             if (arrayPart.EndsWith(']'))
             {
-                arrayPart = arrayPart[..^1];
+                arrayPart = arrayPart[..^1};
                 if (!string.IsNullOrEmpty(arrayPart))
                     yield return arrayPart;
             }

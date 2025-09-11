@@ -4,8 +4,6 @@ using Wangkanai.Foundation;
 
 namespace Wangkanai.Audit;
 
-
-
 /// <summary>Represents an auditable entity with properties for tracking creation and modification timestamps using DateTimeOffset for timezone-aware auditing.</summary>
 /// <typeparam name="T">
 /// The type of the identifier for the entity. Must implement <see cref="IComparable{T}"/> and <see cref="IEquatable{T}"/>.

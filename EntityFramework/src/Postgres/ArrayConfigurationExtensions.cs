@@ -113,8 +113,8 @@ public static class ArrayConfigurationExtensions
     /// // CREATE INDEX ix_entity_tags_gin ON entities USING GIN (tags);
     /// 
     /// // Optimizes queries like:
-    /// // SELECT * FROM entities WHERE tags @> ARRAY['important'];
-    /// // SELECT * FROM entities WHERE tags && ARRAY['urgent', 'critical'];
+    /// // SELECT * FROM entities WHERE tags @> ARRAY['important'};
+    /// // SELECT * FROM entities WHERE tags && ARRAY['urgent', 'critical'};
     /// // SELECT * FROM entities WHERE 'specific' = ANY(tags);
     /// </code>
     /// </example>
@@ -155,7 +155,7 @@ public static class ArrayConfigurationExtensions
     /// // CREATE INDEX ix_entity_timeslots_gist ON entities USING GiST (time_slots);
     /// 
     /// // Optimizes queries like:
-    /// // SELECT * FROM entities WHERE time_slots && ARRAY['[9,17)'::int4range];
+    /// // SELECT * FROM entities WHERE time_slots && ARRAY['[9,17)'::int4range};
     /// </code>
     /// </example>
     public static PropertyBuilder<T> HasArrayGistIndex<T>(
@@ -271,7 +271,7 @@ public static class ArrayConfigurationExtensions
     ///        .HasArrayDefaultValue("'{}'::integer[]");
     /// 
     /// // Generated SQL:
-    /// // ALTER TABLE entities ALTER COLUMN default_tags SET DEFAULT ARRAY['draft', 'new'];
+    /// // ALTER TABLE entities ALTER COLUMN default_tags SET DEFAULT ARRAY['draft', 'new'};
     /// </code>
     /// </example>
     public static PropertyBuilder<T> HasArrayDefaultValue<T>(

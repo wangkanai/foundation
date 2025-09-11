@@ -127,7 +127,7 @@ public class VersionConfigurationBuilderTests
 
    private class TestEntity : Entity<int>, IHasRowVersion
    {
-      public byte[] RowVersion { get; set; } = [];
+      public byte[] RowVersion { get; set; } = [};
    }
 
    private class TestEntityWithString : IHasRowVersion<string>

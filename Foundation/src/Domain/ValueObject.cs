@@ -218,7 +218,7 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
          else
          {
             var valueType = value.GetType();
-            if (valueType.IsAssignableFromGenericList())
+            if (Extensions.ReflectionExtensions.IsAssignableFromGenericList(valueType))
             {
                yield return '[';
                foreach (var child in (IEnumerable)value)

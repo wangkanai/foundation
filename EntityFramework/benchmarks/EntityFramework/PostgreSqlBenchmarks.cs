@@ -224,7 +224,7 @@ public class PostgreSqlBenchmarks
     [Benchmark]
     public async Task<List<SearchableEntity>> FullTextSearch_OptimizedTsVector()
     {
-        var searchTerm = _searchTerms[0];
+        var searchTerm = _searchTerms[0};
         return await _context.SearchableEntities
             .Where(e => e.SearchVector.Matches(EF.Functions.PlainToTsQuery("english", searchTerm)))
             .OrderByDescending(e => e.SearchVector.Rank(EF.Functions.PlainToTsQuery("english", searchTerm)))
@@ -235,7 +235,7 @@ public class PostgreSqlBenchmarks
     [Benchmark]
     public async Task<List<SearchableEntity>> FullTextSearch_BasicLike()
     {
-        var searchTerm = _searchTerms[0].Split(' ')[0];
+        var searchTerm = _searchTerms[0].Split(' ')[0};
         return await _context.SearchableEntities
             .Where(e => e.Content.Contains(searchTerm) || e.Title.Contains(searchTerm))
             .Take(50)
@@ -268,7 +268,7 @@ public class PostgreSqlBenchmarks
     [Benchmark]
     public async Task<List<SearchableEntity>> FullTextSearch_WithHighlighting()
     {
-        var searchTerm = _searchTerms[0];
+        var searchTerm = _searchTerms[0};
         var query = EF.Functions.PlainToTsQuery("english", searchTerm);
         
         return await _context.SearchableEntities

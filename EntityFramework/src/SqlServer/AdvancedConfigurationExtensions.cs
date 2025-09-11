@@ -66,7 +66,7 @@ public static class AdvancedConfigurationExtensions
     /// ([OrderProcessingMessage] SENT BY INITIATOR);
     /// 
     /// -- Create queue and service
-    /// CREATE QUEUE [OrderProcessing_Queue];
+    /// CREATE QUEUE [OrderProcessing_Queue};
     /// CREATE SERVICE [OrderProcessing_Service]
     /// ON QUEUE [OrderProcessing_Queue] ([OrderProcessingContract]);
     /// </code>
@@ -268,7 +268,7 @@ public static class AdvancedConfigurationExtensions
     ///     REQUEST_MAX_CPU_TIME_SEC = 300,
     ///     REQUEST_MEMORY_GRANT_TIMEOUT_SEC = 60,
     ///     MAX_DOP = 4
-    /// ) USING [ReportingPool];
+    /// ) USING [ReportingPool};
     /// 
     /// -- Create classifier function
     /// CREATE FUNCTION dbo.ResourceGovernorClassifier()

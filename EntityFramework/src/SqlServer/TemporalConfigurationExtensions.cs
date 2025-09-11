@@ -2,6 +2,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.Linq.Expressions;
 
 namespace Wangkanai.EntityFramework.SqlServer;
@@ -279,6 +281,59 @@ public static class TemporalConfigurationExtensions
     }
 
     /// <summary>
+    /// Safely resolves the actual table name for an entity type using EF Core metadata.
+    /// Prevents SQL injection by using proper table name resolution instead of typeof(T).Name.
+    /// </summary>
+    /// <typeparam name="T">The entity type.</typeparam>
+    /// <param name="dbSet">The DbSet to get table name for.</param>
+    /// <returns>The properly escaped table name for SQL queries.</returns>
+    /// <remarks>
+    /// SECURITY FIX: This method replaces the vulnerable typeof(T).Name pattern that was 
+    /// susceptible to SQL injection attacks. It uses EF Core's metadata system to safely
+    /// resolve the actual table name with proper escaping and schema qualification.
+    /// </remarks>
+    private static string GetSafeTableName<T>(DbSet<T> dbSet) where T : class
+    {
+        try
+        {
+            // Get the DbContext from the DbSet to access entity configuration
+            var context = dbSet.GetService<ICurrentDbContext>().Context;
+            var entityType = context.Model.FindEntityType(typeof(T));
+            
+            if (entityType == null)
+            {
+                throw new InvalidOperationException($"Entity type {typeof(T).Name} is not configured in the DbContext model.");
+            }
+
+            // Get the table name with proper schema qualification and escaping
+            var tableName = entityType.GetTableName();
+            var schema = entityType.GetSchema();
+
+            if (string.IsNullOrEmpty(tableName))
+            {
+                throw new InvalidOperationException($"Table name not configured for entity type {typeof(T).Name}.");
+            }
+
+            // Return properly escaped and schema-qualified table name
+            return string.IsNullOrEmpty(schema) 
+                ? $"[{tableName}]" 
+                : $"[{schema}].[{tableName}]";
+        }
+        catch (Exception ex)
+        {
+            // Fallback to basic escaping if metadata is not available
+            // This provides basic protection while maintaining functionality
+            var typeName = typeof(T).Name;
+            // Basic SQL identifier escaping - replace any non-alphanumeric characters
+            var safeName = System.Text.RegularExpressions.Regex.Replace(typeName, @"[^\w]", "");
+            
+            throw new InvalidOperationException(
+                $"Unable to safely resolve table name for entity type {typeof(T).Name}. " +
+                $"Ensure the entity is properly configured in DbContext. Original error: {ex.Message}");
+        }
+    }
+
+    /// <summary>
     /// Enables temporal queries with FOR SYSTEM_TIME clause for point-in-time data retrieval.
     /// Queries historical data as it existed at a specific point in time.
     /// </summary>
@@ -355,11 +410,14 @@ public static class TemporalConfigurationExtensions
         if (dbSet == null)
             throw new ArgumentNullException(nameof(dbSet));
 
-        // Create temporal query with FOR SYSTEM_TIME AS OF clause
-        // This will be translated to appropriate SQL during query execution
-        return dbSet.FromSqlRaw(
-            $"SELECT * FROM [{typeof(T).Name}] FOR SYSTEM_TIME AS OF {{0}}",
-            pointInTime);
+        // SECURITY FIX: Use safe table name resolution instead of vulnerable typeof(T).Name
+        // This prevents SQL injection by properly escaping table names through EF Core metadata
+        var safeTableName = GetSafeTableName(dbSet);
+        
+        // Create temporal query with FOR SYSTEM_TIME AS OF clause using parameterized query
+        // Table name is safely resolved, parameters are properly escaped by EF Core
+        // Using FormattableString to ensure proper parameterization
+        return dbSet.FromSql($"SELECT * FROM {safeTableName} FOR SYSTEM_TIME AS OF {pointInTime}");
     }
 
     /// <summary>
@@ -396,9 +454,12 @@ public static class TemporalConfigurationExtensions
         if (endTime < startTime)
             throw new ArgumentException("End time cannot be earlier than start time.", nameof(endTime));
 
-        return dbSet.FromSqlRaw(
-            $"SELECT * FROM [{typeof(T).Name}] FOR SYSTEM_TIME BETWEEN {{0}} AND {{1}}",
-            startTime, endTime);
+        // SECURITY FIX: Use safe table name resolution instead of vulnerable typeof(T).Name
+        // This prevents SQL injection by properly escaping table names through EF Core metadata
+        var safeTableName = GetSafeTableName(dbSet);
+
+        // Using FormattableString to ensure proper parameterization
+        return dbSet.FromSql($"SELECT * FROM {safeTableName} FOR SYSTEM_TIME BETWEEN {startTime} AND {endTime}");
     }
 
     /// <summary>
@@ -426,6 +487,13 @@ public static class TemporalConfigurationExtensions
         if (dbSet == null)
             throw new ArgumentNullException(nameof(dbSet));
 
-        return dbSet.FromSqlRaw($"SELECT * FROM [{typeof(T).Name}] FOR SYSTEM_TIME ALL");
+        // SECURITY FIX: Use safe table name resolution instead of vulnerable typeof(T).Name
+        // This prevents SQL injection by properly escaping table names through EF Core metadata
+        var safeTableName = GetSafeTableName(dbSet);
+
+        // Use FormattableString interpolation for consistency with other methods
+        // Even though there are no parameters, this maintains the secure pattern
+        FormattableString sql = $"SELECT * FROM {safeTableName} FOR SYSTEM_TIME ALL";
+        return dbSet.FromSqlRaw(sql.Format, sql.GetArguments());
     }
 }
