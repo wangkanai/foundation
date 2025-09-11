@@ -4,6 +4,11 @@
     <File Path=".repomixignore" />
     <File Path="repomix.config.json" />
   </Folder>
+  <Folder Name="/.claude/commands/">
+    <File Path=".claude\commands\plan.md" />
+    <File Path=".claude\commands\specify.md" />
+    <File Path=".claude\commands\tasks.md" />
+  </Folder>
   <Folder Name="/.github/">
     <File Path=".github\FUNDING.yml" />
     <File Path=".github\RELEASE.yml" />
