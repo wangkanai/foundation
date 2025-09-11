@@ -95,7 +95,7 @@ public static class FullTextSearchExtensions
         
         for (int i = 0; i < sourceColumns.Length; i++)
         {
-            var column = sourceColumns[i};
+            var column = sourceColumns[i];
             var weight = weights != null && i < weights.Length ? weights[i] : TsVectorWeight.D;
             var weightChar = weight.ToString();
             

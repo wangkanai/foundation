@@ -64,8 +64,8 @@ public class AuditPerformanceBenchmark
                   };
 
       // Simulate access patterns
-      _ = audit.OldValues["Name"};
-      _ = audit.NewValues["Age"};
+      _ = audit.OldValues["Name"];
+      _ = audit.NewValues["Age"];
    }
 
    /// <summary>Benchmark: Optimized JSON-based approach for small change sets using SetValuesFromJson.</summary>
@@ -86,8 +86,8 @@ public class AuditPerformanceBenchmark
    {
       var                  audit       = new Trail<int, IdentityUser<int>, int>();
       var columnNames = new string[] { "Name", "Age", "IsActive"};
-      ReadOnlySpan<object> oldValues   = ["John Doe", 30, true};
-      ReadOnlySpan<object> newValues   = ["Jane Doe", 31, false};
+      ReadOnlySpan<object> oldValues   = ["John Doe", 30, true];
+      ReadOnlySpan<object> newValues   = ["Jane Doe", 31, false];
 
       audit.SetValuesFromSpan(columnNames, oldValues, newValues);
 
@@ -107,8 +107,8 @@ public class AuditPerformanceBenchmark
                   };
 
       // Simulate access patterns
-      _ = audit.OldValues["Property0"};
-      _ = audit.NewValues["Property5"};
+      _ = audit.OldValues["Property0"];
+      _ = audit.NewValues["Property5"];
    }
 
    /// <summary>Benchmark: Optimized JSON-based approach for large change sets.</summary>
@@ -128,9 +128,9 @@ public class AuditPerformanceBenchmark
    public void OptimizedSpan_LargeChangeSet()
    {
       var audit       = new Trail<int, IdentityUser<int>, int>();
-      var columnNames = new string[10};
-      var oldValues   = new object[10};
-      var newValues   = new object[10};
+      var columnNames = new string[10];
+      var oldValues   = new object[10];
+      var newValues   = new object[10];
 
       for (var i = 0; i < 10; i++)
       {
@@ -153,7 +153,7 @@ public class AuditPerformanceBenchmark
       var values       = new Dictionary<string, object>(_smallChangeSet);
       var json         = JsonSerializer.Serialize(values);
       var deserialized = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
-      _ = deserialized?["Name"};
+      _ = deserialized?["Name"];
    }
 
    /// <summary>Benchmark: Optimized JSON handling.</summary>
@@ -211,7 +211,7 @@ public class AuditPerformanceBenchmark
 
       // Multiple lookups to simulate real usage
       for (var i = 0; i < 10; i++)
-         _ = audit.OldValues[$"Property{i % 10}"};
+         _ = audit.OldValues[$"Property{i % 10}"];
    }
 
    /// <summary>Benchmark: Single property lookup with optimized JSON parsing.</summary>

@@ -408,7 +408,7 @@ public class TrailTests
       // Arrange
       var trail = new Trail<Guid, TestUser, string>();
       var columnNames = new string[] { "Name", "Description"};
-      ReadOnlySpan<string> values = ["John \"Johnny\" Doe", "A \"test\" description"};
+      ReadOnlySpan<string> values = ["John \"Johnny\" Doe", "A \"test\" description"];
 
       // Act
       trail.SetValuesFromSpan(columnNames, values.Cast<object>().ToArray().AsSpan(), values.Cast<object>().ToArray().AsSpan());
@@ -424,7 +424,7 @@ public class TrailTests
       // Arrange
       var trail = new Trail<Guid, TestUser, string>();
       var columnNames = new string[] { "IsActive", "IsDeleted"};
-      ReadOnlySpan<bool> values = [true, false};
+      ReadOnlySpan<bool> values = [true, false];
 
       // Act
       trail.SetValuesFromSpan(columnNames, values.Cast<object>().ToArray().AsSpan(), values.Cast<object>().ToArray().AsSpan());
@@ -441,7 +441,7 @@ public class TrailTests
       var trail = new Trail<Guid, TestUser, string>();
       var dateTime = new DateTime(2023, 12, 25, 10, 30, 45, 123, DateTimeKind.Utc);
       var columnNames = new string[] { "CreatedAt"};
-      ReadOnlySpan<DateTime> values = [dateTime};
+      ReadOnlySpan<DateTime> values = [dateTime];
 
       // Act
       trail.SetValuesFromSpan(columnNames, values.Cast<object>().ToArray().AsSpan(), values.Cast<object>().ToArray().AsSpan());
@@ -456,7 +456,7 @@ public class TrailTests
       // Arrange
       var trail = new Trail<Guid, TestUser, string>();
       var columnNames = new string[] { "Name", "Description"};
-      ReadOnlySpan<object?> values = [null, "Valid Description"};
+      ReadOnlySpan<object?> values = [null, "Valid Description"];
 
       // Act
       trail.SetValuesFromSpan(columnNames, values.ToArray().AsSpan(), values.ToArray().AsSpan());
@@ -562,7 +562,7 @@ public class TrailTests
       };
 
       // Simulate change tracking
-      ReadOnlySpan<string> changedColumns = ["Name", "Email", "LastModified"};
+      ReadOnlySpan<string> changedColumns = ["Name", "Email", "LastModified"];
       var oldValues = new object[] { "John Doe", "john@old.com", DateTime.UtcNow.AddDays(-1)};
       var newValues = new object[] { "Jane Doe", "jane@new.com", DateTime.UtcNow};
 
@@ -593,9 +593,9 @@ public class TrailTests
       var trail = new Trail<Guid, TestUser, string>();
       
       // Test small change set (optimized path)
-      ReadOnlySpan<string> smallColumns = ["Name", "Email"};
-      ReadOnlySpan<object> smallOld = ["John", "john@test.com"};
-      ReadOnlySpan<object> smallNew = ["Jane", "jane@test.com"};
+      ReadOnlySpan<string> smallColumns = ["Name", "Email"];
+      ReadOnlySpan<object> smallOld = ["John", "john@test.com"];
+      ReadOnlySpan<object> smallNew = ["Jane", "jane@test.com"];
 
       // Act
       trail.SetValuesFromSpan(smallColumns, smallOld, smallNew);
@@ -606,9 +606,9 @@ public class TrailTests
       Assert.Equal("jane@test.com", trail.GetNewValue("Email")?.ToString());
 
       // Verify change to larger set uses dictionary approach
-      ReadOnlySpan<string> largeColumns = ["Col1", "Col2", "Col3", "Col4", "Col5"};
-      ReadOnlySpan<object> largeOld = ["V1", "V2", "V3", "V4", "V5"};
-      ReadOnlySpan<object> largeNew = ["N1", "N2", "N3", "N4", "N5"};
+      ReadOnlySpan<string> largeColumns = ["Col1", "Col2", "Col3", "Col4", "Col5"];
+      ReadOnlySpan<object> largeOld = ["V1", "V2", "V3", "V4", "V5"];
+      ReadOnlySpan<object> largeNew = ["N1", "N2", "N3", "N4", "N5"];
 
       trail.SetValuesFromSpan(largeColumns, largeOld, largeNew);
 
