@@ -301,8 +301,8 @@ public class TrailEntityConfigurationExtensionsTests
 /// <summary>Test-specific DbContext to verify configuration extensions.</summary>
 public class TestAuditDbContext : AuditDbContext<Guid, TestUser, string>
 {
-	public TestAuditDbContext(DbContextOptions<TestAuditDbContext> options)
-		: base((DbContextOptions<AuditDbContext<Guid, TestUser, string>>)(object)options)
+	public TestAuditDbContext(DbContextOptions options)
+		: base(options)
 	{
 	}
 }

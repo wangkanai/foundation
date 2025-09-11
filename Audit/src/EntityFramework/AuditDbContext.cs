@@ -22,6 +22,13 @@ public class AuditDbContext<TKey, TUserType, TUserKey> : DbContext
 	{
 	}
 
+	/// <summary>Initializes a new instance of the <see cref="AuditDbContext{TKey, TUserType, TUserKey}"/> class with non-generic options.</summary>
+	/// <param name="options">The options for this context.</param>
+	protected AuditDbContext(DbContextOptions options)
+		: base(options)
+	{
+	}
+
 	/// <summary>Gets or sets the audit trails.</summary>
 	public DbSet<Trail<TKey, TUserType, TUserKey>> AuditTrails => Set<Trail<TKey, TUserType, TUserKey>>();
 
