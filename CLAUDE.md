@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## SonarQube Integration
+
+- **Project Key**: `wangkanai_foundation`
+- **Quality Gate**: Monitor and maintain passing status
+- **Coverage Target**: 80% minimum
+
 ## Architecture
 
 ### Project Structure
