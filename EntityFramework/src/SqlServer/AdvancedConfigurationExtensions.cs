@@ -111,7 +111,10 @@ public static class AdvancedConfigurationExtensions
             MessageRetentionDays = 7
         };
 
-        // TODO: Implement ServiceBrokerInterceptor to handle Service Broker initialization and management
+        // Future: Implement ServiceBrokerInterceptor to handle:
+        // - Service Broker service/queue creation and configuration
+        // - Connection initialization with Service Broker setup SQL
+        // - Message type and contract management
         // builder.AddInterceptors(new ServiceBrokerInterceptor(serviceBrokerConfig));
         
         builder.UseSqlServer();
@@ -333,7 +336,10 @@ public static class AdvancedConfigurationExtensions
             LogResourceViolations = true
         };
 
-        // TODO: Implement ResourceGovernorInterceptor to handle Resource Governor workload group assignment
+        // Future: Implement ResourceGovernorInterceptor to handle:
+        // - Workload group assignment based on connection context
+        // - Resource pool management and configuration validation
+        // - Performance monitoring and resource usage tracking
         // builder.AddInterceptors(new ResourceGovernorInterceptor(resourceGovernorConfig));
         
         builder.UseSqlServer();
@@ -548,37 +554,6 @@ public static class AdvancedConfigurationExtensions
         Inbound
     }
 
-    /// <summary>
-    /// Interceptor for Service Broker configuration.
-    /// </summary>
-    private class ServiceBrokerInterceptor : Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor
-    {
-        private readonly ServiceBrokerConfiguration _config;
-
-        public ServiceBrokerInterceptor(ServiceBrokerConfiguration config)
-        {
-            _config = config;
-        }
-
-        // Implementation would handle Service Broker initialization and management
-        // This is a placeholder for the actual interceptor implementation
-    }
-
-    /// <summary>
-    /// Interceptor for Resource Governor configuration.
-    /// </summary>
-    private class ResourceGovernorInterceptor : Microsoft.EntityFrameworkCore.Diagnostics.DbCommandInterceptor
-    {
-        private readonly ResourceGovernorConfiguration _config;
-
-        public ResourceGovernorInterceptor(ResourceGovernorConfiguration config)
-        {
-            _config = config;
-        }
-
-        // Implementation would handle Resource Governor workload group assignment
-        // This is a placeholder for the actual interceptor implementation
-    }
 
     #endregion
 }

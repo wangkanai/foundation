@@ -33,7 +33,7 @@ public sealed class AdvancedQueryTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void ConfigureWindowFunction_WithInvalidFunction_ShouldThrowArgumentException(string invalidFunction)
+   public void ConfigureWindowFunction_WithInvalidFunction_ShouldThrowArgumentException(string? invalidFunction)
    {
       // Arrange
       var builder       = new ModelBuilder();
@@ -78,7 +78,7 @@ public sealed class AdvancedQueryTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void ConfigureCommonTableExpression_WithInvalidName_ShouldThrowArgumentException(string invalidName)
+   public void ConfigureCommonTableExpression_WithInvalidName_ShouldThrowArgumentException(string? invalidName)
    {
       // Arrange
       var builder       = new ModelBuilder();
@@ -126,7 +126,7 @@ public sealed class AdvancedQueryTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void ConfigureComplexJoin_WithInvalidCondition_ShouldThrowArgumentException(string invalidCondition)
+   public void ConfigureComplexJoin_WithInvalidCondition_ShouldThrowArgumentException(string? invalidCondition)
    {
       // Arrange
       var builder       = new ModelBuilder();

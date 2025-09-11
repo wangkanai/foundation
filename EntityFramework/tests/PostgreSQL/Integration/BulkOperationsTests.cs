@@ -78,7 +78,7 @@ public sealed class BulkOperationsTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void ConfigureUpsertConflictTarget_WithInvalidColumns_ShouldThrowArgumentException(string invalidColumns)
+   public void ConfigureUpsertConflictTarget_WithInvalidColumns_ShouldThrowArgumentException(string? invalidColumns)
    {
       // Arrange
       var builder       = new ModelBuilder();
@@ -159,7 +159,7 @@ public sealed class BulkOperationsTests
    [Theory]
    [InlineData("")]
    [InlineData(null)]
-   public void ConfigureCopyDelimiter_WithInvalidDelimiter_ShouldThrowArgumentException(string invalidDelimiter)
+   public void ConfigureCopyDelimiter_WithInvalidDelimiter_ShouldThrowArgumentException(string? invalidDelimiter)
    {
       // Arrange
       var builder       = new ModelBuilder();

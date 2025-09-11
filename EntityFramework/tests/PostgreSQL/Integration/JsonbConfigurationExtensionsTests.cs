@@ -68,7 +68,7 @@ public sealed class JsonbConfigurationExtensionsTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void HasJsonbGinIndex_WithInvalidIndexName_ShouldThrowArgumentException(string invalidName)
+   public void HasJsonbGinIndex_WithInvalidIndexName_ShouldThrowArgumentException(string? invalidName)
    {
       // Arrange & Act - Test validation logic directly
       var act = () => ValidateIndexName(invalidName);
@@ -102,7 +102,7 @@ public sealed class JsonbConfigurationExtensionsTests
    [InlineData(" ")]
    [InlineData(null)]
    [InlineData("invalid-path")]
-   public void HasJsonbPathIndex_WithInvalidJsonPath_ShouldThrowArgumentException(string invalidPath)
+   public void HasJsonbPathIndex_WithInvalidJsonPath_ShouldThrowArgumentException(string? invalidPath)
    {
       // Arrange & Act - Test validation logic directly
       var act = () => ValidateJsonPath(invalidPath);
@@ -139,7 +139,7 @@ public sealed class JsonbConfigurationExtensionsTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void RequireJsonbProperty_WithInvalidJsonPath_ShouldThrowArgumentException(string invalidPath)
+   public void RequireJsonbProperty_WithInvalidJsonPath_ShouldThrowArgumentException(string? invalidPath)
    {
       // Arrange & Act - Test validation logic directly
       var act = () => ValidateJsonPath(invalidPath);
@@ -169,7 +169,7 @@ public sealed class JsonbConfigurationExtensionsTests
    [InlineData(" ")]
    [InlineData(null)]
    [InlineData("invalid_type")]
-   public void ValidateJsonbPropertyType_WithInvalidType_ShouldThrowArgumentException(string invalidType)
+   public void ValidateJsonbPropertyType_WithInvalidType_ShouldThrowArgumentException(string? invalidType)
    {
       // Arrange & Act - Test validation logic directly
       var act = () => ValidateJsonType(invalidType);
@@ -209,7 +209,7 @@ public sealed class JsonbConfigurationExtensionsTests
    [InlineData(null)]
    [InlineData("invalid-json")]
    [InlineData("{unclosed")]
-   public void HasJsonbDefaultValue_WithInvalidJson_ShouldThrowArgumentException(string invalidJson)
+   public void HasJsonbDefaultValue_WithInvalidJson_ShouldThrowArgumentException(string? invalidJson)
    {
       // Arrange & Act - Test validation logic directly
       var act = () => ValidateJsonValue(invalidJson);

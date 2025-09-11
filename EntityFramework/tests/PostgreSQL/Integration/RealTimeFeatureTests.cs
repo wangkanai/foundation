@@ -32,7 +32,7 @@ public sealed class RealTimeFeatureTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void ConfigureNotificationChannel_WithInvalidChannel_ShouldThrowArgumentException(string invalidChannel)
+   public void ConfigureNotificationChannel_WithInvalidChannel_ShouldThrowArgumentException(string? invalidChannel)
    {
       // Arrange
       var builder       = new ModelBuilder();
@@ -179,7 +179,7 @@ public sealed class RealTimeFeatureTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void ConfigureChangeStream_WithInvalidStreamName_ShouldThrowArgumentException(string invalidName)
+   public void ConfigureChangeStream_WithInvalidStreamName_ShouldThrowArgumentException(string? invalidName)
    {
       // Arrange
       var builder       = new ModelBuilder();

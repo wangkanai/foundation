@@ -50,7 +50,7 @@ public sealed class FullTextSearchExtensionsTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void ConfigureTextSearchLanguage_WithInvalidLanguage_ShouldThrowArgumentException(string invalidLanguage)
+   public void ConfigureTextSearchLanguage_WithInvalidLanguage_ShouldThrowArgumentException(string? invalidLanguage)
    {
       // Arrange & Act - Test validation logic directly
       var act = () => ValidateTextSearchConfiguration(invalidLanguage);
@@ -86,7 +86,7 @@ public sealed class FullTextSearchExtensionsTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void HasTextSearchGinIndex_WithInvalidIndexName_ShouldThrowArgumentException(string invalidName)
+   public void HasTextSearchGinIndex_WithInvalidIndexName_ShouldThrowArgumentException(string? invalidName)
    {
       // Arrange & Act - Test validation logic directly
       var act = () => ValidateIndexName(invalidName);
@@ -156,7 +156,7 @@ public sealed class FullTextSearchExtensionsTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void ValidateSourceExpression_WithInvalidExpression_ShouldThrowArgumentException(string invalidExpression)
+   public void ValidateSourceExpression_WithInvalidExpression_ShouldThrowArgumentException(string? invalidExpression)
    {
       // Arrange & Act
       var act = () => ValidateSourceExpression(invalidExpression);

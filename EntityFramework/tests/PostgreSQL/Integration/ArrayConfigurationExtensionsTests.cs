@@ -223,7 +223,7 @@ public sealed class ArrayConfigurationExtensionsTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void HasArrayDefaultValue_WithInvalidValue_ShouldThrowArgumentException(string invalidValue)
+   public void HasArrayDefaultValue_WithInvalidValue_ShouldThrowArgumentException(string? invalidValue)
    {
       // Arrange
       var builder         = new ModelBuilder();
@@ -267,7 +267,7 @@ public sealed class ArrayConfigurationExtensionsTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void HasTypedArray_WithInvalidType_ShouldThrowArgumentException(string invalidType)
+   public void HasTypedArray_WithInvalidType_ShouldThrowArgumentException(string? invalidType)
    {
       // Arrange
       var builder         = new ModelBuilder();
@@ -327,7 +327,7 @@ public sealed class ArrayConfigurationExtensionsTests
    [InlineData("")]
    [InlineData(" ")]
    [InlineData(null)]
-   public void HasArrayGinIndex_WithInvalidIndexName_ShouldThrowArgumentException(string invalidName)
+   public void HasArrayGinIndex_WithInvalidIndexName_ShouldThrowArgumentException(string? invalidName)
    {
       // Arrange
       var builder         = new ModelBuilder();
