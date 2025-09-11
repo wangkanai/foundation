@@ -6,13 +6,11 @@ namespace Wangkanai.Foundation;
 /// Represents a domain event identified by a unique <see cref="Guid"/>.
 /// This class provides a default implementation for generating a new unique identifier upon instantiation.
 /// </summary>
-public class GuidDomainEvent
-   : DomainEvent<Guid>
+public class GuidDomainEvent : DomainEvent<Guid>
 {
    /// <summary>
    /// Represents a domain event identified by a unique <see cref="Guid"/>.
    /// Provides a default implementation for generating a new unique identifier upon instantiation.
    /// </summary>
-   public GuidDomainEvent()
-      => Id = Guid.NewGuid();
+   public GuidDomainEvent() => Id = Guid.NewGuid();
 }

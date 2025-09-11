@@ -6,15 +6,13 @@ namespace Wangkanai.Foundation;
 /// Represents a domain event with a default identifier type of int.
 /// This class serves as a specialization of the generic DomainEvent class with int as the identifier type.
 /// </summary>
-public class DomainEvent
-   : DomainEvent<int>;
+public class DomainEvent : DomainEvent<int>;
 
 /// <summary>Represents a general domain event which captures significant events in the domain model.</summary>
 /// <typeparam name="T">
 /// The type of the identifier for the domain event, which must implement both IComparable and IEquatable interfaces.
 /// </typeparam>
-public class DomainEvent<T>
-   : Entity<T>, IDomainEvent<T>, INotification
+public class DomainEvent<T> : Entity<T>, IDomainEvent<T>, INotification
    where T : IComparable<T>, IEquatable<T>
 {
    /// <summary>

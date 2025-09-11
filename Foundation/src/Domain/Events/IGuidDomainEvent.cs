@@ -7,5 +7,4 @@ namespace Wangkanai.Foundation;
 /// This interface combines the characteristics of an entity identified by a GUID and the behavior of a domain event.
 /// It enables the encapsulation of domain-specific state changes or business rules triggered by a specific action.
 /// </summary>
-public interface IGuidDomainEvent
-   : IKeyGuidEntity, IDomainEvent<Guid>;
+public interface IGuidDomainEvent : IKeyGuidEntity, IDomainEvent<Guid>;

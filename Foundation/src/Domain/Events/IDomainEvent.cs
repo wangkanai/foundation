@@ -6,15 +6,13 @@ namespace Wangkanai.Foundation;
 /// Represents a domain event that contains key information and is part of the domain-driven design framework.
 /// This interface serves as a base for all domain events with an integer key type.
 /// </summary>
-public interface IDomainEvent
-   : IKeyIntEntity, IDomainEvent<int>;
+public interface IDomainEvent : IKeyIntEntity, IDomainEvent<int>;
 
 /// <summary>
 /// Defines a contract for a domain event that encapsulates significant state changes or behaviors within the domain model.
 /// This serves as the base interface for implementing domain events with an integer identifier and integrates with domain-driven design concepts.
 /// </summary>
-public interface IDomainEvent<T>
-   : IEntity<T>, IEvent, IDomainMessage
+public interface IDomainEvent<T> : IEntity<T>, IEvent, IDomainMessage
    where T : IComparable<T>, IEquatable<T>
 {
    /// <summary>

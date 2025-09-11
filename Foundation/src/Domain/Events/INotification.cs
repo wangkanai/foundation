@@ -7,3 +7,9 @@ namespace Wangkanai.Foundation;
 /// providing a standardized mechanism for handling notification-related operations.
 /// </summary>
 public interface INotification;
+
+/// <summary>
+/// Defines a contract for asynchronous notifications within the domain,
+/// extending the capabilities of the base notification interface to support asynchronous operations.
+/// </summary>
+public interface IAsyncNotification : INotification;
