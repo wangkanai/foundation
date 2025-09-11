@@ -43,13 +43,13 @@ public sealed class AdvancedQueryTests
       var act = () =>
       {
          if (string.IsNullOrWhiteSpace(invalidFunction))
-            throw new ArgumentException("Window function cannot be null or whitespace.", "function");
+            throw new ArgumentException("Window function cannot be null or whitespace.", nameof(invalidFunction));
          return entityBuilder.HasAnnotation("WindowFunction", invalidFunction);
       };
 
       // Assert
       act.Should().Throw<ArgumentException>()
-         .WithParameterName("function")
+         .WithParameterName("invalidFunction")
          .WithMessage("*Window function cannot be null or whitespace.*");
    }
 
@@ -88,13 +88,13 @@ public sealed class AdvancedQueryTests
       var act = () =>
       {
          if (string.IsNullOrWhiteSpace(invalidName))
-            throw new ArgumentException("CTE name cannot be null or whitespace.", "name");
+            throw new ArgumentException("CTE name cannot be null or whitespace.", nameof(invalidName));
          return entityBuilder.HasAnnotation("CommonTableExpression", invalidName);
       };
 
       // Assert
       act.Should().Throw<ArgumentException>()
-         .WithParameterName("name")
+         .WithParameterName("invalidName")
          .WithMessage("*CTE name cannot be null or whitespace.*");
    }
 
@@ -136,13 +136,13 @@ public sealed class AdvancedQueryTests
       var act = () =>
       {
          if (string.IsNullOrWhiteSpace(invalidCondition))
-            throw new ArgumentException("Join condition cannot be null or whitespace.", "joinCondition");
+            throw new ArgumentException("Join condition cannot be null or whitespace.", nameof(invalidCondition));
          return entityBuilder.HasAnnotation("ComplexJoinCondition", invalidCondition);
       };
 
       // Assert
       act.Should().Throw<ArgumentException>()
-         .WithParameterName("joinCondition")
+         .WithParameterName("invalidCondition")
          .WithMessage("*Join condition cannot be null or whitespace.*");
    }
 
