@@ -4,7 +4,7 @@ using System.Data;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.EntityFramework.Sqlite;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides SQLite-specific bulk operation configuration extensions for Entity Framework Core.

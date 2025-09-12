@@ -1,11 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using System.Linq.Expressions;
 
-namespace Wangkanai.EntityFramework.Postgres;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for advanced PostgreSQL query capabilities including

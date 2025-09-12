@@ -1,17 +1,20 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using BenchmarkDotNet.Attributes;
-using BenchmarkDotNet.Jobs;
-using BenchmarkDotNet.Order;
-using Microsoft.EntityFrameworkCore;
-using Npgsql;
-using NpgsqlTypes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Text.Json;
 
-namespace Wangkanai.EntityFramework.Benchmark;
+using BenchmarkDotNet.Jobs;
+using BenchmarkDotNet.Order;
+
+using Microsoft.EntityFrameworkCore;
+
+using Npgsql;
+
+using NpgsqlTypes;
+
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Comprehensive performance benchmarks for PostgreSQL-specific Entity Framework Core optimizations.

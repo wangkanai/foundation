@@ -1,10 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
-using Wangkanai.Audit;
 
-namespace Wangkanai.Audit.Tests;
+namespace Wangkanai.Audit;
 
 public class TrailTests
 {

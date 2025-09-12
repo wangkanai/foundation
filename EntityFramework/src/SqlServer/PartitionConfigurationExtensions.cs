@@ -1,12 +1,13 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Data;
 using System.Linq.Expressions;
-using Microsoft.Data.SqlClient;
 
-namespace Wangkanai.EntityFramework.SqlServer;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for configuring SQL Server table partitioning for large-scale data management.

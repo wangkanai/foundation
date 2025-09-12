@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.EntityFramework.Sqlite;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// FTS version enumeration for SQLite full-text search configuration

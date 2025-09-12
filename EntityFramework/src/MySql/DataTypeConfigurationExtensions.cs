@@ -1,10 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Globalization;
-using System.Linq;
 
-namespace Wangkanai.EntityFramework.MySql;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Defines MySQL-specific spatial data types for geographic data storage and operations.

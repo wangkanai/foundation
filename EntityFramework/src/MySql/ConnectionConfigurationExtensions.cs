@@ -1,10 +1,10 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
 using Microsoft.EntityFrameworkCore;
-using MySqlConnector;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
-namespace Wangkanai.EntityFramework.MySql;
+using MySqlConnector;
+
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for configuring MySQL connection optimization and performance settings

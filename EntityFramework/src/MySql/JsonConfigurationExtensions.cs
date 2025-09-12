@@ -1,9 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace Wangkanai.EntityFramework.MySql;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Extension methods for configuring MySQL JSON column types and operations in Entity Framework Core.
