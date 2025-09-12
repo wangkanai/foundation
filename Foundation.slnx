@@ -69,7 +69,6 @@
     <Project Path="Foundation\src\Application\Wangkanai.Foundation.Application.csproj" Type="Classic C#" />
     <Project Path="Foundation\src\Domain\Wangkanai.Foundation.Domain.csproj" Type="Classic C#" />
     <Project Path="Foundation\src\Infrastructure\Wangkanai.Foundation.Infrastructure.csproj" Type="Classic C#" />
-    <Project Path="Foundation\src\Persistence\Wangkanai.Foundation.Persistence.csproj" Type="Classic C#" />
     <File Path="Foundation\Directory.Build.props" />
     <File Path="Foundation\README.md" />
   </Folder>
@@ -82,6 +81,5 @@
     <Project Path="Foundation\tests\Domain\Integration\Wangkanai.Foundation.Domain.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Domain\Unit\Wangkanai.Foundation.Domain.UnitTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Infrastructure\Integration\Wangkanai.Foundation.Infrastructure.IntegrationTests.csproj" Type="Classic C#" />
-    <Project Path="Foundation\tests\Persistence\Unit\Wangkanai.Foundation.Persistence.UnitTests.csproj" Type="Classic C#" />
   </Folder>
 </Solution>

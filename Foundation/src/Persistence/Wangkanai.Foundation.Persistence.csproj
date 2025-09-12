@@ -1,7 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
-   <ItemGroup>
-      <ProjectReference Include="..\Infrastructure\Wangkanai.Foundation.Infrastructure.csproj" />
-   </ItemGroup>
-
-</Project>
