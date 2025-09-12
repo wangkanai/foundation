@@ -18,15 +18,14 @@ namespace Wangkanai.Audit;
 /// The type of the key for the user, which must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
 /// <param name="context">The database context instance to be used for accessing the audit trails.</param>
-public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) : IQueryableTrailStore<TKey, TUserType, TUserKey>
+public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context)
+   : IQueryableTrailStore<TKey, TUserType, TUserKey>
    where TContext : DbContext
    where TKey : IEquatable<TKey>, IComparable<TKey>
    where TUserType : IdentityUser<TUserKey>
    where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
 {
    private readonly TContext _context = context ?? throw new ArgumentNullException(nameof(context));
-
-   private bool _disposed;
 
    private DbSet<Trail<TKey, TUserType, TUserKey>> AuditsSet
       => _context.Set<Trail<TKey, TUserType, TUserKey>>();
@@ -42,7 +41,7 @@ public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) :
    /// This property acts as an interface to the underlying entity set of audit trails,
    /// allowing for LINQ-based querying and manipulation of audit trail data.
    /// </remarks>
-   public IQueryable<Trail<TKey, TUserType, TUserKey>> Audits
+   public IQueryable<Trail<TKey, TUserType, TUserKey>> Trails
       => AuditsSet;
 
    /// <summary>Creates a new audit trail entry in the underlying storage context.</summary>
@@ -129,6 +128,7 @@ public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) :
    {
       var audit = await _context.Set<Trail<TKey, TUserType, TUserKey>>()
                                 .FirstOrDefaultAsync(a => a.Id.Equals(id) && a.UserId!.Equals(userId), cancellationToken);
+
       return Result.Success(audit);
    }
 
@@ -140,6 +140,7 @@ public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) :
    {
       var audit = await _context.Set<Trail<TKey, TUserType, TUserKey>>()
                                 .FirstOrDefaultAsync(a => a.UserId!.Equals(userId), cancellationToken);
+
       return Result.Success(audit);
    }
 
@@ -156,15 +157,10 @@ public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) :
       return Result.Success(audit);
    }
 
-   /// <summary>Releases the resources used by the current instance of the class.</summary>
-   public void Dispose()
-   {
-      Dispose(true);
-      GC.SuppressFinalize(this);
-   }
-
    private Task SaveChangesAsync(CancellationToken cancellationToken)
       => AutoSaveChanges ? _context.SaveChangesAsync(cancellationToken) : Task.CompletedTask;
+
+   private bool _disposed;
 
    private void Dispose(bool disposing)
    {
@@ -175,5 +171,12 @@ public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) :
          _context?.Dispose();
 
       _disposed = true;
+   }
+
+   /// <summary>Releases the resources used by the current instance of the class.</summary>
+   public void Dispose()
+   {
+      Dispose(true);
+      GC.SuppressFinalize(this);
    }
 }

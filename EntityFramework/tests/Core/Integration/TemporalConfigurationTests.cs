@@ -3,10 +3,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-using Wangkanai.EntityFramework;
-using Wangkanai.Foundation;
+using Wangkanai.EntityFramework.Mocks;
 
-namespace Wangkanai.EntityFramework.Tests;
+namespace Wangkanai.EntityFramework;
 
 public class TemporalConfigurationTests : IDisposable
 {
@@ -383,105 +382,3 @@ public class TemporalConfigurationTests : IDisposable
       _serviceProvider.Dispose();
    }
 }
-
-#region Test Entity Classes
-
-public class TestEntity : Entity<Guid>
-{
-   public TestEntity()
-   {
-      Id = Guid.NewGuid();
-   }
-
-   public string Name        { get; set; } = string.Empty;
-   public string Description { get; set; } = string.Empty;
-}
-
-public class TestEntityWithRowVersion : Entity<Guid>, IHasRowVersion
-{
-   public TestEntityWithRowVersion()
-   {
-      Id = Guid.NewGuid();
-   }
-
-   public string  Name        { get; set; } = string.Empty;
-   public string  Description { get; set; } = string.Empty;
-   public byte[]? RowVersion  { get; set; }
-}
-
-public class TestEntityWithValueObject : Entity<Guid>
-{
-   public TestEntityWithValueObject()
-   {
-      Id = Guid.NewGuid();
-   }
-
-   public string       Name    { get; set; } = string.Empty;
-   public TestAddress? Address { get; set; }
-}
-
-public class TestAddress : ValueObject
-{
-   public string Street  { get; set; }
-   public string City    { get; set; }
-   public string State   { get; set; }
-   public string ZipCode { get; set; }
-
-   public TestAddress(string street, string city, string state, string zipCode)
-   {
-      Street  = street;
-      City    = city;
-      State   = state;
-      ZipCode = zipCode;
-   }
-
-   // Required for EF Core
-   private TestAddress() : this(string.Empty, string.Empty, string.Empty, string.Empty) { }
-}
-
-public class TestDbContext : DbContext
-{
-   public TestDbContext(DbContextOptions<TestDbContext> options) : base(options) { }
-
-   public DbSet<TestEntity>                TestEntities                 { get; set; }
-   public DbSet<TestEntityWithRowVersion>  TestEntitiesWithRowVersion   { get; set; }
-   public DbSet<TestEntityWithValueObject> TestEntitiesWithValueObjects { get; set; }
-
-   protected override void OnModelCreating(ModelBuilder modelBuilder)
-   {
-      base.OnModelCreating(modelBuilder);
-
-      // Configure entities
-      modelBuilder.Entity<TestEntity>(entity =>
-      {
-         entity.HasKey(e => e.Id);
-         entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
-         entity.Property(e => e.Description).HasMaxLength(1000);
-      });
-
-      modelBuilder.Entity<TestEntityWithRowVersion>(entity =>
-      {
-         entity.HasKey(e => e.Id);
-         entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
-         entity.Property(e => e.Description).HasMaxLength(1000);
-         entity.Property(e => e.RowVersion).IsRowVersion();
-      });
-
-      modelBuilder.Entity<TestEntityWithValueObject>(entity =>
-      {
-         entity.HasKey(e => e.Id);
-         entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
-
-         // Configure value object as owned type
-         entity.OwnsOne(e => e.Address, address =>
-         {
-            address.Property(a => a.Street).HasMaxLength(200);
-            address.Property(a => a.City).HasMaxLength(100);
-            address.Property(a => a.State).HasMaxLength(50);
-            address.Property(a => a.ZipCode).HasMaxLength(20);
-         });
-      });
-   }
-}
-
-#endregion

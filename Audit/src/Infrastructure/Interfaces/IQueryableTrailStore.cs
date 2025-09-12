@@ -28,5 +28,5 @@ public interface IQueryableTrailStore<TKey, TUserType, TUserKey> : ITrailStore<T
    /// </typeparam>
    /// <typeparam name="TUserType">The type representing the user associated with the audit trail.</typeparam>
    /// <typeparam name="TUserKey">The type of the primary key for the user entity.</typeparam>
-   IQueryable<Trail<TKey, TUserType, TUserKey>> Audits { get; }
+   IQueryable<Trail<TKey, TUserType, TUserKey>> Trails { get; }
 }
