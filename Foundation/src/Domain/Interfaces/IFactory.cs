@@ -14,4 +14,4 @@ public interface IFactory;
 /// instances without dictating the specific class of the object being instantiated.
 /// It promotes abstraction and enables asynchronous instantiation processes.
 /// </summary>
-public interface IAsyncFactory;
+public interface IAsyncFactory: IFactory;

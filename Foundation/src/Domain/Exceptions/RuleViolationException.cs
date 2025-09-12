@@ -6,14 +6,13 @@ namespace Wangkanai.Foundation.Exceptions;
 /// Represents an exception thrown when a specific domain rule is violated within the application.
 /// This exception is used to explicitly indicate a failure to adhere to predefined domain rules or constraints.
 /// </summary>
-public class DomainRuleViolationException
-   : DomainException
+public class RuleViolationException : DomainException
 {
    /// <summary>
    /// Represents an exception thrown when a specific domain rule is violated within the application's business logic.
    /// This exception is intended for identifying and handling violations of defined domain rules or constraints.
    /// </summary>
-   public DomainRuleViolationException(string ruleName, string message)
+   public RuleViolationException(string ruleName, string message)
       : base($"Domain rule '{ruleName}' violated: {message}")
       => RuleName = ruleName;
 
@@ -21,7 +20,7 @@ public class DomainRuleViolationException
    /// Represents an exception thrown when a specific domain rule is violated within the application's business logic.
    /// This exception is intended for identifying and handling violations of defined domain rules or constraints.
    /// </summary>
-   public DomainRuleViolationException(string ruleName, string message, Exception innerException)
+   public RuleViolationException(string ruleName, string message, Exception innerException)
       : base($"Domain rule '{ruleName}' violated: {message}", innerException)
       => RuleName = ruleName;
 

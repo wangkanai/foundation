@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.Foundation.Extensions;
+namespace Wangkanai.Foundation.Infrastructure.Persistence.Extensions;
 
 /// <summary>
 /// Provides extension methods for configuring entity type properties using the <see cref="EntityTypeBuilder{TEntity}"/> from

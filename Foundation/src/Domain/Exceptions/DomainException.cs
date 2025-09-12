@@ -7,8 +7,7 @@ namespace Wangkanai.Foundation.Exceptions;
 /// This class serves as a foundation for creating custom exceptions related to
 /// specific domain logic errors within the application.
 /// </summary>
-public abstract class DomainException
-   : Exception
+public abstract class DomainException : Exception
 {
    /// <summary>
    /// Represents a base class for domain-specific exceptions.

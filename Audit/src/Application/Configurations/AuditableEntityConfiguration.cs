@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using Wangkanai.Foundation;
-using Wangkanai.Foundation.Configurations;
 
 namespace Wangkanai.Audit.Configurations;
 

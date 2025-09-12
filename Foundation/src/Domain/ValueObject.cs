@@ -148,7 +148,7 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
    /// This provides 500-1000x performance improvement while maintaining backward compatibility.
    /// </summary>
    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-   private IEnumerable<object?> GetEqualityComponentsOptimized()
+   internal IEnumerable<object?> GetEqualityComponentsOptimized()
    {
       var type = GetType();
 

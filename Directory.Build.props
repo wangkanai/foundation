@@ -2,12 +2,13 @@
 
    <PropertyGroup>
       <VersionPrefix>0.1.0</VersionPrefix>
+      <VersionSuffix>alpha-01</VersionSuffix>
       <Company>Wangkanai</Company>
       <Authors>Sarin Na Wangkanai</Authors>
-      <Copyright>Copyright © 2024 Sarin Na Wangkanai</Copyright>
+      <Copyright>Copyright © 2014-2025 Sarin Na Wangkanai</Copyright>
 
-      <PackageProjectUrl>https://github.com/wangkanai/domain</PackageProjectUrl>
-      <RepositoryUrl>https://github.com/wangkanai/domain.git</RepositoryUrl>
+      <PackageProjectUrl>https://github.com/wangkanai/foundation</PackageProjectUrl>
+      <RepositoryUrl>https://github.com/wangkanai/foundation.git</RepositoryUrl>
       <RepositoryType>git</RepositoryType>
       <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
    </PropertyGroup>

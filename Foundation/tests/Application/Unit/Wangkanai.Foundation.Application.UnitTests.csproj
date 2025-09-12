@@ -2,5 +2,6 @@
 
    <ItemGroup>
       <ProjectReference Include="..\..\..\src\Application\Wangkanai.Foundation.Application.csproj" />
+      <ProjectReference Include="..\..\..\src\Infrastructure\Wangkanai.Foundation.Infrastructure.csproj" />
    </ItemGroup>
 </Project>

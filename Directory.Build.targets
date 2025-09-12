@@ -2,8 +2,8 @@
    <ItemGroup>
       <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all"/>
       <PackageReference Include="Microsoft.VisualStudio.SlnGen" PrivateAssets="all"/>
-      <PackageReference Include="Microsoft.CodeAnalysis.Common"/>
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp"/>
+      <PackageReference Include="Microsoft.CodeAnalysis.Common" PrivateAssets="all"/>
+      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all"/>
    </ItemGroup>
 
    <PropertyGroup Condition="$(MSBuildProjectName.Contains('Benchmark'))">
@@ -40,7 +40,7 @@
    </ItemGroup>
 
    <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">
-      <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest"/>
+      <Content Include="$(RepoRoot)/xunit.runner.json" CopyToOutputDirectory="PreserveNewest"/>
    </ItemGroup>
 
    <ItemGroup Condition="$(MSBuildProjectName.Contains('Tests'))">

@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+
 using Wangkanai.EntityFramework;
 using Wangkanai.Foundation;
 
@@ -9,19 +10,19 @@ namespace Wangkanai.EntityFramework.Tests;
 
 public class TemporalConfigurationTests : IDisposable
 {
-   private readonly TestDbContext _context;
+   private readonly TestDbContext   _context;
    private readonly ServiceProvider _serviceProvider;
-   private readonly string _databaseName;
+   private readonly string          _databaseName;
 
    public TemporalConfigurationTests()
    {
       _databaseName = $"TestDb_{Guid.NewGuid()}";
       var services = new ServiceCollection();
       services.AddDbContext<TestDbContext>(options =>
-         options.UseInMemoryDatabase(_databaseName));
+                                              options.UseInMemoryDatabase(_databaseName));
 
       _serviceProvider = services.BuildServiceProvider();
-      _context = _serviceProvider.GetRequiredService<TestDbContext>();
+      _context         = _serviceProvider.GetRequiredService<TestDbContext>();
       _context.Database.EnsureCreated();
    }
 
@@ -56,15 +57,15 @@ public class TemporalConfigurationTests : IDisposable
       // Act
       _context.TestEntitiesWithRowVersion.Add(entity);
       _context.SaveChanges();
-      
+
       // Note: InMemory provider doesn't automatically update RowVersion
       // We need to manually simulate this for testing purposes
       entity.RowVersion = new byte[] { 0, 0, 0, 1 };
       var originalRowVersion = entity.RowVersion;
-      
+
       // Update
       entity.Description = "Modified";
-      entity.RowVersion = new byte[] { 0, 0, 0, 2 }; // Simulate RowVersion update
+      entity.RowVersion  = new byte[] { 0, 0, 0, 2 }; // Simulate RowVersion update
       _context.SaveChanges();
 
       // Assert
@@ -83,11 +84,11 @@ public class TemporalConfigurationTests : IDisposable
       await _context.SaveChangesAsync();
 
       var id = entity.Id;
-      
+
       // Retrieve and update
       var retrieved = await _context.TestEntities.FindAsync(id);
       Assert.NotNull(retrieved);
-      
+
       retrieved.Name = "Async Updated";
       await _context.SaveChangesAsync();
 
@@ -106,11 +107,11 @@ public class TemporalConfigurationTests : IDisposable
    {
       // Arrange
       var entities = new[]
-      {
-         new TestEntity { Name = "Entity1", Description = "Desc1" },
-         new TestEntity { Name = "Entity2", Description = "Desc2" },
-         new TestEntity { Name = "Entity3", Description = "Desc3" }
-      };
+                     {
+                        new TestEntity { Name = "Entity1", Description = "Desc1" },
+                        new TestEntity { Name = "Entity2", Description = "Desc2" },
+                        new TestEntity { Name = "Entity3", Description = "Desc3" }
+                     };
 
       // Act
       _context.TestEntities.AddRange(entities);
@@ -130,15 +131,15 @@ public class TemporalConfigurationTests : IDisposable
    {
       // Arrange & Act
       var modelBuilder = new ModelBuilder();
-      var entityType = modelBuilder.Entity<TestEntity>();
+      var entityType   = modelBuilder.Entity<TestEntity>();
 
       // Assert - Verify entity is properly configured
       Assert.NotNull(entityType);
-      
+
       // Verify we can create and save entities
       var entity = new TestEntity { Name = "Config Test", Description = "Config Description" };
       _context.TestEntities.Add(entity);
-      
+
       // Should not throw
       Assert.True(_context.SaveChanges() > 0);
    }
@@ -152,8 +153,8 @@ public class TemporalConfigurationTests : IDisposable
    {
       // Arrange
       var entities = Enumerable.Range(1, 100)
-         .Select(i => new TestEntity { Name = $"Entity{i}", Description = $"Description{i}" })
-         .ToList();
+                               .Select(i => new TestEntity { Name = $"Entity{i}", Description = $"Description{i}" })
+                               .ToList();
 
       // Act
       var stopwatch = System.Diagnostics.Stopwatch.StartNew();
@@ -164,7 +165,7 @@ public class TemporalConfigurationTests : IDisposable
       // Assert
       Assert.Equal(100, result);
       Assert.True(stopwatch.ElapsedMilliseconds < 5000); // Should complete within 5 seconds
-      
+
       var count = _context.TestEntities.Count();
       Assert.Equal(100, count);
    }
@@ -174,8 +175,8 @@ public class TemporalConfigurationTests : IDisposable
    {
       // Arrange
       var entities = Enumerable.Range(1, 50)
-         .Select(i => new TestEntity { Name = $"Entity{i}", Description = $"Description{i}" })
-         .ToList();
+                               .Select(i => new TestEntity { Name = $"Entity{i}", Description = $"Description{i}" })
+                               .ToList();
 
       _context.TestEntities.AddRange(entities);
       _context.SaveChanges();
@@ -186,6 +187,7 @@ public class TemporalConfigurationTests : IDisposable
       {
          entity.Description = $"Updated{entity.Name}";
       }
+
       var result = _context.SaveChanges();
       stopwatch.Stop();
 
@@ -203,12 +205,12 @@ public class TemporalConfigurationTests : IDisposable
    {
       // Arrange
       var entities = Enumerable.Range(1, 200)
-         .Select(i => new TestEntity 
-         { 
-            Name = $"Entity{i}", 
-            Description = i % 2 == 0 ? "Even" : "Odd"
-         })
-         .ToList();
+                               .Select(i => new TestEntity
+                                            {
+                                               Name        = $"Entity{i}",
+                                               Description = i % 2 == 0 ? "Even" : "Odd"
+                                            })
+                               .ToList();
 
       _context.TestEntities.AddRange(entities);
       _context.SaveChanges();
@@ -216,10 +218,10 @@ public class TemporalConfigurationTests : IDisposable
       // Act
       var stopwatch = System.Diagnostics.Stopwatch.StartNew();
       var evenEntities = _context.TestEntities
-         .Where(e => e.Description == "Even")
-         .Where(e => e.Name.Contains("Entity"))
-         .OrderBy(e => e.Name)
-         .ToList();
+                                 .Where(e => e.Description == "Even")
+                                 .Where(e => e.Name.Contains("Entity"))
+                                 .OrderBy(e => e.Name)
+                                 .ToList();
       stopwatch.Stop();
 
       // Assert
@@ -243,10 +245,10 @@ public class TemporalConfigurationTests : IDisposable
       // Simulate concurrent access by getting the same entity in two contexts
       // Note: InMemory database doesn't support GetDbConnection(), use the same database name
       using var context2 = new ServiceCollection()
-         .AddDbContext<TestDbContext>(options =>
-            options.UseInMemoryDatabase(_databaseName))
-         .BuildServiceProvider()
-         .GetRequiredService<TestDbContext>();
+                          .AddDbContext<TestDbContext>(options =>
+                                                          options.UseInMemoryDatabase(_databaseName))
+                          .BuildServiceProvider()
+                          .GetRequiredService<TestDbContext>();
 
       var entity1 = _context.TestEntitiesWithRowVersion.Find(entity.Id);
       var entity2 = context2.TestEntitiesWithRowVersion.Find(entity.Id);
@@ -279,7 +281,7 @@ public class TemporalConfigurationTests : IDisposable
       {
          _context.TestEntities.Add(entity);
          _context.SaveChanges();
-         
+
          // Verify entity was saved
          var saved = _context.TestEntities.Find(entity.Id);
          Assert.NotNull(saved);
@@ -297,25 +299,25 @@ public class TemporalConfigurationTests : IDisposable
       // Arrange
       var largeDescription = new string('A', 10000); // 10KB string
       var entities = Enumerable.Range(1, 10)
-         .Select(i => new TestEntity { Name = $"Large{i}", Description = largeDescription })
-         .ToList();
+                               .Select(i => new TestEntity { Name = $"Large{i}", Description = largeDescription })
+                               .ToList();
 
       // Act
       var initialMemory = GC.GetTotalMemory(false);
       _context.TestEntities.AddRange(entities);
       _context.SaveChanges();
-      
+
       // Force garbage collection
       GC.Collect();
       GC.WaitForPendingFinalizers();
       GC.Collect();
-      
+
       var finalMemory = GC.GetTotalMemory(false);
 
       // Assert
       var count = _context.TestEntities.Count();
       Assert.Equal(10, count);
-      
+
       // Memory should not have grown excessively (allow for 50MB growth)
       var memoryGrowth = finalMemory - initialMemory;
       Assert.True(memoryGrowth < 50 * 1024 * 1024, $"Memory grew by {memoryGrowth / 1024 / 1024}MB");
@@ -351,11 +353,11 @@ public class TemporalConfigurationTests : IDisposable
    {
       // Arrange
       var address = new TestAddress("123 Main St", "Seattle", "WA", "98101");
-      var entity = new TestEntityWithValueObject 
-      { 
-         Name = "Value Object Test", 
-         Address = address 
-      };
+      var entity = new TestEntityWithValueObject
+                   {
+                      Name    = "Value Object Test",
+                      Address = address
+                   };
 
       // Act
       _context.TestEntitiesWithValueObjects.Add(entity);
@@ -363,13 +365,13 @@ public class TemporalConfigurationTests : IDisposable
 
       // Assert
       var retrieved = _context.TestEntitiesWithValueObjects
-         .Include(e => e.Address)
-         .FirstOrDefault(e => e.Id == entity.Id);
-      
+                              .Include(e => e.Address)
+                              .FirstOrDefault(e => e.Id == entity.Id);
+
       Assert.NotNull(retrieved);
       Assert.NotNull(retrieved.Address);
       Assert.Equal(address.Street, retrieved.Address.Street);
-      Assert.Equal(address.City, retrieved.Address.City);
+      Assert.Equal(address.City,   retrieved.Address.City);
       Assert.True(address.Equals(retrieved.Address));
    }
 
@@ -391,7 +393,7 @@ public class TestEntity : Entity<Guid>
       Id = Guid.NewGuid();
    }
 
-   public string Name { get; set; } = string.Empty;
+   public string Name        { get; set; } = string.Empty;
    public string Description { get; set; } = string.Empty;
 }
 
@@ -402,9 +404,9 @@ public class TestEntityWithRowVersion : Entity<Guid>, IHasRowVersion
       Id = Guid.NewGuid();
    }
 
-   public string Name { get; set; } = string.Empty;
-   public string Description { get; set; } = string.Empty;
-   public byte[]? RowVersion { get; set; }
+   public string  Name        { get; set; } = string.Empty;
+   public string  Description { get; set; } = string.Empty;
+   public byte[]? RowVersion  { get; set; }
 }
 
 public class TestEntityWithValueObject : Entity<Guid>
@@ -414,22 +416,22 @@ public class TestEntityWithValueObject : Entity<Guid>
       Id = Guid.NewGuid();
    }
 
-   public string Name { get; set; } = string.Empty;
+   public string       Name    { get; set; } = string.Empty;
    public TestAddress? Address { get; set; }
 }
 
 public class TestAddress : ValueObject
 {
-   public string Street { get; set; }
-   public string City { get; set; }
-   public string State { get; set; }
+   public string Street  { get; set; }
+   public string City    { get; set; }
+   public string State   { get; set; }
    public string ZipCode { get; set; }
 
    public TestAddress(string street, string city, string state, string zipCode)
    {
-      Street = street;
-      City = city;
-      State = state;
+      Street  = street;
+      City    = city;
+      State   = state;
       ZipCode = zipCode;
    }
 
@@ -441,8 +443,8 @@ public class TestDbContext : DbContext
 {
    public TestDbContext(DbContextOptions<TestDbContext> options) : base(options) { }
 
-   public DbSet<TestEntity> TestEntities { get; set; }
-   public DbSet<TestEntityWithRowVersion> TestEntitiesWithRowVersion { get; set; }
+   public DbSet<TestEntity>                TestEntities                 { get; set; }
+   public DbSet<TestEntityWithRowVersion>  TestEntitiesWithRowVersion   { get; set; }
    public DbSet<TestEntityWithValueObject> TestEntitiesWithValueObjects { get; set; }
 
    protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -469,7 +471,7 @@ public class TestDbContext : DbContext
       {
          entity.HasKey(e => e.Id);
          entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
-         
+
          // Configure value object as owned type
          entity.OwnsOne(e => e.Address, address =>
          {

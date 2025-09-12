@@ -9,8 +9,7 @@ namespace Wangkanai.Foundation;
 /// <typeparam name="T">
 /// The type of domain message being handled. This type must implement <see cref="IDomainMessage"/>.
 /// </typeparam>
-public interface IDomainHandler<in T>
-   where T : IDomainMessage
+public interface IDomainHandler<in T> where T : IDomainMessage
 {
    /// <summary>Handles the processing of a domain message of the specified type. </summary>
    /// <param name="message">The domain message to be handled. The message must be an instance of a type that implements
@@ -25,7 +24,7 @@ public interface IDomainHandler<in T>
 /// <typeparam name="T">
 /// The type of domain message to be handled. This type must implement <see cref="IDomainMessage"/>.
 /// </typeparam>
-public interface IDomainHandlerAsync<in T> where T : IDomainMessage
+public interface IAsyncDomainHandler<in T> where T : IAsyncDomainMessage
 {
    /// <summary>Asynchronously handles the processing of a domain message of the specified type.</summary>
    /// <param name="message">The domain message to be handled. The message must be an instance of a type that implements
