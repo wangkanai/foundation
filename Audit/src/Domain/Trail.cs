@@ -7,6 +7,7 @@
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+
 using Microsoft.AspNetCore.Identity;
 
 using Wangkanai.Foundation;
@@ -17,7 +18,6 @@ namespace Wangkanai.Audit;
 /// <typeparam name="TKey">The type of the unique identifier for the audit trail.</typeparam>
 /// <typeparam name="TUserType">The type of the user associated with the audit action.</typeparam>
 /// <typeparam name="TUserKey">The type of the user's unique identifier.</typeparam>
-[Obsolete("Use Trail<TKey> with AuditConfiguration instead. This class will be removed in a future version.")]
 public class Trail<TKey, TUserType, TUserKey> : Entity<TKey>
    where TKey : IEquatable<TKey>, IComparable<TKey>
    where TUserType : IdentityUser<TUserKey>
@@ -26,12 +26,10 @@ public class Trail<TKey, TUserType, TUserKey> : Entity<TKey>
    /// <summary>Initializes a new instance of the <see cref="Trail{TKey, TUserType, TUserKey}"/> class.</summary>
    public Trail()
    {
-      // Initialize Id with a new value if TKey is Guid
       if (typeof(TKey) == typeof(Guid))
-      {
          Id = (TKey)(object)Guid.NewGuid();
-      }
    }
+
    /// <summary>Gets or sets the type of trail associated with an audit action.</summary>
    /// <remarks>
    /// The <see cref="TrailType"/> property indicates the nature of the change that occurred in an entity.
@@ -126,14 +124,12 @@ public class Trail<TKey, TUserType, TUserKey> : Entity<TKey>
    {
       try
       {
-         var result = new Dictionary<string, object>();
-         using var doc = JsonDocument.Parse(json);
-         
+         var       result = new Dictionary<string, object>();
+         using var doc    = JsonDocument.Parse(json);
+
          foreach (var property in doc.RootElement.EnumerateObject())
-         {
             result[property.Name] = ConvertJsonElement(property.Value);
-         }
-         
+
          return result;
       }
       catch (JsonException)
@@ -147,16 +143,16 @@ public class Trail<TKey, TUserType, TUserKey> : Entity<TKey>
    private static object ConvertJsonElement(JsonElement element)
    {
       return element.ValueKind switch
-      {
-         JsonValueKind.String => element.GetString()!,
-         JsonValueKind.Number when element.TryGetInt32(out var intValue) => intValue,
-         JsonValueKind.Number when element.TryGetInt64(out var longValue) => longValue,
-         JsonValueKind.Number => element.GetDouble(),
-         JsonValueKind.True => true,
-         JsonValueKind.False => false,
-         JsonValueKind.Null => null!,
-         _ => element.ToString()
-      };
+             {
+                JsonValueKind.String                                             => element.GetString()!,
+                JsonValueKind.Number when element.TryGetInt32(out var intValue)  => intValue,
+                JsonValueKind.Number when element.TryGetInt64(out var longValue) => longValue,
+                JsonValueKind.Number                                             => element.GetDouble(),
+                JsonValueKind.True                                               => true,
+                JsonValueKind.False                                              => false,
+                JsonValueKind.Null                                               => null!,
+                _                                                                => element.ToString()
+             };
    }
 
    /// <summary>Sets the old and new values efficiently using pre-serialized JSON strings.</summary>
