@@ -1,11 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Data;
-using System.Data.SqlClient;
 
-namespace Wangkanai.EntityFramework.SqlServer;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for configuring SQL Server bulk operations and high-performance data loading scenarios.

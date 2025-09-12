@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Wangkanai.EntityFramework.MySql;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for MySQL-specific query optimization in Entity Framework Core.

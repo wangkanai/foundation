@@ -139,7 +139,7 @@ public class AuditPerformanceBenchmark
          newValues[i]   = $"NewValue{i}";
       }
 
-      audit.SetValuesFromSpan<object>(columnNames.AsSpan(), oldValues.AsSpan(), newValues.AsSpan());
+      audit.SetValuesFromSpan(columnNames.AsSpan(), oldValues.AsSpan(), newValues.AsSpan());
 
       // Simulate access patterns
       _ = audit.GetOldValue("Property0");

@@ -3,7 +3,7 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace Wangkanai.EntityFramework.Sqlite;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for configuring SQLite connection-level performance optimizations.

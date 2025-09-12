@@ -1,10 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
-using Wangkanai.Audit;
 
-namespace Wangkanai.Audit.Tests;
+namespace Wangkanai.Audit;
 
 public class TrailTests
 {
@@ -189,7 +187,7 @@ public class TrailTests
       var newValues = new object[] { "Jane", 25, false };
 
       // Act
-      trail.SetValuesFromSpan<object>(columnNames.AsSpan(), oldValues.AsSpan(), newValues.AsSpan());
+      trail.SetValuesFromSpan(columnNames.AsSpan(), oldValues.AsSpan(), newValues.AsSpan());
 
       // Assert
       Assert.NotNull(trail.OldValuesJson);
@@ -215,7 +213,7 @@ public class TrailTests
       var newValues = new object[] { "New1", "New2", "New3", "New4", "New5"};
 
       // Act
-      trail.SetValuesFromSpan<object>(columnNames, oldValues, newValues);
+      trail.SetValuesFromSpan(columnNames, oldValues, newValues);
 
       // Assert
       Assert.NotNull(trail.OldValuesJson);
@@ -240,7 +238,7 @@ public class TrailTests
 
       // Act & Assert
       var exception = Assert.Throws<ArgumentException>(() =>
-         trail.SetValuesFromSpan<object>(columnNames, oldValues, newValues));
+         trail.SetValuesFromSpan(columnNames, oldValues, newValues));
       Assert.Contains("All spans must have the same length", exception.Message);
    }
 
@@ -254,7 +252,7 @@ public class TrailTests
       var newValues = new object[] { };
 
       // Act
-      trail.SetValuesFromSpan<object>(columnNames, oldValues, newValues);
+      trail.SetValuesFromSpan(columnNames, oldValues, newValues);
 
       // Assert
       Assert.Empty(trail.ChangedColumns);
@@ -413,7 +411,7 @@ public class TrailTests
       // Act
       var objectValues = new object[values.Length];
       for (int i = 0; i < values.Length; i++) objectValues[i] = values[i];
-      trail.SetValuesFromSpan<object>(columnNames, objectValues.AsSpan(), objectValues.AsSpan());
+      trail.SetValuesFromSpan(columnNames, objectValues.AsSpan(), objectValues.AsSpan());
 
       // Assert
       Assert.Contains("John \\\"Johnny\\\" Doe", trail.OldValuesJson);
@@ -431,7 +429,7 @@ public class TrailTests
       // Act
       var objectValues = new object[values.Length];
       for (int i = 0; i < values.Length; i++) objectValues[i] = values[i];
-      trail.SetValuesFromSpan<object>(columnNames, objectValues.AsSpan(), objectValues.AsSpan());
+      trail.SetValuesFromSpan(columnNames, objectValues.AsSpan(), objectValues.AsSpan());
 
       // Assert
       Assert.Contains("\"IsActive\":true", trail.OldValuesJson);
@@ -450,7 +448,7 @@ public class TrailTests
       // Act
       var objectValues = new object[values.Length];
       for (int i = 0; i < values.Length; i++) objectValues[i] = values[i];
-      trail.SetValuesFromSpan<object>(columnNames, objectValues.AsSpan(), objectValues.AsSpan());
+      trail.SetValuesFromSpan(columnNames, objectValues.AsSpan(), objectValues.AsSpan());
 
       // Assert
       Assert.Contains("\"CreatedAt\":\"2023-12-25T10:30:45.123Z\"", trail.OldValuesJson);
@@ -466,7 +464,7 @@ public class TrailTests
 
       // Act
       var objectValues = values.ToArray();
-      trail.SetValuesFromSpan<object>(columnNames, objectValues.AsSpan(), objectValues.AsSpan());
+      trail.SetValuesFromSpan(columnNames, objectValues.AsSpan(), objectValues.AsSpan());
 
       // Assert
       Assert.Contains("\"Name\":null", trail.OldValuesJson);
@@ -574,7 +572,7 @@ public class TrailTests
       var newValues = new object[] { "Jane Doe", "jane@new.com", DateTime.UtcNow};
 
       // Act
-      trail.SetValuesFromSpan<object>(changedColumns, oldValues, newValues);
+      trail.SetValuesFromSpan(changedColumns, oldValues, newValues);
 
       // Assert - Verify all properties are set correctly
       Assert.Equal(TrailType.Update, trail.TrailType);

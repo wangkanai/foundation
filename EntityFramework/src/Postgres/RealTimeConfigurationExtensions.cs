@@ -1,14 +1,13 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Npgsql;
 using System.Collections.Concurrent;
 using System.Text;
-using System.Text.Json;
 
-namespace Wangkanai.EntityFramework.Postgres;
+using Microsoft.EntityFrameworkCore;
+
+using Npgsql;
+
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for configuring real-time database features in PostgreSQL.

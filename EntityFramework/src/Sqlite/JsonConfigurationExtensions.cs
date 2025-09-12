@@ -6,7 +6,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.EntityFramework.Sqlite;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Extension methods for configuring JSON column support in SQLite Entity Framework Core entities.

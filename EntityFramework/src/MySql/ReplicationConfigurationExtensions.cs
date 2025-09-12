@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.EntityFramework.MySql;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for configuring MySQL replication, high availability, and read/write splitting.

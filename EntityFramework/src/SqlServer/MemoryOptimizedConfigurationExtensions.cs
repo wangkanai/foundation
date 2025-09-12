@@ -3,7 +3,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.EntityFramework.SqlServer;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Defines the durability types for memory-optimized tables.

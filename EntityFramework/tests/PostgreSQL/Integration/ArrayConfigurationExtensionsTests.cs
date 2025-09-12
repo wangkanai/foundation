@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.EntityFramework.PostgreSQL.Integration;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Unit tests for PostgreSQL array configuration extensions.

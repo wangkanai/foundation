@@ -1,9 +1,10 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
 using Microsoft.EntityFrameworkCore;
+
 using Npgsql;
 
-namespace Wangkanai.EntityFramework.Postgres;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for configuring PostgreSQL-specific connection behaviors and performance optimizations.

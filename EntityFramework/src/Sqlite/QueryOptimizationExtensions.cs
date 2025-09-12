@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.EntityFramework.Sqlite;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Extension methods for SQLite-specific query pattern optimizations.

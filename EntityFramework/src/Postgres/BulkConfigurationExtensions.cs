@@ -1,13 +1,15 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Npgsql;
 using System.Data;
 using System.Reflection;
 using System.Text;
 
-namespace Wangkanai.EntityFramework.Postgres;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
+using Npgsql;
+
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for configuring high-performance bulk operations in PostgreSQL.

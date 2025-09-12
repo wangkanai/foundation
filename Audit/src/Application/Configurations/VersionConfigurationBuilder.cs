@@ -2,7 +2,9 @@
 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.Foundation.Configurations;
+using Wangkanai.Foundation;
+
+namespace Wangkanai.Audit.Configurations;
 
 /// <summary>
 /// Provides extension methods to configure RowVersion properties for entity types.

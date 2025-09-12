@@ -1,8 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Data.SqlClient;
 
-namespace Wangkanai.EntityFramework.SqlServer;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides SQL Server connection performance optimization extensions for Entity Framework Core.

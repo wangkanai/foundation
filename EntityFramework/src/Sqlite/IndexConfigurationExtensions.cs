@@ -6,7 +6,7 @@ using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.EntityFramework.Sqlite;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Extension methods for advanced SQLite indexing configurations.

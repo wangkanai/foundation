@@ -1,10 +1,8 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-using System.Linq.Expressions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Wangkanai.EntityFramework.MySql;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for configuring MySQL-specific indexing capabilities.

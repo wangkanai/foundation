@@ -2,10 +2,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using NpgsqlTypes;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace Wangkanai.EntityFramework.Postgres;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for configuring PostgreSQL specialized data types including ranges,

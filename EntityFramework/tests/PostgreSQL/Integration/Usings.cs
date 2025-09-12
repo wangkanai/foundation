@@ -15,6 +15,4 @@ global using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 global using FluentAssertions;
 
-global using Wangkanai.EntityFramework.Postgres;
-
 global using Xunit;

@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Wangkanai.EntityFramework.Sqlite;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides SQLite-specific migration configuration extensions for Entity Framework Core.

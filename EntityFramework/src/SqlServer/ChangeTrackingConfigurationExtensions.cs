@@ -1,9 +1,7 @@
-using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.SqlServer.Infrastructure;
 
-namespace Wangkanai.EntityFramework.SqlServer;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Extension methods for configuring SQL Server Change Tracking and Change Data Capture (CDC) features.

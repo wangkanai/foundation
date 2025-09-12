@@ -2,10 +2,10 @@
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+
 using NpgsqlTypes;
 
-namespace Wangkanai.EntityFramework.Postgres;
+namespace Wangkanai.EntityFramework;
 
 /// <summary>
 /// Provides extension methods for configuring PostgreSQL full-text search capabilities.
