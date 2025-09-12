@@ -1,6 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
-namespace Wangkanai.Foundation.Application;
+namespace Wangkanai.Foundation;
 
 /// <summary>
 /// Marker interface that identifies a command that changes the state of the system but returns no result.
