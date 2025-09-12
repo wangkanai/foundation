@@ -3,11 +3,7 @@
 namespace Wangkanai.Foundation.Models;
 
 /// <summary>Base entity class for integer-keyed entities used in testing.</summary>
-public abstract class KeyIntEntity : Entity<int>
-{
-}
+public abstract class KeyIntEntity : Entity<int>;
 
 /// <summary>Base entity class for GUID-keyed entities used in testing.</summary>
-public abstract class KeyGuidEntity : Entity<Guid>
-{
-}
+public abstract class KeyGuidEntity : Entity<Guid>;

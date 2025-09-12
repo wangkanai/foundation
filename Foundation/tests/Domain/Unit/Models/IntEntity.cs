@@ -7,8 +7,7 @@ namespace Wangkanai.Foundation.Models;
 /// IntEntity is derived from KeyIntEntity, which provides integer key functionality.
 /// The unique identifier <see cref="Entity{T}.Id"/> is assigned a default value of 1 in the constructor.
 /// </remarks>
-public class IntEntity
-   : KeyIntEntity
+public class IntEntity : KeyIntEntity
 {
    /// <summary>Represents an entity with an integer-based unique identifier.</summary>
    /// <remarks>
@@ -23,5 +22,4 @@ public class IntEntity
 /// TransientIntEntity inherits from KeyIntEntity, providing an integer key functionality and transient behavior.
 /// This class is designed to be used where the entity does not persist and is considered transient.
 /// </remarks>
-public class TransientIntEntity
-   : KeyIntEntity { }
+public class TransientIntEntity : KeyIntEntity;
