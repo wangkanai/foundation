@@ -60,7 +60,6 @@
   <Folder Name="/EntityFramework/tests/">
     <Project Path="EntityFramework\tests\Core\Integration\Wangkanai.EntityFramework.Core.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="EntityFramework\tests\Core\Unit\Wangkanai.EntityFramework.Core.UnitTests.csproj" Type="Classic C#" />
-    <Project Path="EntityFramework\tests\EntityFramework\Wangkanai.EntityFramework.Tests.csproj" Type="Classic C#" />
     <Project Path="EntityFramework\tests\PostgreSQL\Integration\Wangkanai.EntityFramework.PostgreSQL.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="EntityFramework\tests\Sqlite\Integration\Wangkanai.EntityFramework.Sqlite.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="EntityFramework\tests\SqlServer\Integration\Wangkanai.EntityFramework.SqlServer.IntegrationTests.csproj" Type="Classic C#" />
