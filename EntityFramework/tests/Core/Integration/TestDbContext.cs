@@ -4,10 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Wangkanai.EntityFramework;
 
-public class TestDbContext : DbContext
+public class TestDbContext(DbContextOptions<TestDbContext> options) : DbContext(options)
 {
-   public TestDbContext(DbContextOptions<TestDbContext> options) : base(options) { }
-
    public DbSet<TestEntity>                TestEntities                 { get; set; }
    public DbSet<TestEntityWithRowVersion>  TestEntitiesWithRowVersion   { get; set; }
    public DbSet<TestEntityWithValueObject> TestEntitiesWithValueObjects { get; set; }
@@ -20,30 +18,43 @@ public class TestDbContext : DbContext
       modelBuilder.Entity<TestEntity>(entity =>
       {
          entity.HasKey(e => e.Id);
-         entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
-         entity.Property(e => e.Description).HasMaxLength(1000);
+         entity.Property(e => e.Name)
+               .IsRequired()
+               .HasMaxLength(100);
+         entity.Property(e => e.Description)
+               .HasMaxLength(1000);
       });
 
       modelBuilder.Entity<TestEntityWithRowVersion>(entity =>
       {
          entity.HasKey(e => e.Id);
-         entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
-         entity.Property(e => e.Description).HasMaxLength(1000);
-         entity.Property(e => e.RowVersion).IsRowVersion();
+         entity.Property(e => e.Name)
+               .IsRequired()
+               .HasMaxLength(100);
+         entity.Property(e => e.Description)
+               .HasMaxLength(1000);
+         entity.Property(e => e.RowVersion)
+               .IsRowVersion();
       });
 
       modelBuilder.Entity<TestEntityWithValueObject>(entity =>
       {
          entity.HasKey(e => e.Id);
-         entity.Property(e => e.Name).IsRequired().HasMaxLength(100);
+         entity.Property(e => e.Name)
+               .IsRequired()
+               .HasMaxLength(100);
 
          // Configure value object as owned type
          entity.OwnsOne(e => e.Address, address =>
          {
-            address.Property(a => a.Street).HasMaxLength(200);
-            address.Property(a => a.City).HasMaxLength(100);
-            address.Property(a => a.State).HasMaxLength(50);
-            address.Property(a => a.ZipCode).HasMaxLength(20);
+            address.Property(a => a.Street)
+                   .HasMaxLength(200);
+            address.Property(a => a.City)
+                   .HasMaxLength(100);
+            address.Property(a => a.State)
+                   .HasMaxLength(50);
+            address.Property(a => a.ZipCode)
+                   .HasMaxLength(20);
          });
       });
    }

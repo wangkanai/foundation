@@ -6,10 +6,7 @@ namespace Wangkanai.EntityFramework;
 
 public class TestEntityWithRowVersion : Entity<Guid>, IHasRowVersion
 {
-   public TestEntityWithRowVersion()
-   {
-      Id = Guid.NewGuid();
-   }
+   public TestEntityWithRowVersion() => Id = Guid.NewGuid();
 
    public string  Name        { get; set; } = string.Empty;
    public string  Description { get; set; } = string.Empty;
