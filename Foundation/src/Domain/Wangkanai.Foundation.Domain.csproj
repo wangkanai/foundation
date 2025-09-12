@@ -3,7 +3,7 @@
 
    </PropertyGroup>
    <ItemGroup>
-      <PackageReference Include="Wangkanai.System"/>
-      <PackageReference Include="Wangkanai.Validation"/>
+      <PackageReference Include="Wangkanai.System" />
+      <PackageReference Include="Wangkanai.Validation" />
    </ItemGroup>
 </Project>
