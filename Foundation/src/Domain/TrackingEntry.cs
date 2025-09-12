@@ -27,6 +27,5 @@ public class TrackingEntry
    /// Returns a string that represents the current <see cref="TrackingEntry"/> instance, including its entity and state.
    /// </summary>
    /// <returns>A string representation of the <see cref="TrackingEntry"/> in the format "Entity EntryState".</returns>
-   public override string ToString()
-      => $"{Entity ?? "null"} {EntryState}";
+   public override string ToString() => $"{Entity} {EntryState}";
 }

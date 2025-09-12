@@ -4,8 +4,7 @@ namespace Wangkanai.Foundation;
 
 /// <summary>Represents a handler for processing domain messages that supports cancellation.</summary>
 /// <typeparam name="T">The type of the domain message, which must implement <see cref="IDomainMessage"/>.</typeparam>
-public interface ICancellableDomainHandler<in T>
-   where T : IDomainMessage
+public interface ICancellableDomainHandler<in T> where T : IDomainMessage
 {
    /// <summary>Handles the processing of a domain message with support for cancellation.</summary>
    /// <typeparam name="T">The type of the domain message being handled, implementing <see cref="IDomainMessage"/>.</typeparam>
@@ -17,7 +16,7 @@ public interface ICancellableDomainHandler<in T>
 
 /// <summary>Represents an asynchronous handler for processing domain messages that supports cancellation.</summary>
 /// <typeparam name="T">The type of the domain message, which must implement <see cref="IDomainMessage"/>.</typeparam>
-public interface ICancellableDomainHandlerAsync<in T> where T : IDomainMessage
+public interface IAsyncCancellableDomainHandler<in T> where T : IAsyncDomainMessage
 {
    /// <summary>Handles the processing of a domain message asynchronously with support for cancellation.</summary>
    /// <typeparam name="T">The type of the domain message being handled, implementing <see cref="IDomainMessage"/>.</typeparam>
