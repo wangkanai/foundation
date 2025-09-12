@@ -2,7 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
-namespace Wangkanai.EntityFramework;
+namespace Wangkanai.EntityFramework.Mocks;
 
 public class TestDbContext(DbContextOptions<TestDbContext> options) : DbContext(options)
 {

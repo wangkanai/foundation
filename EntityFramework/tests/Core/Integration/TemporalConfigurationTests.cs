@@ -3,6 +3,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
+using Wangkanai.EntityFramework.Mocks;
+
 namespace Wangkanai.EntityFramework;
 
 public class TemporalConfigurationTests : IDisposable

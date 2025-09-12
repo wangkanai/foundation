@@ -2,7 +2,7 @@
 
 using Wangkanai.Foundation;
 
-namespace Wangkanai.EntityFramework;
+namespace Wangkanai.EntityFramework.Mocks;
 
 public class TestEntity : Entity<Guid>
 {
