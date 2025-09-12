@@ -16,12 +16,11 @@ namespace Wangkanai.Foundation;
 /// <typeparam name="T">
 /// The type of the unique identifier for the entity. Must implement <see cref="IEquatable{T}"/> and <see cref="IComparable{T}"/>.
 /// </typeparam>
-public abstract class Entity<T> : IEntity<T>
-   where T : IEquatable<T>, IComparable<T>
+public abstract class Entity<T> : IEntity<T> where T : IEquatable<T>, IComparable<T>
 {
+   private const int    MaxCacheSize           = 1000;
    private const int    EfProxyNamespaceLength = 35;
    private const string EfProxyNamespace       = "System.Data.Entity.DynamicProxies";
-   private const int    MaxCacheSize           = 1000;
 
    private static readonly ConcurrentDictionary<Type, Type> _realTypeCache    = new();
    private static readonly ConcurrentDictionary<Type, bool> _isProxyTypeCache = new();
@@ -106,7 +105,7 @@ public abstract class Entity<T> : IEntity<T>
       return realType;
    }
 
-   /// <summary> Determines the real type by detecting EF dynamic proxies with optimized namespace checking. </summary>
+   /// <summary>Determines the real type by detecting EF dynamic proxies with optimized namespace checking.</summary>
    [MethodImpl(MethodImplOptions.AggressiveInlining)]
    private static Type DetermineRealType(Type objectType)
    {
