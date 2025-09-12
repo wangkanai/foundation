@@ -2,7 +2,7 @@
 
 namespace Wangkanai.Audit.Configurations;
 
-internal static class Configuration
+internal static class Constants
 {
    public const string Jsonb     = "jsonb";
    public const string OldValues = "OldValues";
