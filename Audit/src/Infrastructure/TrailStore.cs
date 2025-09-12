@@ -28,8 +28,7 @@ public class TrailStore<TContext, TKey, TUserType, TUserKey>(TContext context) :
 
    private bool _disposed;
 
-   private DbSet<Trail<TKey, TUserType, TUserKey>> AuditsSet
-      => _context.Set<Trail<TKey, TUserType, TUserKey>>();
+   private DbSet<Trail<TKey, TUserType, TUserKey>> AuditsSet => _context.Set<Trail<TKey, TUserType, TUserKey>>();
 
    /// <summary>Indicates whether changes to the context are automatically persisted to the database upon certain operations.</summary>
    /// <remarks>When set to true, any modifications to the underlying data store resulting from method calls such as creation, update, or delete will automatically trigger a call to save changes on the database context. If set to false, changes must be explicitly saved manually by invoking the appropriate context method.</remarks>
