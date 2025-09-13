@@ -58,15 +58,20 @@ Comprehensive auditing module for maintaining complete audit trails and change h
 [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
 
-Entity Framework Core utilities and extensions to enhance database operations and development productivity.
+Entity Framework Core integration module that bridges DDD patterns with EF Core's powerful ORM capabilities. Provides utilities and extensions for seamless database operations while maintaining domain model purity.
 
 **Features:**
 
-- Database builder extensions
-- Value generators for timestamps
-- Convention-based configurations
-- Migration utilities
-- Performance optimizations
+- **DbContext Extensions**: Enhanced context configuration and setup
+- **Repository Implementation**: EF Core-based repository patterns
+- **Value Converters**: Custom converters for value objects
+- **Shadow Properties**: Automatic timestamp and audit field management
+- **Migration Helpers**: Simplified database migration utilities
+- **Query Extensions**: LINQ extensions for common query patterns
+- **Performance Optimizations**: Query optimization and caching strategies
+- **Convention Configurations**: Automatic entity configuration based on conventions
+- **Seed Data Support**: Fluent API for database seeding
+- **Multi-tenancy Support**: Built-in tenant isolation patterns
 
 ## 🚀 Quick Start
 
@@ -75,13 +80,13 @@ Entity Framework Core utilities and extensions to enhance database operations an
 Install the packages you need via NuGet Package Manager:
 
 ```bash
-# Core domain patterns
-dotnet add package Wangkanai.Domain
+# Core DDD foundation patterns
+dotnet add package Wangkanai.Foundation
 
 # Auditing capabilities
 dotnet add package Wangkanai.Audit
 
-# Entity Framework utilities
+# Entity Framework Core integration
 dotnet add package Wangkanai.EntityFramework
 ```
 
@@ -90,7 +95,7 @@ dotnet add package Wangkanai.EntityFramework
 #### Domain Entities
 
 ```csharp
-using Wangkanai.Domain;
+using Wangkanai.Foundation;
 
 public class Customer : Entity<int>
 {
@@ -147,17 +152,17 @@ This repository follows a **clean architecture** approach with the following str
 
 ```
 src/
-├── Domain/           # Core domain patterns and entities
+├── Foundation/       # Core DDD patterns and building blocks
 ├── Audit/            # Auditing and change tracking
-└── EntityFramework/  # EF Core utilities and extensions
+└── EntityFramework/  # EF Core integration and utilities
 
 tests/
-├── Domain/           # Domain module tests
+├── Foundation/       # Foundation module tests
 ├── Audit/            # Audit module tests
 └── EntityFramework/  # EntityFramework module tests
 
 benchmark/
-├── Domain/           # Performance benchmarks
+├── Foundation/       # Performance benchmarks
 ├── Audit/            # Audit performance tests
 └── EntityFramework/  # EF utilities benchmarks
 ```
@@ -173,7 +178,7 @@ dotnet test --collect:"XPlat Code Coverage"
 Run benchmarks:
 
 ```bash
-dotnet run --project benchmark/Domain --configuration Release
+dotnet run --project benchmark/Foundation --configuration Release
 dotnet run --project benchmark/Audit --configuration Release
 dotnet run --project benchmark/EntityFramework --configuration Release
 ```
