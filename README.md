@@ -1,6 +1,6 @@
-# Wangkanai Domain
+# Wangkanai Domain-Driven-Design Foundation
 
-## Domain: Breathtakingly Simple Domain-Driven Design for .NET
+## A Comprehensive Domain-Driven Design Framework for .NET
 
 [![.NET](https://github.com/wangkanai/wangkanai/actions/workflows/dotnet.yml/badge.svg)](https://github.com/wangkanai/domain/actions/workflows/dotnet.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=wangkanai_foundation&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=wangkanai_foundation)
@@ -9,58 +9,84 @@
 [![Patreon](https://img.shields.io/badge/patreon-support%20me-d9643a.svg)](https://www.patreon.com/wangkanai)
 [![GitHub](https://img.shields.io/github/license/wangkanai/wangkanai)](https://github.com/wangkanai/wangkanai/blob/main/LICENSE)
 
-Welcome to the **Wangkanai Domain** repository - a comprehensive collection of domain-driven design patterns, auditing
-capabilities, and Entity Framework utilities for .NET applications.
+Welcome to the **Wangkanai Domain-Driven-Design Foundation** repository - a robust framework providing essential building blocks
+for implementing Domain-Driven Design (DDD) patterns in .NET applications. This foundation library offers core domain modeling
+capabilities, comprehensive auditing features, and Entity Framework Core integrations to accelerate enterprise application
+development.
 
 ## 📦 Packages
 
 This repository produces three NuGet packages:
 
-### Wangkanai.Domain
+### Wangkanai.Foundation
 
-[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.domain)](https://www.nuget.org/packages/wangkanai.domain)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.domain)](https://www.nuget.org/packages/wangkanai.domain)
+- Domain [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation)](https://www.nuget.org/packages/wangkanai.foundation)
+[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation)](https://www.nuget.org/packages/wangkanai.foundation)
+- Application
+- Infrastructure
 
-Core domain-driven design patterns and building blocks for .NET applications. Provides base classes, interfaces, and utilities for
-implementing clean domain models.
+Core domain-driven design patterns and fundamental building blocks for implementing DDD in .NET applications. This module provides
+the essential abstractions and base implementations for creating rich domain models.
 
 **Features:**
 
-- Entity base classes with strongly-typed IDs
-- Value objects with equality comparison
-- Domain events and handlers
-- Result patterns for error handling
-- Audit trails and tracking
+- **Entity Base Classes**: Strongly-typed entities with generic ID support
+- **Value Objects**: Immutable value objects with structural equality
+- **Aggregate Roots**: Support for aggregate boundaries and consistency rules
+- **Domain Events**: Event-driven architecture with domain event handlers
+- **Repositories**: Generic repository interfaces and patterns
+- **Specifications**: Query specification pattern implementation
+- **Result Patterns**: Railway-oriented programming for error handling
+- **Domain Services**: Encapsulation of domain logic
+- **Unit of Work**: Transaction boundary management
 
 ### Wangkanai.Audit
 
-[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
+- Domain [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
+- Application
+- Infrastructure
 
-Comprehensive auditing capabilities for tracking changes and maintaining data history in your applications.
+Comprehensive auditing module for maintaining complete audit trails and change history in your domain models. Seamlessly
+integrates with the Foundation module to provide automatic tracking capabilities.
 
 **Features:**
 
-- Automatic change tracking
-- User audit trails
-- Configurable audit policies
-- Integration with Entity Framework
-- Audit data querying and reporting
+- **Automatic Change Tracking**: Intercept and record all entity modifications
+- **User Audit Trails**: Track who made changes and when
+- **Audit Entities**: Pre-built audit entity base classes
+- **Flexible Configuration**: Configurable audit policies and filters
+- **Audit Context**: Capture additional contextual information
+- **Query Support**: Rich querying capabilities for audit data
+- **Compliance Ready**: Meet regulatory and compliance requirements
+- **Soft Delete Support**: Track deletions without data loss
+- **Field-Level Tracking**: Monitor changes at property level
 
 ### Wangkanai.EntityFramework
 
 [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
 
-Entity Framework Core utilities and extensions to enhance database operations and development productivity.
+- Postgres
+- SqlServer
+- MySql
+- Sqlite
+
+Entity Framework Core integration module that bridges DDD patterns with EF Core's powerful ORM capabilities. Provides utilities
+and extensions for seamless database operations while maintaining domain model purity.
 
 **Features:**
 
-- Database builder extensions
-- Value generators for timestamps
-- Convention-based configurations
-- Migration utilities
-- Performance optimizations
+- **DbContext Extensions**: Enhanced context configuration and setup
+- **Repository Implementation**: EF Core-based repository patterns
+- **Value Converters**: Custom converters for value objects
+- **Shadow Properties**: Automatic timestamp and audit field management
+- **Migration Helpers**: Simplified database migration utilities
+- **Query Extensions**: LINQ extensions for common query patterns
+- **Performance Optimizations**: Query optimization and caching strategies
+- **Convention Configurations**: Automatic entity configuration based on conventions
+- **Seed Data Support**: Fluent API for database seeding
+- **Multi-tenancy Support**: Built-in tenant isolation patterns
 
 ## 🚀 Quick Start
 
@@ -69,70 +95,14 @@ Entity Framework Core utilities and extensions to enhance database operations an
 Install the packages you need via NuGet Package Manager:
 
 ```bash
-# Core domain patterns
-dotnet add package Wangkanai.Domain
+# Core DDD foundation patterns
+dotnet add package Wangkanai.Foundation
 
 # Auditing capabilities
 dotnet add package Wangkanai.Audit
 
-# Entity Framework utilities
+# Entity Framework Core integration
 dotnet add package Wangkanai.EntityFramework
-```
-
-### Basic Usage
-
-#### Domain Entities
-
-```csharp
-using Wangkanai.Domain;
-
-public class Customer : Entity<int>
-{
-    public string Name { get; private set; }
-    public string Email { get; private set; }
-
-    public Customer(string name, string email)
-    {
-        Name = name;
-        Email = email;
-    }
-}
-```
-
-#### Auditing
-
-```csharp
-using Wangkanai.Audit;
-using Microsoft.EntityFrameworkCore;
-
-public class ApplicationDbContext : AuditDbContext
-{
-    public DbSet<Customer> Customers { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        // Configure audit tracking
-        optionsBuilder.EnableAuditing();
-    }
-}
-```
-
-#### Entity Framework Extensions
-
-```csharp
-using Wangkanai.EntityFramework;
-
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString));
-}
-
-public void Configure(IApplicationBuilder app)
-{
-    // Ensure database exists
-    app.CreateDatabase<ApplicationDbContext>();
-}
 ```
 
 ## 🏗️ Architecture
@@ -141,35 +111,19 @@ This repository follows a **clean architecture** approach with the following str
 
 ```
 src/
-├── Domain/           # Core domain patterns and entities
+├── Foundation/       # Core DDD patterns and building blocks
 ├── Audit/            # Auditing and change tracking
-└── EntityFramework/  # EF Core utilities and extensions
+└── EntityFramework/  # EF Core integration and utilities
 
 tests/
-├── Domain/           # Domain module tests
+├── Foundation/       # Foundation module tests
 ├── Audit/            # Audit module tests
 └── EntityFramework/  # EntityFramework module tests
 
 benchmark/
-├── Domain/           # Performance benchmarks
+├── Foundation/       # Performance benchmarks
 ├── Audit/            # Audit performance tests
 └── EntityFramework/  # EF utilities benchmarks
-```
-
-## 🧪 Testing
-
-Run all tests with coverage:
-
-```bash
-dotnet test --collect:"XPlat Code Coverage"
-```
-
-Run benchmarks:
-
-```bash
-dotnet run --project benchmark/Domain --configuration Release
-dotnet run --project benchmark/Audit --configuration Release
-dotnet run --project benchmark/EntityFramework --configuration Release
 ```
 
 ## 🤝 Contributing
