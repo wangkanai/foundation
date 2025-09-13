@@ -9,7 +9,10 @@
 [![Patreon](https://img.shields.io/badge/patreon-support%20me-d9643a.svg)](https://www.patreon.com/wangkanai)
 [![GitHub](https://img.shields.io/github/license/wangkanai/wangkanai)](https://github.com/wangkanai/wangkanai/blob/main/LICENSE)
 
-Welcome to the **Wangkanai Domain-Driven-Design Foundation** repository - a robust framework providing essential building blocks for implementing Domain-Driven Design (DDD) patterns in .NET applications. This foundation library offers core domain modeling capabilities, comprehensive auditing features, and Entity Framework Core integrations to accelerate enterprise application development.
+Welcome to the **Wangkanai Domain-Driven-Design Foundation** repository - a robust framework providing essential building blocks
+for implementing Domain-Driven Design (DDD) patterns in .NET applications. This foundation library offers core domain modeling
+capabilities, comprehensive auditing features, and Entity Framework Core integrations to accelerate enterprise application
+development.
 
 ## 📦 Packages
 
@@ -20,7 +23,8 @@ This repository produces three NuGet packages:
 [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation)](https://www.nuget.org/packages/wangkanai.foundation)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation)](https://www.nuget.org/packages/wangkanai.foundation)
 
-Core domain-driven design patterns and fundamental building blocks for implementing DDD in .NET applications. This module provides the essential abstractions and base implementations for creating rich domain models.
+Core domain-driven design patterns and fundamental building blocks for implementing DDD in .NET applications. This module provides
+the essential abstractions and base implementations for creating rich domain models.
 
 **Features:**
 
@@ -39,7 +43,8 @@ Core domain-driven design patterns and fundamental building blocks for implement
 [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
 
-Comprehensive auditing module for maintaining complete audit trails and change history in your domain models. Seamlessly integrates with the Foundation module to provide automatic tracking capabilities.
+Comprehensive auditing module for maintaining complete audit trails and change history in your domain models. Seamlessly
+integrates with the Foundation module to provide automatic tracking capabilities.
 
 **Features:**
 
@@ -58,7 +63,8 @@ Comprehensive auditing module for maintaining complete audit trails and change h
 [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
 
-Entity Framework Core integration module that bridges DDD patterns with EF Core's powerful ORM capabilities. Provides utilities and extensions for seamless database operations while maintaining domain model purity.
+Entity Framework Core integration module that bridges DDD patterns with EF Core's powerful ORM capabilities. Provides utilities
+and extensions for seamless database operations while maintaining domain model purity.
 
 **Features:**
 
