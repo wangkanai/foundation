@@ -1,6 +1,6 @@
-# Wangkanai Domain
+# Wangkanai Domain-Driven-Design Foundation
 
-## Domain: Breathtakingly Simple Domain-Driven Design for .NET
+## A Comprehensive Domain-Driven Design Framework for .NET
 
 [![.NET](https://github.com/wangkanai/wangkanai/actions/workflows/dotnet.yml/badge.svg)](https://github.com/wangkanai/domain/actions/workflows/dotnet.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=wangkanai_foundation&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=wangkanai_foundation)
@@ -9,43 +9,49 @@
 [![Patreon](https://img.shields.io/badge/patreon-support%20me-d9643a.svg)](https://www.patreon.com/wangkanai)
 [![GitHub](https://img.shields.io/github/license/wangkanai/wangkanai)](https://github.com/wangkanai/wangkanai/blob/main/LICENSE)
 
-Welcome to the **Wangkanai Domain** repository - a comprehensive collection of domain-driven design patterns, auditing
-capabilities, and Entity Framework utilities for .NET applications.
+Welcome to the **Wangkanai Domain-Driven-Design Foundation** repository - a robust framework providing essential building blocks for implementing Domain-Driven Design (DDD) patterns in .NET applications. This foundation library offers core domain modeling capabilities, comprehensive auditing features, and Entity Framework Core integrations to accelerate enterprise application development.
 
 ## 📦 Packages
 
 This repository produces three NuGet packages:
 
-### Wangkanai.Domain
+### Wangkanai.Foundation
 
-[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.domain)](https://www.nuget.org/packages/wangkanai.domain)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.domain)](https://www.nuget.org/packages/wangkanai.domain)
+[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation)](https://www.nuget.org/packages/wangkanai.foundation)
+[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation)](https://www.nuget.org/packages/wangkanai.foundation)
 
-Core domain-driven design patterns and building blocks for .NET applications. Provides base classes, interfaces, and utilities for
-implementing clean domain models.
+Core domain-driven design patterns and fundamental building blocks for implementing DDD in .NET applications. This module provides the essential abstractions and base implementations for creating rich domain models.
 
 **Features:**
 
-- Entity base classes with strongly-typed IDs
-- Value objects with equality comparison
-- Domain events and handlers
-- Result patterns for error handling
-- Audit trails and tracking
+- **Entity Base Classes**: Strongly-typed entities with generic ID support
+- **Value Objects**: Immutable value objects with structural equality
+- **Aggregate Roots**: Support for aggregate boundaries and consistency rules
+- **Domain Events**: Event-driven architecture with domain event handlers
+- **Repositories**: Generic repository interfaces and patterns
+- **Specifications**: Query specification pattern implementation
+- **Result Patterns**: Railway-oriented programming for error handling
+- **Domain Services**: Encapsulation of domain logic
+- **Unit of Work**: Transaction boundary management
 
 ### Wangkanai.Audit
 
 [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
 
-Comprehensive auditing capabilities for tracking changes and maintaining data history in your applications.
+Comprehensive auditing module for maintaining complete audit trails and change history in your domain models. Seamlessly integrates with the Foundation module to provide automatic tracking capabilities.
 
 **Features:**
 
-- Automatic change tracking
-- User audit trails
-- Configurable audit policies
-- Integration with Entity Framework
-- Audit data querying and reporting
+- **Automatic Change Tracking**: Intercept and record all entity modifications
+- **User Audit Trails**: Track who made changes and when
+- **Audit Entities**: Pre-built audit entity base classes
+- **Flexible Configuration**: Configurable audit policies and filters
+- **Audit Context**: Capture additional contextual information
+- **Query Support**: Rich querying capabilities for audit data
+- **Compliance Ready**: Meet regulatory and compliance requirements
+- **Soft Delete Support**: Track deletions without data loss
+- **Field-Level Tracking**: Monitor changes at property level
 
 ### Wangkanai.EntityFramework
 

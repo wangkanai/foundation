@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
    <PropertyGroup>
       <Product>Wangkanai EntityFramework</Product>
+      <IsPackable>false</IsPackable>
    </PropertyGroup>
 
    <ItemGroup>
