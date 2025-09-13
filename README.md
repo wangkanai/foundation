@@ -90,62 +90,6 @@ dotnet add package Wangkanai.Audit
 dotnet add package Wangkanai.EntityFramework
 ```
 
-### Basic Usage
-
-#### Domain Entities
-
-```csharp
-using Wangkanai.Foundation;
-
-public class Customer : Entity<int>
-{
-    public string Name { get; private set; }
-    public string Email { get; private set; }
-
-    public Customer(string name, string email)
-    {
-        Name = name;
-        Email = email;
-    }
-}
-```
-
-#### Auditing
-
-```csharp
-using Wangkanai.Audit;
-using Microsoft.EntityFrameworkCore;
-
-public class ApplicationDbContext : AuditDbContext
-{
-    public DbSet<Customer> Customers { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        // Configure audit tracking
-        optionsBuilder.EnableAuditing();
-    }
-}
-```
-
-#### Entity Framework Extensions
-
-```csharp
-using Wangkanai.EntityFramework;
-
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddDbContext<ApplicationDbContext>(options =>
-        options.UseSqlServer(connectionString));
-}
-
-public void Configure(IApplicationBuilder app)
-{
-    // Ensure database exists
-    app.CreateDatabase<ApplicationDbContext>();
-}
-```
-
 ## 🏗️ Architecture
 
 This repository follows a **clean architecture** approach with the following structure:
@@ -165,22 +109,6 @@ benchmark/
 ├── Foundation/       # Performance benchmarks
 ├── Audit/            # Audit performance tests
 └── EntityFramework/  # EF utilities benchmarks
-```
-
-## 🧪 Testing
-
-Run all tests with coverage:
-
-```bash
-dotnet test --collect:"XPlat Code Coverage"
-```
-
-Run benchmarks:
-
-```bash
-dotnet run --project benchmark/Foundation --configuration Release
-dotnet run --project benchmark/Audit --configuration Release
-dotnet run --project benchmark/EntityFramework --configuration Release
 ```
 
 ## 🤝 Contributing
