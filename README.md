@@ -20,8 +20,10 @@ This repository produces three NuGet packages:
 
 ### Wangkanai.Foundation
 
-[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation)](https://www.nuget.org/packages/wangkanai.foundation)
+- Domain [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation)](https://www.nuget.org/packages/wangkanai.foundation)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation)](https://www.nuget.org/packages/wangkanai.foundation)
+- Application
+- Infrastructure
 
 Core domain-driven design patterns and fundamental building blocks for implementing DDD in .NET applications. This module provides
 the essential abstractions and base implementations for creating rich domain models.
@@ -40,8 +42,10 @@ the essential abstractions and base implementations for creating rich domain mod
 
 ### Wangkanai.Audit
 
-[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
+- Domain [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
+- Application
+- Infrastructure
 
 Comprehensive auditing module for maintaining complete audit trails and change history in your domain models. Seamlessly
 integrates with the Foundation module to provide automatic tracking capabilities.
@@ -62,6 +66,11 @@ integrates with the Foundation module to provide automatic tracking capabilities
 
 [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
 [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
+
+- Postgres
+- SqlServer
+- MySql
+- Sqlite
 
 Entity Framework Core integration module that bridges DDD patterns with EF Core's powerful ORM capabilities. Provides utilities
 and extensions for seamless database operations while maintaining domain model purity.
