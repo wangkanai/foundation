@@ -1,4 +1,4 @@
-# Wangkanai Domain-Driven-Design Foundation
+# Wangkanai Domain-Driven-Design
 
 ## A Comprehensive Domain-Driven Design Framework for .NET
 
@@ -20,12 +20,11 @@ This repository produces three NuGet packages:
 
 ### Wangkanai.Foundation
 
-- Domain [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.domain)](https://www.nuget.org/packages/wangkanai.foundation.domain)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.domain)](https://www.nuget.org/packages/wangkanai.foundation.domain)
-- Application [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.application)](https://www.nuget.org/packages/wangkanai.foundation.application)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.application)](https://www.nuget.org/packages/wangkanai.foundation.application)
-- Infrastructure [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.infrastructure)](https://www.nuget.org/packages/wangkanai.foundation.infrastructure)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.infrastructure)](https://www.nuget.org/packages/wangkanai.foundation.infrastructure)
+| Package | Release | Pre-Release |
+|---------|---------|-------------|
+| Wangkanai.Foundation.Domain | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.domain)](https://www.nuget.org/packages/wangkanai.foundation.domain) | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.domain)](https://www.nuget.org/packages/wangkanai.foundation.domain) |
+| Wangkanai.Foundation.Application | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.application)](https://www.nuget.org/packages/wangkanai.foundation.application) | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.application)](https://www.nuget.org/packages/wangkanai.foundation.application) |
+| Wangkanai.Foundation.Infrastructure | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.infrastructure)](https://www.nuget.org/packages/wangkanai.foundation.infrastructure) | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.infrastructure)](https://www.nuget.org/packages/wangkanai.foundation.infrastructure) |
 
 Core domain-driven design patterns and fundamental building blocks for implementing DDD in .NET applications. This module provides
 the essential abstractions and base implementations for creating rich domain models.

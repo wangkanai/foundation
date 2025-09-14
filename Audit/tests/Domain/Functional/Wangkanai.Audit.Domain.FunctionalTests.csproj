@@ -1,5 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Domain\Wangkanai.Audit.Domain.csproj" />
-  </ItemGroup>
+   <ItemGroup>
+      <ProjectReference Include="..\..\..\src\Domain\Wangkanai.Audit.Domain.csproj" />
+   </ItemGroup>
 </Project>
