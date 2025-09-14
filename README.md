@@ -1,4 +1,4 @@
-# Wangkanai Domain-Driven-Design Foundation
+# Wangkanai Domain-Driven-Design
 
 ## A Comprehensive Domain-Driven Design Framework for .NET
 
@@ -20,75 +20,77 @@ This repository produces three NuGet packages:
 
 ### Wangkanai.Foundation
 
-- Domain [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.domain)](https://www.nuget.org/packages/wangkanai.foundation.domain)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.domain)](https://www.nuget.org/packages/wangkanai.foundation.domain)
-- Application [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.application)](https://www.nuget.org/packages/wangkanai.foundation.application)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.application)](https://www.nuget.org/packages/wangkanai.foundation.application)
-- Infrastructure [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.infrastructure)](https://www.nuget.org/packages/wangkanai.foundation.infrastructure)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.infrastructure)](https://www.nuget.org/packages/wangkanai.foundation.infrastructure)
+| Package                             | Release                                                                                                                                                    | Pre-Release                                                                                                                                                       |
+|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Wangkanai.Foundation.Domain         | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.domain)](https://www.nuget.org/packages/wangkanai.foundation.domain)                 | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.domain)](https://www.nuget.org/packages/wangkanai.foundation.domain)                 |
+| Wangkanai.Foundation.Application    | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.application)](https://www.nuget.org/packages/wangkanai.foundation.application)       | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.application)](https://www.nuget.org/packages/wangkanai.foundation.application)       |
+| Wangkanai.Foundation.Infrastructure | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.foundation.infrastructure)](https://www.nuget.org/packages/wangkanai.foundation.infrastructure) | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.foundation.infrastructure)](https://www.nuget.org/packages/wangkanai.foundation.infrastructure) |
 
 Core domain-driven design patterns and fundamental building blocks for implementing DDD in .NET applications. This module provides
 the essential abstractions and base implementations for creating rich domain models.
 
 **Features:**
 
-- **Entity Base Classes**: Strongly-typed entities with generic ID support
-- **Value Objects**: Immutable value objects with structural equality
-- **Aggregate Roots**: Support for aggregate boundaries and consistency rules
-- **Domain Events**: Event-driven architecture with domain event handlers
-- **Repositories**: Generic repository interfaces and patterns
-- **Specifications**: Query specification pattern implementation
-- **Result Patterns**: Railway-oriented programming for error handling
-- **Domain Services**: Encapsulation of domain logic
-- **Unit of Work**: Transaction boundary management
+- **Entity Base Classes**: Strongly-typed entities with generic ID support, optimized EF proxy handling, and performance caching
+- **Value Objects**: Immutable value objects with structural equality, cache key generation, and optimized equality comparison
+- **Aggregate Roots**: Support for aggregate boundaries with typed ID constraints (Int, Guid, String, Long, Byte)
+- **Domain Events**: Event-driven architecture with versioning, timestamps, and event suppression capabilities
+- **Repository Pattern**: Generic sync/async repository interfaces with Unit of Work pattern support
+- **Result Pattern**: Railway-oriented programming for error handling with typed success/failure results
+- **Domain Exceptions**: Structured exception hierarchy for domain-specific errors
+- **Cache Key Management**: Advanced cache key generation with type-based and composite key support
+- **Change Tracking**: Entity state tracking with entry state management (Unchanged, Modified, Added, Deleted)
+- **Performance Optimizations**: Built-in performance monitoring and type caching for improved runtime efficiency
 
 ### Wangkanai.Audit
 
-- Domain [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
-- Application
-- Infrastructure
+| Package                        | Release                                                                                                                                          | Pre-Release                                                                                                                                             |
+|--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Wangkanai.Audit.Domain         | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)                               | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)                               |
+| Wangkanai.Audit.Application    | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit.application)](https://www.nuget.org/packages/wangkanai.audit.application)       | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit.application)](https://www.nuget.org/packages/wangkanai.audit.application)       |
+| Wangkanai.Audit.Infrastructure | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit.infrastructure)](https://www.nuget.org/packages/wangkanai.audit.infrastructure) | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit.infrastructure)](https://www.nuget.org/packages/wangkanai.audit.infrastructure) |
 
 Comprehensive auditing module for maintaining complete audit trails and change history in your domain models. Seamlessly
 integrates with the Foundation module to provide automatic tracking capabilities.
 
 **Features:**
 
-- **Automatic Change Tracking**: Intercept and record all entity modifications
-- **User Audit Trails**: Track who made changes and when
-- **Audit Entities**: Pre-built audit entity base classes
-- **Flexible Configuration**: Configurable audit policies and filters
-- **Audit Context**: Capture additional contextual information
-- **Query Support**: Rich querying capabilities for audit data
-- **Compliance Ready**: Meet regulatory and compliance requirements
-- **Soft Delete Support**: Track deletions without data loss
-- **Field-Level Tracking**: Monitor changes at property level
+- **Audit Trail Entity**: Comprehensive trail tracking with user, timestamp, and change details
+- **Auditable Entity Base Classes**: Pre-built entities with Created, Updated, Deleted timestamps
+- **User Auditable Entities**: Track CreatedBy, UpdatedBy, DeletedBy user information
+- **Trail Type Enumeration**: Categorize changes as Create, Update, Delete, or None
+- **JSON Value Storage**: Efficient storage of old/new values in optimized JSON format
+- **Field-Level Change Tracking**: Monitor and record specific column modifications
+- **Trail Store Repository**: Queryable store for managing and retrieving audit records
+- **Entity Configuration Builders**: Fluent API for configuring audit behavior
+- **Soft Delete Support**: Track deletions with timestamp and user information
+- **Row Version Support**: Optimistic concurrency control with version tracking
 
 ### Wangkanai.EntityFramework
 
-[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
-
-- Postgres
-- SqlServer
-- MySql
-- Sqlite
+| Package                             | Release                                                                                                                                                    | Pre-Release                                                                                                                                                       |
+|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Wangkanai.EntityFramework           | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)                     | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)                     |
+| Wangkanai.EntityFramework.Postgres  | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework.postgres)](https://www.nuget.org/packages/wangkanai.entityframework.postgres)   | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework.postgres)](https://www.nuget.org/packages/wangkanai.entityframework.postgres)   |
+| Wangkanai.EntityFramework.SqlServer | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework.sqlserver)](https://www.nuget.org/packages/wangkanai.entityframework.sqlserver) | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework.sqlserver)](https://www.nuget.org/packages/wangkanai.entityframework.sqlserver) |
+| Wangkanai.EntityFramework.MySql     | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework.mysql)](https://www.nuget.org/packages/wangkanai.entityframework.mysql)         | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework.mysql)](https://www.nuget.org/packages/wangkanai.entityframework.mysql)         |
+| Wangkanai.EntityFramework.Sqlite    | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework.sqlite)](https://www.nuget.org/packages/wangkanai.entityframework.sqlite)       | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework.sqlite)](https://www.nuget.org/packages/wangkanai.entityframework.sqlite)       |
 
 Entity Framework Core integration module that bridges DDD patterns with EF Core's powerful ORM capabilities. Provides utilities
 and extensions for seamless database operations while maintaining domain model purity.
 
 **Features:**
 
-- **DbContext Extensions**: Enhanced context configuration and setup
-- **Repository Implementation**: EF Core-based repository patterns
-- **Value Converters**: Custom converters for value objects
-- **Shadow Properties**: Automatic timestamp and audit field management
-- **Migration Helpers**: Simplified database migration utilities
-- **Query Extensions**: LINQ extensions for common query patterns
-- **Performance Optimizations**: Query optimization and caching strategies
-- **Convention Configurations**: Automatic entity configuration based on conventions
-- **Seed Data Support**: Fluent API for database seeding
-- **Multi-tenancy Support**: Built-in tenant isolation patterns
+- **Database Management Extensions**: CreateDatabase, MigrateDatabase with async support
+- **Value Generators**: DateTime and DateTimeOffset generators for automatic timestamps
+- **Database Provider Support**: Specialized extensions for Postgres, SqlServer, MySql, Sqlite
+- **PostgreSQL Features**: JSONB support, array types, full-text search, partitioning, real-time notifications
+- **SQL Server Features**: Temporal tables, columnstore indexes, memory-optimized tables, change tracking
+- **MySQL Features**: JSON support, replication configuration, partitioning, query optimization
+- **SQLite Features**: JSON1 extension, full-text search, spatial data, version management
+- **Bulk Operations**: Efficient bulk insert/update/delete across all providers
+- **Index Optimization**: Provider-specific index configurations and strategies
+- **Connection Management**: Advanced connection pooling and configuration options
 
 ## 🤝 Contributing
 
