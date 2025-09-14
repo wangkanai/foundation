@@ -1,4 +1,5 @@
-#!/usr/bin/env pwsh
+# This script is compatible with both Windows PowerShell and PowerShell Core.
+# Run with: powershell -File clean.ps1   or   pwsh clean.ps1
 
 # Clean script to remove all TestResults folders recursively
 Write-Host "Cleaning TestResults folders..." -ForegroundColor Yellow
