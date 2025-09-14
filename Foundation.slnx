@@ -27,6 +27,7 @@
     <File Path="SonarQube.Analysis.xml" />
     <File Path=".editorconfig" />
     <File Path=".resharper-cleanup.config" />
+    <File Path="clean.ps1" />
   </Folder>
   <Folder Name="/Audit/">
     <Project Path="Audit\src\Application\Wangkanai.Audit.Application.csproj" Type="Classic C#" />
@@ -40,10 +41,14 @@
   </Folder>
   <Folder Name="/Audit/tests/">
     <Project Path="Audit\tests\Application\Functional\Wangkanai.Audit.Application.FunctionalTests.csproj" Type="Classic C#" />
+    <Project Path="Audit\tests\Application\Integration\Wangkanai.Audit.Application.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Application\Unit\Wangkanai.Audit.Application.UnitTests.csproj" Type="Classic C#" />
+    <Project Path="Audit\tests\Domain\Functional\Wangkanai.Audit.Domain.FunctionalTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Domain\Integration\Wangkanai.Audit.Domain.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Domain\Unit\Wangkanai.Audit.Domain.UnitTests.csproj" Type="Classic C#" />
+    <Project Path="Audit\tests\Infrastructure\Functional\Wangkanai.Audit.Infrastructure.FunctionalTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Infrastructure\Integration\Wangkanai.Audit.Infrastructure.IntegrationTests.csproj" Type="Classic C#" />
+    <Project Path="Audit\tests\Infrastructure\Unit\Wangkanai.Audit.Infrastructure.UnitTests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/EntityFramework/">
     <Project Path="EntityFramework\src\EntityFramework\Wangkanai.EntityFramework.csproj" Type="Classic C#" />
@@ -76,9 +81,13 @@
   </Folder>
   <Folder Name="/Foundation/tests/">
     <Project Path="Foundation\tests\Application\Functional\Wangkanai.Foundation.Application.FunctionalTests.csproj" Type="Classic C#" />
+    <Project Path="Foundation\tests\Application\Integration\Wangkanai.Foundation.Application.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Application\Unit\Wangkanai.Foundation.Application.UnitTests.csproj" Type="Classic C#" />
+    <Project Path="Foundation\tests\Domain\Functional\Wangkanai.Foundation.Domain.FunctionalTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Domain\Integration\Wangkanai.Foundation.Domain.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Domain\Unit\Wangkanai.Foundation.Domain.UnitTests.csproj" Type="Classic C#" />
+    <Project Path="Foundation\tests\Infrastructure\Functional\Wangkanai.Foundation.Infrastructure.FunctionalTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Infrastructure\Integration\Wangkanai.Foundation.Infrastructure.IntegrationTests.csproj" Type="Classic C#" />
+    <Project Path="Foundation\tests\Infrastructure\Unit\Wangkanai.Foundation.Infrastructure.UnitTests.csproj" Type="Classic C#" />
   </Folder>
 </Solution>

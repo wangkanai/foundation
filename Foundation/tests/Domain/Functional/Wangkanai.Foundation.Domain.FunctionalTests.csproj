@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+   <ItemGroup>
+      <ProjectReference Include="..\..\..\..\Audit\src\Domain\Wangkanai.Audit.Domain.csproj"/>
+   </ItemGroup>
+
+</Project>

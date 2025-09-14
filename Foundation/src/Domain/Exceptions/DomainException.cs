@@ -14,14 +14,12 @@ public abstract class DomainException : Exception
    /// This class serves as a foundation for creating custom exceptions related to
    /// specific domain logic errors within the application.
    /// </summary>
-   protected DomainException(string message)
-      : base(message) { }
+   protected DomainException(string message) : base(message) { }
 
    /// <summary>
    /// Represents a base class for domain-specific exceptions.
    /// This class serves as a foundation for creating custom exceptions related to
    /// specific domain logic errors within the application.
    /// </summary>
-   protected DomainException(string message, Exception innerException)
-      : base(message, innerException) { }
+   protected DomainException(string message, Exception innerException) : base(message, innerException) { }
 }
