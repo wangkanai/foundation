@@ -44,11 +44,12 @@ the essential abstractions and base implementations for creating rich domain mod
 
 ### Wangkanai.Audit
 
-| Package | Release | Pre-Release |
-|---------|---------|-------------|
-| Wangkanai.Audit.Domain | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit.domain)](https://www.nuget.org/packages/wangkanai.audit.domain) | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit.domain)](https://www.nuget.org/packages/wangkanai.audit.domain) |
-| Wangkanai.Audit.Application | - | - |
-| Wangkanai.Audit.Infrastructure | - | - |
+- Domain [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
+  [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
+- Application [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit.application)](https://www.nuget.org/packages/wangkanai.audit.application)
+  [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit.application)](https://www.nuget.org/packages/wangkanai.audit.application)
+- Infrastructure [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit.infrastructure)](https://www.nuget.org/packages/wangkanai.audit.infrastructure)
+  [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit.infrastructure)](https://www.nuget.org/packages/wangkanai.audit.infrastructure)
 
 Comprehensive auditing module for maintaining complete audit trails and change history in your domain models. Seamlessly
 integrates with the Foundation module to provide automatic tracking capabilities.
@@ -67,13 +68,14 @@ integrates with the Foundation module to provide automatic tracking capabilities
 
 ### Wangkanai.EntityFramework
 
-| Package | Release | Pre-Release |
-|---------|---------|-------------|
-| Wangkanai.EntityFramework | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework) | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework) |
-| Wangkanai.EntityFramework.Postgres | - | - |
-| Wangkanai.EntityFramework.SqlServer | - | - |
-| Wangkanai.EntityFramework.MySql | - | - |
-| Wangkanai.EntityFramework.Sqlite | - | - |
+- Postgres [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework.postgres)](https://www.nuget.org/packages/wangkanai.entityframework.postgres)
+  [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework.postgres)](https://www.nuget.org/packages/wangkanai.entityframework.postgres)
+- SqlServer [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework.sqlserver)](https://www.nuget.org/packages/wangkanai.entityframework.sqlserver)
+  [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework.sqlserver)](https://www.nuget.org/packages/wangkanai.entityframework.sqlserver)
+- MySql [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework.mysql)](https://www.nuget.org/packages/wangkanai.entityframework.mysql)
+  [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework.mysql)](https://www.nuget.org/packages/wangkanai.entityframework.mysql)
+- Sqlite [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework.sqlite)](https://www.nuget.org/packages/wangkanai.entityframework.sqlite)
+  [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework.sqlite)](https://www.nuget.org/packages/wangkanai.entityframework.sqlite)
 
 Entity Framework Core integration module that bridges DDD patterns with EF Core's powerful ORM capabilities. Provides utilities
 and extensions for seamless database operations while maintaining domain model purity.
