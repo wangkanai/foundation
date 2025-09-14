@@ -41,10 +41,12 @@
   </Folder>
   <Folder Name="/Audit/tests/">
     <Project Path="Audit\tests\Application\Functional\Wangkanai.Audit.Application.FunctionalTests.csproj" Type="Classic C#" />
+    <Project Path="Audit\tests\Application\Integration\Wangkanai.Audit.Application.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Application\Unit\Wangkanai.Audit.Application.UnitTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Domain\Functional\Wangkanai.Audit.Domain.FunctionalTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Domain\Integration\Wangkanai.Audit.Domain.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Domain\Unit\Wangkanai.Audit.Domain.UnitTests.csproj" Type="Classic C#" />
+    <Project Path="Audit\tests\Infrastructure\Functional\Wangkanai.Audit.Infrastructure.FunctionalTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Infrastructure\Integration\Wangkanai.Audit.Infrastructure.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Infrastructure\Unit\Wangkanai.Audit.Infrastructure.UnitTests.csproj" Type="Classic C#" />
   </Folder>
