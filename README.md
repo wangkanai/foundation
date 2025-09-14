@@ -31,22 +31,24 @@ the essential abstractions and base implementations for creating rich domain mod
 
 **Features:**
 
-- **Entity Base Classes**: Strongly-typed entities with generic ID support
-- **Value Objects**: Immutable value objects with structural equality
-- **Aggregate Roots**: Support for aggregate boundaries and consistency rules
-- **Domain Events**: Event-driven architecture with domain event handlers
-- **Repositories**: Generic repository interfaces and patterns
-- **Specifications**: Query specification pattern implementation
-- **Result Patterns**: Railway-oriented programming for error handling
-- **Domain Services**: Encapsulation of domain logic
-- **Unit of Work**: Transaction boundary management
+- **Entity Base Classes**: Strongly-typed entities with generic ID support, optimized EF proxy handling, and performance caching
+- **Value Objects**: Immutable value objects with structural equality, cache key generation, and optimized equality comparison
+- **Aggregate Roots**: Support for aggregate boundaries with typed ID constraints (Int, Guid, String, Long, Byte)
+- **Domain Events**: Event-driven architecture with versioning, timestamps, and event suppression capabilities
+- **Repository Pattern**: Generic sync/async repository interfaces with Unit of Work pattern support
+- **Result Pattern**: Railway-oriented programming for error handling with typed success/failure results
+- **Domain Exceptions**: Structured exception hierarchy for domain-specific errors
+- **Cache Key Management**: Advanced cache key generation with type-based and composite key support
+- **Change Tracking**: Entity state tracking with entry state management (Unchanged, Modified, Added, Deleted)
+- **Performance Optimizations**: Built-in performance monitoring and type caching for improved runtime efficiency
 
 ### Wangkanai.Audit
 
-- Domain [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
-  [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit)](https://www.nuget.org/packages/wangkanai.audit)
-- Application
-- Infrastructure
+| Package | Release | Pre-Release |
+|---------|---------|-------------|
+| Wangkanai.Audit.Domain | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.audit.domain)](https://www.nuget.org/packages/wangkanai.audit.domain) | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.audit.domain)](https://www.nuget.org/packages/wangkanai.audit.domain) |
+| Wangkanai.Audit.Application | - | - |
+| Wangkanai.Audit.Infrastructure | - | - |
 
 Comprehensive auditing module for maintaining complete audit trails and change history in your domain models. Seamlessly
 integrates with the Foundation module to provide automatic tracking capabilities.
@@ -65,13 +67,13 @@ integrates with the Foundation module to provide automatic tracking capabilities
 
 ### Wangkanai.EntityFramework
 
-[![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
-[![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework)
-
-- Postgres
-- SqlServer
-- MySql
-- Sqlite
+| Package | Release | Pre-Release |
+|---------|---------|-------------|
+| Wangkanai.EntityFramework | [![NuGet Version](https://img.shields.io/nuget/v/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework) | [![NuGet Pre Release](https://img.shields.io/nuget/vpre/wangkanai.entityframework)](https://www.nuget.org/packages/wangkanai.entityframework) |
+| Wangkanai.EntityFramework.Postgres | - | - |
+| Wangkanai.EntityFramework.SqlServer | - | - |
+| Wangkanai.EntityFramework.MySql | - | - |
+| Wangkanai.EntityFramework.Sqlite | - | - |
 
 Entity Framework Core integration module that bridges DDD patterns with EF Core's powerful ORM capabilities. Provides utilities
 and extensions for seamless database operations while maintaining domain model purity.
