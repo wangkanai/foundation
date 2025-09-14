@@ -14,7 +14,7 @@ for implementing Domain-Driven Design (DDD) patterns in .NET applications. This 
 capabilities, comprehensive auditing features, and Entity Framework Core integrations to accelerate enterprise application
 development.
 
-## 📦 Packages
+## 📦 Modules
 
 This repository produces three NuGet packages:
 
@@ -89,44 +89,6 @@ and extensions for seamless database operations while maintaining domain model p
 - **Convention Configurations**: Automatic entity configuration based on conventions
 - **Seed Data Support**: Fluent API for database seeding
 - **Multi-tenancy Support**: Built-in tenant isolation patterns
-
-## 🚀 Quick Start
-
-### Installation
-
-Install the packages you need via NuGet Package Manager:
-
-```bash
-# Core DDD foundation patterns
-dotnet add package Wangkanai.Foundation
-
-# Auditing capabilities
-dotnet add package Wangkanai.Audit
-
-# Entity Framework Core integration
-dotnet add package Wangkanai.EntityFramework
-```
-
-## 🏗️ Architecture
-
-This repository follows a **clean architecture** approach with the following structure:
-
-```
-src/
-├── Foundation/       # Core DDD patterns and building blocks
-├── Audit/            # Auditing and change tracking
-└── EntityFramework/  # EF Core integration and utilities
-
-tests/
-├── Foundation/       # Foundation module tests
-├── Audit/            # Audit module tests
-└── EntityFramework/  # EntityFramework module tests
-
-benchmark/
-├── Foundation/       # Performance benchmarks
-├── Audit/            # Audit performance tests
-└── EntityFramework/  # EF utilities benchmarks
-```
 
 ## 🤝 Contributing
 
