@@ -81,6 +81,7 @@
   </Folder>
   <Folder Name="/Foundation/tests/">
     <Project Path="Foundation\tests\Application\Functional\Wangkanai.Foundation.Application.FunctionalTests.csproj" Type="Classic C#" />
+    <Project Path="Foundation\tests\Application\Integration\Wangkanai.Foundation.Application.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Application\Unit\Wangkanai.Foundation.Application.UnitTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Domain\Functional\Wangkanai.Foundation.Domain.FunctionalTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Domain\Integration\Wangkanai.Foundation.Domain.IntegrationTests.csproj" Type="Classic C#" />
