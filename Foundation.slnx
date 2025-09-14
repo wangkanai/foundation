@@ -42,6 +42,7 @@
   <Folder Name="/Audit/tests/">
     <Project Path="Audit\tests\Application\Functional\Wangkanai.Audit.Application.FunctionalTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Application\Unit\Wangkanai.Audit.Application.UnitTests.csproj" Type="Classic C#" />
+    <Project Path="Audit\tests\Domain\Functional\Wangkanai.Audit.Domain.FunctionalTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Domain\Integration\Wangkanai.Audit.Domain.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Domain\Unit\Wangkanai.Audit.Domain.UnitTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Infrastructure\Integration\Wangkanai.Audit.Infrastructure.IntegrationTests.csproj" Type="Classic C#" />
@@ -81,6 +82,7 @@
     <Project Path="Foundation\tests\Application\Unit\Wangkanai.Foundation.Application.UnitTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Domain\Integration\Wangkanai.Foundation.Domain.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Domain\Unit\Wangkanai.Foundation.Domain.UnitTests.csproj" Type="Classic C#" />
+    <Project Path="Foundation\tests\Infrastructure\Functional\Wangkanai.Foundation.Infrastructure.FunctionalTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Infrastructure\Integration\Wangkanai.Foundation.Infrastructure.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Foundation\tests\Infrastructure\Unit\Wangkanai.Foundation.Infrastructure.UnitTests.csproj" Type="Classic C#" />
   </Folder>
