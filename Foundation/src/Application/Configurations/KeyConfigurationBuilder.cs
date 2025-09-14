@@ -13,16 +13,11 @@ public static class KeyConfigurationBuilder
 {
    private const int IndexKeyLength = 450;
 
-   /// <summary>
-   /// Configures the primary key for an entity type in a domain-driven design context.
-   /// </summary>
+   /// <summary> Configures the primary key for an entity type in a domain-driven design context. </summary>
    /// <typeparam name="T">
-   /// The type of the primary key. It must implement <see cref="IEquatable{T}"/>
-   /// and <see cref="IComparable{T}"/>.
+   /// The type of the primary key. It must implement <see cref="IEquatable{T}"/>  and <see cref="IComparable{T}"/>.
    /// </typeparam>
-   /// <param name="builder">
-   /// The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type.
-   /// </param>
+   /// <param name="builder"> The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type. </param>
    public static void HasDomainKey<T>(this EntityTypeBuilder<IEntity<T>> builder)
       where T : IEquatable<T>, IComparable<T>
    {
@@ -32,10 +27,8 @@ public static class KeyConfigurationBuilder
              .ApplyKeyOptimizations();
    }
 
-   /// <summary>
-   /// Configures the primary key for entities inheriting from Entity{T}.
-   /// </summary>
-   /// <typeparam name="TEntity">The entity type that inherits from Entity{T}.</typeparam>
+   /// <summary> Configures the primary key for entities inheriting from <see cref="Entity{T}"/>. </summary>
+   /// <typeparam name="TEntity">The entity type that inherits from <see cref="Entity{T}"/>.</typeparam>
    /// <typeparam name="TKey">The type of the primary key.</typeparam>
    /// <param name="builder">The entity type builder.</param>
    public static EntityTypeBuilder<TEntity> HasDomainKey<TEntity, TKey>(this EntityTypeBuilder<TEntity> builder)
@@ -46,39 +39,6 @@ public static class KeyConfigurationBuilder
       builder.Property(x => x.Id)
              .IsRequired()
              .ApplyKeyOptimizations();
-      return builder;
-   }
-
-   /// <summary>
-   /// Configures an entity inheriting from Entity{T} with comprehensive settings.
-   /// </summary>
-   /// <typeparam name="TEntity">The entity type that inherits from Entity{T}.</typeparam>
-   /// <typeparam name="TKey">The type of the primary key.</typeparam>
-   /// <param name="builder">The entity type builder.</param>
-   public static EntityTypeBuilder<TEntity> ConfigureEntity<TEntity, TKey>(this EntityTypeBuilder<TEntity> builder)
-      where TEntity : Entity<TKey>
-      where TKey : IEquatable<TKey>, IComparable<TKey>
-   {
-      builder.HasDomainKey<TEntity, TKey>();
-      builder.HasIndex(x => x.Id);
-      return builder;
-   }
-
-   /// <summary>
-   /// Configures optimized ID settings for entities inheriting from Entity{T}.
-   /// </summary>
-   /// <typeparam name="TEntity">The entity type that inherits from Entity{T}.</typeparam>
-   /// <typeparam name="TKey">The type of the primary key.</typeparam>
-   /// <param name="builder">The entity type builder.</param>
-   public static EntityTypeBuilder<TEntity> HasOptimizedId<TEntity, TKey>(this EntityTypeBuilder<TEntity> builder)
-      where TEntity : Entity<TKey>
-      where TKey : IEquatable<TKey>, IComparable<TKey>
-   {
-      builder.Property(x => x.Id)
-             .IsRequired()
-             .ApplyKeyOptimizations();
-
-      builder.HasIndex(x => x.Id);
       return builder;
    }
 
