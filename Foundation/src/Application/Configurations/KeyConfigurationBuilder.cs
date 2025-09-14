@@ -18,13 +18,15 @@ public static class KeyConfigurationBuilder
    /// The type of the primary key. It must implement <see cref="IEquatable{T}"/>  and <see cref="IComparable{T}"/>.
    /// </typeparam>
    /// <param name="builder"> The <see cref="EntityTypeBuilder{TEntity}"/> used to configure the entity type. </param>
-   public static void HasDomainKey<T>(this EntityTypeBuilder<IEntity<T>> builder)
+   public static EntityTypeBuilder<IEntity<T>> HasDomainKey<T>(this EntityTypeBuilder<IEntity<T>> builder)
       where T : IEquatable<T>, IComparable<T>
    {
       builder.HasKey(x => x.Id);
       builder.Property(x => x.Id)
              .IsRequired()
              .ApplyKeyOptimizations();
+
+      return builder;
    }
 
    /// <summary> Configures the primary key for entities inheriting from <see cref="Entity{T}"/>. </summary>
@@ -39,6 +41,7 @@ public static class KeyConfigurationBuilder
       builder.Property(x => x.Id)
              .IsRequired()
              .ApplyKeyOptimizations();
+
       return builder;
    }
 
