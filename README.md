@@ -55,15 +55,16 @@ integrates with the Foundation module to provide automatic tracking capabilities
 
 **Features:**
 
-- **Automatic Change Tracking**: Intercept and record all entity modifications
-- **User Audit Trails**: Track who made changes and when
-- **Audit Entities**: Pre-built audit entity base classes
-- **Flexible Configuration**: Configurable audit policies and filters
-- **Audit Context**: Capture additional contextual information
-- **Query Support**: Rich querying capabilities for audit data
-- **Compliance Ready**: Meet regulatory and compliance requirements
-- **Soft Delete Support**: Track deletions without data loss
-- **Field-Level Tracking**: Monitor changes at property level
+- **Audit Trail Entity**: Comprehensive trail tracking with user, timestamp, and change details
+- **Auditable Entity Base Classes**: Pre-built entities with Created, Updated, Deleted timestamps
+- **User Auditable Entities**: Track CreatedBy, UpdatedBy, DeletedBy user information
+- **Trail Type Enumeration**: Categorize changes as Create, Update, Delete, or None
+- **JSON Value Storage**: Efficient storage of old/new values in optimized JSON format
+- **Field-Level Change Tracking**: Monitor and record specific column modifications
+- **Trail Store Repository**: Queryable store for managing and retrieving audit records
+- **Entity Configuration Builders**: Fluent API for configuring audit behavior
+- **Soft Delete Support**: Track deletions with timestamp and user information
+- **Row Version Support**: Optimistic concurrency control with version tracking
 
 ### Wangkanai.EntityFramework
 
@@ -79,16 +80,16 @@ and extensions for seamless database operations while maintaining domain model p
 
 **Features:**
 
-- **DbContext Extensions**: Enhanced context configuration and setup
-- **Repository Implementation**: EF Core-based repository patterns
-- **Value Converters**: Custom converters for value objects
-- **Shadow Properties**: Automatic timestamp and audit field management
-- **Migration Helpers**: Simplified database migration utilities
-- **Query Extensions**: LINQ extensions for common query patterns
-- **Performance Optimizations**: Query optimization and caching strategies
-- **Convention Configurations**: Automatic entity configuration based on conventions
-- **Seed Data Support**: Fluent API for database seeding
-- **Multi-tenancy Support**: Built-in tenant isolation patterns
+- **Database Management Extensions**: CreateDatabase, MigrateDatabase with async support
+- **Value Generators**: DateTime and DateTimeOffset generators for automatic timestamps
+- **Database Provider Support**: Specialized extensions for Postgres, SqlServer, MySql, Sqlite
+- **PostgreSQL Features**: JSONB support, array types, full-text search, partitioning, real-time notifications
+- **SQL Server Features**: Temporal tables, columnstore indexes, memory-optimized tables, change tracking
+- **MySQL Features**: JSON support, replication configuration, partitioning, query optimization
+- **SQLite Features**: JSON1 extension, full-text search, spatial data, version management
+- **Bulk Operations**: Efficient bulk insert/update/delete across all providers
+- **Index Optimization**: Provider-specific index configurations and strategies
+- **Connection Management**: Advanced connection pooling and configuration options
 
 ## 🤝 Contributing
 
