@@ -27,6 +27,7 @@
     <File Path="SonarQube.Analysis.xml" />
     <File Path=".editorconfig" />
     <File Path=".resharper-cleanup.config" />
+    <File Path="clean.ps1" />
   </Folder>
   <Folder Name="/Audit/">
     <Project Path="Audit\src\Application\Wangkanai.Audit.Application.csproj" Type="Classic C#" />
