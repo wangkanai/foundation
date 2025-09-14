@@ -1,5 +1,6 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Wangkanai.Foundation.Configurations;
@@ -29,6 +30,56 @@ public static class KeyConfigurationBuilder
       builder.Property(x => x.Id)
              .IsRequired()
              .ApplyKeyOptimizations();
+   }
+
+   /// <summary>
+   /// Configures the primary key for entities inheriting from Entity{T}.
+   /// </summary>
+   /// <typeparam name="TEntity">The entity type that inherits from Entity{T}.</typeparam>
+   /// <typeparam name="TKey">The type of the primary key.</typeparam>
+   /// <param name="builder">The entity type builder.</param>
+   public static EntityTypeBuilder<TEntity> HasDomainKey<TEntity, TKey>(this EntityTypeBuilder<TEntity> builder)
+      where TEntity : Entity<TKey>
+      where TKey : IEquatable<TKey>, IComparable<TKey>
+   {
+      builder.HasKey(x => x.Id);
+      builder.Property(x => x.Id)
+             .IsRequired()
+             .ApplyKeyOptimizations();
+      return builder;
+   }
+
+   /// <summary>
+   /// Configures an entity inheriting from Entity{T} with comprehensive settings.
+   /// </summary>
+   /// <typeparam name="TEntity">The entity type that inherits from Entity{T}.</typeparam>
+   /// <typeparam name="TKey">The type of the primary key.</typeparam>
+   /// <param name="builder">The entity type builder.</param>
+   public static EntityTypeBuilder<TEntity> ConfigureEntity<TEntity, TKey>(this EntityTypeBuilder<TEntity> builder)
+      where TEntity : Entity<TKey>
+      where TKey : IEquatable<TKey>, IComparable<TKey>
+   {
+      builder.HasDomainKey<TEntity, TKey>();
+      builder.HasIndex(x => x.Id);
+      return builder;
+   }
+
+   /// <summary>
+   /// Configures optimized ID settings for entities inheriting from Entity{T}.
+   /// </summary>
+   /// <typeparam name="TEntity">The entity type that inherits from Entity{T}.</typeparam>
+   /// <typeparam name="TKey">The type of the primary key.</typeparam>
+   /// <param name="builder">The entity type builder.</param>
+   public static EntityTypeBuilder<TEntity> HasOptimizedId<TEntity, TKey>(this EntityTypeBuilder<TEntity> builder)
+      where TEntity : Entity<TKey>
+      where TKey : IEquatable<TKey>, IComparable<TKey>
+   {
+      builder.Property(x => x.Id)
+             .IsRequired()
+             .ApplyKeyOptimizations();
+
+      builder.HasIndex(x => x.Id);
+      return builder;
    }
 
    private static PropertyBuilder<T> ApplyKeyOptimizations<T>(this PropertyBuilder<T> property)

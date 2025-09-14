@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+using Wangkanai.Foundation.Configurations;
+
 namespace Wangkanai.Audit.Configurations;
 
 /// <summary>
@@ -31,8 +33,7 @@ public class TrailConfiguration<TKey, TUserType, TUserKey> : IEntityTypeConfigur
    /// <param name="builder">An object that provides a simple API for configuring an entity type.</param>
    public void Configure(EntityTypeBuilder<Trail<TKey, TUserType, TUserKey>> builder)
    {
-      builder.HasKey(x => x.Id);
-      builder.Property(x => x.Id);
+      builder.HasDomainKey<Trail<TKey, TUserType, TUserKey>, TKey>();
 
       builder.HasIndex(x => x.EntityName);
       builder.Property(x => x.EntityName)
