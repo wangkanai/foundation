@@ -3,4 +3,5 @@
    <ItemGroup>
       <ProjectReference Include="..\..\..\src\Domain\Wangkanai.Audit.Domain.csproj" />
    </ItemGroup>
+
 </Project>

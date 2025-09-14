@@ -44,6 +44,7 @@
     <Project Path="Audit\tests\Domain\Integration\Wangkanai.Audit.Domain.IntegrationTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Domain\Unit\Wangkanai.Audit.Domain.UnitTests.csproj" Type="Classic C#" />
     <Project Path="Audit\tests\Infrastructure\Integration\Wangkanai.Audit.Infrastructure.IntegrationTests.csproj" Type="Classic C#" />
+    <Project Path="Audit\tests\Infrastructure\Unit\Wangkanai.Audit.Infrastructure.UnitTests.csproj" Type="Classic C#" />
   </Folder>
   <Folder Name="/EntityFramework/">
     <Project Path="EntityFramework\src\EntityFramework\Wangkanai.EntityFramework.csproj" Type="Classic C#" />
