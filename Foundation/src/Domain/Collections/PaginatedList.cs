@@ -1,7 +1,9 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
 using System.Linq.Expressions;
+
 using Microsoft.EntityFrameworkCore;
+
 using Wangkanai.Foundation.Extensions;
 
 namespace Wangkanai.Foundation.Collections;
