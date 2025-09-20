@@ -2,6 +2,7 @@
 
 using System.Linq.Expressions;
 using System.Reflection;
+using Wangkanai.Foundation.Collections;
 
 namespace Wangkanai.Foundation.Extensions;
 
@@ -64,7 +65,7 @@ public static class EnumerableExtensions
     /// <param name="source">The source collection to group.</param>
     /// <param name="propertyNames">The names of the properties to group by.</param>
     /// <returns>A grouped collection using composite keys.</returns>
-    public static IEnumerable<IGrouping<string, TElement>> GroupPropertyValuesBy<TElement>(
+    public static IEnumerable<IGrouping<CompositeKey, TElement>> GroupPropertyValuesBy<TElement>(
         this IEnumerable<TElement> source,
         params string[] propertyNames)
     {
@@ -96,8 +97,8 @@ public static class EnumerableExtensions
 
         return source.GroupBy(element =>
         {
-            var values = properties.Select(p => p.GetValue(element)?.ToString() ?? "null");
-            return string.Join("|", values);
+            var values = properties.Select(p => p.GetValue(element)).ToArray();
+            return new CompositeKey(values);
         });
     }
 

@@ -1,6 +1,7 @@
 // Copyright (c) 2014-2025 Sarin Na Wangkanai, All Rights Reserved.
 
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore;
 using Wangkanai.Foundation.Extensions;
 
 namespace Wangkanai.Foundation.Collections;
@@ -104,9 +105,20 @@ public class PaginatedList<T> : List<T>
     {
         ArgumentNullException.ThrowIfNull(source);
 
+        if (pageIndex < 1)
+            throw new ArgumentOutOfRangeException(nameof(pageIndex), "Page index must be 1 or greater.");
+
+        if (pageSize < 1)
+            throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be 1 or greater.");
+
         // Convert to list to avoid multiple enumeration
-        var sourceList = source as List<T> ?? source.ToList();
-        return Create(sourceList.AsQueryable(), pageIndex, pageSize);
+        var sourceList = source as IList<T> ?? source.ToList();
+        var count = sourceList.Count;
+        var items = sourceList.Skip((pageIndex - 1) * pageSize)
+                              .Take(pageSize)
+                              .ToList();
+
+        return new PaginatedList<T>(items, count, pageIndex, pageSize);
     }
 
     /// <summary>
@@ -142,6 +154,36 @@ public class PaginatedList<T> : List<T>
 
         var mappedItems = this.Select(selector).ToList();
         return new PaginatedList<TResult>(mappedItems, TotalCount, PageIndex, PageSize);
+    }
+
+    /// <summary>
+    /// Creates a paginated list asynchronously from a queryable source.
+    /// </summary>
+    /// <param name="source">The source queryable.</param>
+    /// <param name="pageIndex">The page index (1-based).</param>
+    /// <param name="pageSize">The page size.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A paginated list containing the items for the specified page.</returns>
+    public static async Task<PaginatedList<T>> CreateAsync(
+        IQueryable<T> source,
+        int pageIndex,
+        int pageSize,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(source);
+
+        if (pageIndex < 1)
+            throw new ArgumentOutOfRangeException(nameof(pageIndex), "Page index must be 1 or greater.");
+
+        if (pageSize < 1)
+            throw new ArgumentOutOfRangeException(nameof(pageSize), "Page size must be 1 or greater.");
+
+        var count = await source.CountAsync(cancellationToken);
+        var items = await source.Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToListAsync(cancellationToken);
+
+        return new PaginatedList<T>(items, count, pageIndex, pageSize);
     }
 
     /// <summary>
