@@ -1,62 +1,50 @@
-# Foundation DDD Constitution
-
-Minimal, enforceable rules that enable developers to build on the Foundation framework with correct Domain-Driven Design practices and zero unnecessary boilerplate.
+# [PROJECT_NAME] Constitution
+<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
 
 ## Core Principles
 
-### 1. Ubiquitous Language First
+### [PRINCIPLE_1_NAME]
+<!-- Example: I. Library-First -->
+[PRINCIPLE_1_DESCRIPTION]
+<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
 
-Every module begins by defining the domain language (entities, value objects, invariants, flows) before implementation. Code, tests, documentation, and commit messages reflect the same vocabulary. No model is created without an explicit ubiquitous language agreement.
+### [PRINCIPLE_2_NAME]
+<!-- Example: II. CLI Interface -->
+[PRINCIPLE_2_DESCRIPTION]
+<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
 
-### 2. Explicit Boundaries & Aggregate Integrity
+### [PRINCIPLE_3_NAME]
+<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
+[PRINCIPLE_3_DESCRIPTION]
+<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
 
-All domain changes flow through aggregate roots. Invariants are enforced inside aggregates only. Cross-aggregate access must use repositories or domain services. No leaking persistence concerns into the domain layer. Value objects are immutable and structurally comparable.
+### [PRINCIPLE_4_NAME]
+<!-- Example: IV. Integration Testing -->
+[PRINCIPLE_4_DESCRIPTION]
+<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
 
-### 3. Test-Driven & Contract-Guarded
+### [PRINCIPLE_5_NAME]
+<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
+[PRINCIPLE_5_DESCRIPTION]
+<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
 
-Write failing unit/spec tests for entities, value objects, and domain services before implementation. Add integration tests only for persistence behaviors and domain event publication. Red-Green-Refactor is mandatory; code merged without test coverage is rejected.
+## [SECTION_2_NAME]
+<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
 
-### 4. Templates Over Boilerplate
+[SECTION_2_CONTENT]
+<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
 
-Scaffolding uses provided templates (entity, value object, repository, audit, domain event). Manual duplication of patterns is disallowed. New patterns must be codified into a template before adoption in more than one module.
+## [SECTION_3_NAME]
+<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
 
-### 5. Auditability & Traceable Evolution
-
-All auditable entities implement the auditing interfaces. Domain events are the authoritative record of state transitions. No silent mutation: every state change is traceable either via domain events or audit trails.
-
-## Platform & Architectural Constraints
-
-Runtime: .NET 9 only; nullable enabled; file-scoped namespaces; 3-space indentation.
-Keys: Entity keys implement `IEquatable<T>` and `IComparable<T>`; prefer strongly-typed IDs (wrappers) when ambiguity exists.
-Layers: Domain (pure), Application (orchestration + commands/queries), Infrastructure (EF, external systems). No Infrastructure reference inside Domain.
-Events: Domain events are synchronous in-process publication; external propagation handled by application/integration layer.
-Persistence: EF Core mappings never introduce business rules; only shape persistence.
-Guarding: Input validation performed at aggregate boundary using guard helpers; no defensive duplication downstream.
-Value Objects: Immutable, validated on construction, equality via component enumeration.
-Repositories: Return aggregates or value objects only—never raw data structures or anonymous types.
-Auditing: Any entity with business-relevant lifecycle must opt into auditing or document why excluded.
-
-## Development Workflow
-
-1. Scaffold: Use template to create entity/value object/repository/event.
-2. Language: Capture or update ubiquitous language notes (kept near module README or docs/architecture section).
-3. Specify: Write unit tests for invariants + value object equality + domain service behavior.
-4. Implement: Make tests pass with minimal code; enforce invariants internally.
-5. Integrate: Add persistence mapping + repository + audit registration.
-6. Wire: Register application behaviors (commands/queries) and domain event handlers.
-7. Review: PR must show tests, invariant coverage, and no extraneous infrastructure leakage.
-8. Document: Update docs if new concepts introduced (INDEX or architecture subpage).
-
-## Quality Gates (Minimum)
-
-100% test coverage for value object equality and entity invariants.
-No public setters on entities except for ORM-required protected/private constructors.
-All new aggregates emit at least one domain event on meaningful state transitions.
-No TODO comments left unresolved in domain or application layers.
-Static analysis warnings related to nullability or accessibility resolved before merge.
+[SECTION_3_CONTENT]
+<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
 
 ## Governance
+<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-This Constitution supersedes ad-hoc conventions. Non-compliant code must be refactored before feature acceptance unless a temporary exception is logged with an expiry date. Amendments require: (1) written proposal in `docs/architecture/` (2) justification + migration impact (3) approval via PR review by at least two maintainers. New recurring pattern → must become a template within two PRs or be rejected.
+[GOVERNANCE_RULES]
+<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
 
-**Version**: 1.0.0 | **Ratified**: 2025-09-14 | **Last Amended**: 2025-09-14
+**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
+<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
