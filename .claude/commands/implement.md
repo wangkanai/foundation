@@ -49,8 +49,16 @@ $ARGUMENTS
 7. Completion validation:
    - Verify all required tasks are completed
    - Check that implemented features match the original specification
-   - Validate that tests pass and coverage meets requirements
+   - Validate that tests pass and coverage meets requirements (80% minimum per Constitution)
    - Confirm the implementation follows the technical plan
+   - Verify constitution compliance:
+     * Domain boundaries preserved (Principle I)
+     * Tests written first (Principle II)
+     * Clean architecture layers maintained (Principle III)
+     * Audit trail implemented for data changes (Principle IV)
+     * Performance benchmarks included (Principle V)
+     * Extension methods used appropriately (Principle VI)
+     * Documentation in docs/ folder (Principle VII)
    - Report final status with summary of completed work
 
 Note: This command assumes a complete task breakdown exists in tasks.md. If tasks are incomplete or missing, suggest running `/tasks` first to regenerate the task list.

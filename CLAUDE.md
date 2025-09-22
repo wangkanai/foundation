@@ -2,6 +2,19 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Constitution Reference
+
+This project follows a formal constitution defined in `.specify/memory/constitution.md`. All development must comply with the seven core principles:
+1. Domain-Driven Design Excellence
+2. Test-First Development (NON-NEGOTIABLE)
+3. Clean Architecture Layers
+4. Comprehensive Audit Trail
+5. Performance-First Design
+6. Extension Method Preference
+7. Documentation as Code
+
+Refer to the constitution for detailed governance and amendment procedures.
+
 ## SonarQube Integration
 
 - **Project Key**: `wangkanai_foundation`
