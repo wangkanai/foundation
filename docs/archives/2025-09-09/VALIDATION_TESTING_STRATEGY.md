@@ -2,13 +2,15 @@
 
 ⚠️ **ARCHIVED DOCUMENT** - This was the original validation strategy for hierarchical structure.
 
-**See Current Implementation**: 
+**See Current Implementation**:
+
 - `MONOREPO_VALIDATION_STRATEGY.md` - Actual validation strategy for monorepo
 - `CLEAN_ARCHITECTURE_VALIDATION.md` - Clean Architecture validation scripts
 
 ## 🎯 **Original Overview (Superseded)**
 
-This document represents the original validation strategy for hierarchical structure. **The actual implementation used monorepo validation instead**.
+This document represents the original validation strategy for hierarchical structure. **The actual implementation used monorepo
+validation instead**.
 
 ---
 

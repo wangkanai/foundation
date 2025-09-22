@@ -1,6 +1,7 @@
 # Usage Patterns and Examples
 
-This document provides practical usage patterns and comprehensive examples for the Wangkanai Domain library, demonstrating how to effectively implement domain-driven design patterns with performance optimization.
+This document provides practical usage patterns and comprehensive examples for the Wangkanai Domain library, demonstrating how to
+effectively implement domain-driven design patterns with performance optimization.
 
 ## Table of Contents
 
@@ -20,6 +21,7 @@ This document provides practical usage patterns and comprehensive examples for t
 ### Project Setup
 
 1. **Install NuGet Packages**:
+
 ```xml
 <PackageReference Include="Wangkanai.Domain" Version="9.0.0" />
 <PackageReference Include="Wangkanai.Audit" Version="9.0.0" />
@@ -27,6 +29,7 @@ This document provides practical usage patterns and comprehensive examples for t
 ```
 
 2. **Add Using Statements**:
+
 ```csharp
 using Wangkanai.Domain;
 using Wangkanai.Audit;
@@ -64,13 +67,13 @@ public class Order : AuditableEntity<Guid>, IAggregateRoot<Guid>
         var item = new OrderItem(product.Id, quantity, unitPrice);
         Items.Add(item);
         RecalculateTotal();
-        
+
         return Result.Success();
     }
 
     private void RecalculateTotal()
     {
-        TotalAmount = Items.Aggregate(Money.Zero("USD"), 
+        TotalAmount = Items.Aggregate(Money.Zero("USD"),
             (sum, item) => sum.Add(item.LineTotal));
     }
 }
@@ -94,7 +97,7 @@ public class OrderItem : Entity<Guid>
     }
 }
 
-// Value Objects  
+// Value Objects
 public class Money : ValueObject
 {
     public decimal Amount { get; init; }
@@ -166,7 +169,7 @@ public class Customer : Entity<Guid>
     {
         if (string.IsNullOrWhiteSpace(email))
             throw new DomainException("Email cannot be empty");
-        
+
         Email = email;
     }
 }
@@ -188,7 +191,7 @@ public class Category : KeyIntEntity
     }
 }
 
-// String key  
+// String key
 public class ProductCode : KeyStringEntity
 {
     public string Description { get; private set; }
@@ -235,7 +238,7 @@ public class BankAccount : AuditableEntity<Guid>, IAggregateRoot<Guid>
         AccountNumber = accountNumber;
         Balance = initialDeposit;
         Status = AccountStatus.Active;
-        
+
         if (initialDeposit > 0)
         {
             _transactions.Add(new Transaction(TransactionType.Deposit, initialDeposit, "Initial deposit"));
@@ -279,7 +282,7 @@ public class BankAccount : AuditableEntity<Guid>, IAggregateRoot<Guid>
     {
         if (Balance != 0)
             throw new DomainException("Cannot close account with non-zero balance");
-        
+
         Status = AccountStatus.Closed;
     }
 }
@@ -316,7 +319,7 @@ public class EntityPerformanceService
     {
         // Get performance statistics for Entity<T> type caching
         var (hits, misses, hitRatio) = Entity<Guid>.GetPerformanceStats();
-        
+
         Console.WriteLine($"Entity Cache Performance:");
         Console.WriteLine($"  Hits: {hits}");
         Console.WriteLine($"  Misses: {misses}");
@@ -350,8 +353,8 @@ public class PersonName : ValueObject
         Middle = middle;
     }
 
-    public string FullName => string.IsNullOrEmpty(Middle) 
-        ? $"{First} {Last}" 
+    public string FullName => string.IsNullOrEmpty(Middle)
+        ? $"{First} {Last}"
         : $"{First} {Middle} {Last}";
 
     public static PersonName Parse(string fullName)
@@ -426,7 +429,7 @@ public class PhoneNumber : ValueObject
     {
         // Simple parsing logic - production code would be more robust
         var cleaned = new string(phoneNumber.Where(char.IsDigit).ToArray());
-        
+
         return cleaned.Length switch
         {
             10 => new PhoneNumber("1", cleaned[..3], cleaned[3..]),
@@ -452,7 +455,7 @@ public class Range<T> : ValueObject where T : IComparable<T>
         End = end;
     }
 
-    public bool Contains(T value) => 
+    public bool Contains(T value) =>
         value.CompareTo(Start) >= 0 && value.CompareTo(End) <= 0;
 
     public bool Overlaps(Range<T> other) =>
@@ -497,9 +500,9 @@ public class Tags : ValueObject
         return new Tags(newTags);
     }
 
-    public bool Contains(string tag) => 
+    public bool Contains(string tag) =>
         _tags.Contains(tag?.Trim().ToLowerInvariant());
-    
+
     public static implicit operator string[](Tags tags) => tags._tags.ToArray();
 }
 ```
@@ -517,7 +520,7 @@ public class Coordinates : ValueObject
     {
         if (latitude < -90 || latitude > 90)
             throw new ArgumentOutOfRangeException(nameof(latitude));
-        
+
         if (longitude < -180 || longitude > 180)
             throw new ArgumentOutOfRangeException(nameof(longitude));
 
@@ -529,7 +532,7 @@ public class Coordinates : ValueObject
     {
         // Haversine formula
         const double R = 6371; // Earth's radius in kilometers
-        
+
         var lat1Rad = ToRadians(Latitude);
         var lat2Rad = ToRadians(other.Latitude);
         var deltaLatRad = ToRadians(other.Latitude - Latitude);
@@ -538,7 +541,7 @@ public class Coordinates : ValueObject
         var a = Math.Sin(deltaLatRad / 2) * Math.Sin(deltaLatRad / 2) +
                 Math.Cos(lat1Rad) * Math.Cos(lat2Rad) *
                 Math.Sin(deltaLonRad / 2) * Math.Sin(deltaLonRad / 2);
-        
+
         var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
         return R * c;
     }
@@ -557,13 +560,13 @@ public class ProductDimensions : ValueObject
     public ProductDimensions(decimal length, decimal width, decimal height, string unit = "cm")
     {
         Length = length;
-        Width = width; 
+        Width = width;
         Height = height;
         Unit = unit;
     }
 
     public decimal Volume => Length * Width * Height;
-    
+
     // This will use compiled accessors for ~1000x performance improvement
     // in equality comparisons due to simple properties
 }
@@ -599,7 +602,7 @@ public class ProductService
 
         // Capture old values for audit
         var oldValues = new { product.Name, product.Price, product.Category };
-        
+
         // Update product
         product.Name = request.Name;
         product.Price = request.Price;
@@ -725,10 +728,10 @@ public class DocumentRepository : IAsyncRepository<Document>
 {
     private readonly ApplicationDbContext _context;
 
-    public IQueryable<Document> ActiveDocuments => 
+    public IQueryable<Document> ActiveDocuments =>
         _context.Documents.Where(d => !d.IsDeleted);
 
-    public IQueryable<Document> DeletedDocuments => 
+    public IQueryable<Document> DeletedDocuments =>
         _context.Documents.Where(d => d.IsDeleted);
 
     public async Task<Document?> GetActiveByIdAsync(Guid id)
@@ -744,7 +747,7 @@ public class DocumentRepository : IAsyncRepository<Document>
 
         document.Delete(deletedBy);
         await _context.SaveChangesAsync();
-        
+
         return Result.Success();
     }
 }
@@ -758,9 +761,9 @@ public class AuditConfiguration : IEntityTypeConfiguration<Audit<Guid, Applicati
     public void Configure(EntityTypeBuilder<Audit<Guid, ApplicationUser, string>> builder)
     {
         builder.ToTable("AuditTrails");
-        
+
         builder.HasKey(a => a.Id);
-        
+
         builder.Property(a => a.TrailType)
                .HasConversion<byte>();
 
@@ -777,7 +780,7 @@ public class AuditConfiguration : IEntityTypeConfiguration<Audit<Guid, Applicati
         // JSON columns for efficient storage
         builder.Property(a => a.OldValuesJson)
                .HasColumnType("nvarchar(max)");
-               
+
         builder.Property(a => a.NewValuesJson)
                .HasColumnType("nvarchar(max)");
 
@@ -932,7 +935,7 @@ public class BaseSpecification<T> : ISpecification<T>
 // Example specification
 public class OrdersWithItemsSpecification : BaseSpecification<Order>
 {
-    public OrdersWithItemsSpecification(Guid customerId) 
+    public OrdersWithItemsSpecification(Guid customerId)
         : base(o => o.CustomerId == customerId)
     {
         AddInclude(o => o.Items);
@@ -942,7 +945,7 @@ public class OrdersWithItemsSpecification : BaseSpecification<Order>
 
 public class ActiveOrdersSpecification : BaseSpecification<Order>
 {
-    public ActiveOrdersSpecification() 
+    public ActiveOrdersSpecification()
         : base(o => o.Status != OrderStatus.Cancelled && o.Status != OrderStatus.Delivered)
     {
         ApplyOrderBy(o => o.Created);
@@ -957,7 +960,7 @@ public interface IRepositoryWithSpecifications<T> : IAsyncRepository<T> where T 
     Task<int> CountAsync(ISpecification<T> spec);
 }
 
-public class RepositoryWithSpecifications<T> : Repository<T>, IRepositoryWithSpecifications<T> 
+public class RepositoryWithSpecifications<T> : Repository<T>, IRepositoryWithSpecifications<T>
     where T : class
 {
     public RepositoryWithSpecifications(ApplicationDbContext context) : base(context) { }
@@ -1053,7 +1056,7 @@ public class ProductPriceChangedEvent : DomainEvent
 
 ```csharp
 // Event handler interface (implementing MediatR pattern)
-public interface IDomainEventHandler<in TDomainEvent> 
+public interface IDomainEventHandler<in TDomainEvent>
     where TDomainEvent : IDomainEvent
 {
     Task Handle(TDomainEvent domainEvent, CancellationToken cancellationToken);
@@ -1075,10 +1078,10 @@ public class OrderCreatedEventHandler : IDomainEventHandler<OrderCreatedEvent>
     {
         // Send confirmation email
         await _emailService.SendOrderConfirmationAsync(domainEvent.CustomerId, domainEvent.OrderId);
-        
+
         // Reserve inventory
         await _inventoryService.ReserveInventoryForOrderAsync(domainEvent.OrderId);
-        
+
         // Other side effects...
     }
 }
@@ -1109,8 +1112,8 @@ public class ProductPriceChangedEventHandler : IDomainEventHandler<ProductPriceC
 
         // Notify relevant parties
         await _notificationService.NotifyPriceChangeAsync(
-            domainEvent.ProductId, 
-            domainEvent.OldPrice, 
+            domainEvent.ProductId,
+            domainEvent.OldPrice,
             domainEvent.NewPrice
         );
     }
@@ -1222,8 +1225,8 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> CreateOrder(CreateOrderCommand command)
     {
         var result = await _orderService.CreateOrderAsync(command);
-        
-        return result.IsSuccess 
+
+        return result.IsSuccess
             ? CreatedAtAction(nameof(GetOrder), new { id = result.Value.Id }, result.Value)
             : BadRequest(result.Error);
     }
@@ -1232,7 +1235,7 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> GetOrder(Guid id)
     {
         var result = await _orderService.GetOrderAsync(id);
-        
+
         return result.IsSuccess
             ? Ok(result.Value)
             : NotFound(result.Error);
@@ -1242,7 +1245,7 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> CancelOrder(Guid id, CancelOrderCommand command)
     {
         var result = await _orderService.CancelOrderAsync(id, command.Reason);
-        
+
         return result.IsSuccess
             ? NoContent()
             : BadRequest(result.Error);
@@ -1252,7 +1255,7 @@ public class OrdersController : ControllerBase
     public async Task<IActionResult> GetCustomerOrders(Guid customerId)
     {
         var result = await _orderService.GetOrdersForCustomerAsync(customerId);
-        
+
         return result.IsSuccess
             ? Ok(result.Value)
             : NotFound(result.Error);
@@ -1268,7 +1271,7 @@ public class ValidationResult : Result
 {
     public List<ValidationError> Errors { get; }
 
-    protected ValidationResult(List<ValidationError> errors) 
+    protected ValidationResult(List<ValidationError> errors)
         : base(false, Error.Validation)
     {
         Errors = errors;
@@ -1309,11 +1312,11 @@ public class OrderValidationService
         foreach (var item in command.Items ?? Enumerable.Empty<OrderItemDto>())
         {
             if (item.Quantity <= 0)
-                errors.Add(new ValidationError($"Items[{command.Items!.ToList().IndexOf(item)}].Quantity", 
+                errors.Add(new ValidationError($"Items[{command.Items!.ToList().IndexOf(item)}].Quantity",
                     "Quantity must be greater than zero"));
         }
 
-        return errors.Any() 
+        return errors.Any()
             ? ValidationResult.WithErrors(errors.ToArray())
             : ValidationResult.Success();
     }
@@ -1332,17 +1335,17 @@ public class ApplicationDbContext : AuditDbContext
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Audit<Guid, ApplicationUser, string>> AuditTrails { get; set; }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) 
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Apply all entity configurations
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
-        
+
         // Configure value objects
         ConfigureValueObjects(modelBuilder);
-        
+
         // Configure audit entities
         ConfigureAuditEntities(modelBuilder);
 
@@ -1377,7 +1380,7 @@ public class ApplicationDbContext : AuditDbContext
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             var entity = entityType.ClrType;
-            
+
             if (typeof(IAuditable).IsAssignableFrom(entity))
             {
                 modelBuilder.Entity(entity)
@@ -1391,7 +1394,7 @@ public class ApplicationDbContext : AuditDbContext
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         var entries = ChangeTracker.Entries<IAuditable>();
-        
+
         foreach (var entry in entries)
         {
             switch (entry.State)
@@ -1399,7 +1402,7 @@ public class ApplicationDbContext : AuditDbContext
                 case EntityState.Added:
                     entry.Entity.Created = DateTime.UtcNow;
                     break;
-                
+
                 case EntityState.Modified:
                     entry.Entity.Updated = DateTime.UtcNow;
                     break;
@@ -1419,7 +1422,7 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
     public void Configure(EntityTypeBuilder<Order> builder)
     {
         builder.HasKey(o => o.Id);
-        
+
         builder.Property(o => o.OrderNumber)
                .HasMaxLength(20)
                .IsRequired();
@@ -1507,8 +1510,8 @@ public class PerformanceMonitoringService
     public void MonitorEntityPerformance()
     {
         var stats = Entity<Guid>.GetPerformanceStats();
-        
-        _logger.LogInformation("Entity Performance Stats: Hits={Hits}, Misses={Misses}, HitRatio={HitRatio:P2}", 
+
+        _logger.LogInformation("Entity Performance Stats: Hits={Hits}, Misses={Misses}, HitRatio={HitRatio:P2}",
             stats.Hits, stats.Misses, stats.HitRatio);
 
         if (stats.HitRatio < 0.8m) // Less than 80% hit ratio
@@ -1536,16 +1539,16 @@ public class ValueObjectPerformanceTests
     {
         var coord1 = new Coordinates(40.7128, -74.0060);
         var coord2 = new Coordinates(40.7128, -74.0060);
-        
+
         var stopwatch = Stopwatch.StartNew();
-        
+
         for (int i = 0; i < 100_000; i++)
         {
             var isEqual = coord1.Equals(coord2);
         }
-        
+
         stopwatch.Stop();
-        
+
         // With compiled accessors, this should be very fast
         Assert.True(stopwatch.ElapsedMilliseconds < 10);
     }
@@ -1555,7 +1558,7 @@ public class ValueObjectPerformanceTests
     {
         var tags1 = new Tags("tag1", "tag2", "tag3");
         var tags2 = new Tags("tag1", "tag2", "tag3");
-        
+
         // This will use reflection fallback due to complex collection property
         var isEqual = tags1.Equals(tags2);
         Assert.True(isEqual);
@@ -1647,7 +1650,7 @@ public class MultiTenantDbContext : AuditDbContext
 {
     private readonly ITenantProvider _tenantProvider;
 
-    public MultiTenantDbContext(DbContextOptions options, ITenantProvider tenantProvider) 
+    public MultiTenantDbContext(DbContextOptions options, ITenantProvider tenantProvider)
         : base(options)
     {
         _tenantProvider = tenantProvider;
@@ -1664,7 +1667,7 @@ public class MultiTenantDbContext : AuditDbContext
                 var property = Expression.Property(parameter, nameof(ITenantEntity.TenantId));
                 var tenantId = Expression.Constant(_tenantProvider.TenantId);
                 var filter = Expression.Lambda(Expression.Equal(property, tenantId), parameter);
-                
+
                 modelBuilder.Entity(entityType.ClrType).HasQueryFilter(filter);
             }
         }
@@ -1694,7 +1697,7 @@ public class MultiTenantDbContext : AuditDbContext
 public abstract class EventSourcedAggregateRoot : Entity<Guid>, IAggregateRoot<Guid>
 {
     private readonly List<IDomainEvent> _events = new();
-    
+
     public IReadOnlyCollection<IDomainEvent> Events => _events.AsReadOnly();
     public int Version { get; private set; }
 
@@ -1757,7 +1760,7 @@ public class EventSourcedOrder : EventSourcedAggregateRoot
 
     private void Apply(OrderItemAddedEvent @event)
     {
-        Items.Add(new OrderItem(@event.ProductId, @event.Quantity, 
+        Items.Add(new OrderItem(@event.ProductId, @event.Quantity,
             new Money(@event.UnitPrice, "USD")));
     }
 }
@@ -1782,7 +1785,7 @@ public class CreateOrderCommandHandler
     public async Task<Result<Guid>> Handle(CreateOrderCommand command)
     {
         var order = new EventSourcedOrder(command.OrderNumber);
-        
+
         foreach (var item in command.Items)
         {
             order.AddItem(item.ProductId, item.Quantity, item.UnitPrice);
@@ -1790,7 +1793,7 @@ public class CreateOrderCommandHandler
 
         await _repository.AddAsync(order);
         await _eventStore.SaveEventsAsync(order.Id, order.Events, 0);
-        
+
         return Result.Success(order.Id);
     }
 }
@@ -1806,7 +1809,7 @@ public class OrderProjection : Entity<Guid>
     public int ItemCount { get; set; }
 }
 
-public class OrderProjectionHandler : 
+public class OrderProjectionHandler :
     IDomainEventHandler<OrderCreatedEvent>,
     IDomainEventHandler<OrderItemAddedEvent>
 {
@@ -1835,7 +1838,7 @@ public class OrderProjectionHandler :
         {
             projection.ItemCount++;
             projection.TotalAmount += domainEvent.UnitPrice * domainEvent.Quantity;
-            
+
             await _projectionRepository.UpdateAsync(projection);
             await _projectionRepository.UnitOfWork.SaveChangesAsync();
         }
@@ -1850,11 +1853,12 @@ public class GetOrderQueryHandler
     public async Task<Result<OrderProjection>> Handle(GetOrderQuery query)
     {
         var projection = await _projectionRepository.GetByIdAsync(query.OrderId);
-        return projection != null 
+        return projection != null
             ? Result.Success(projection)
             : Result.Failure<OrderProjection>(OrderErrors.NotFound);
     }
 }
 ```
 
-This comprehensive usage guide demonstrates practical implementation patterns for the Wangkanai Domain library, showcasing how to leverage its performance optimizations and clean architecture principles in real-world scenarios.
+This comprehensive usage guide demonstrates practical implementation patterns for the Wangkanai Domain library, showcasing how to
+leverage its performance optimizations and clean architecture principles in real-world scenarios.

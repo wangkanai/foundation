@@ -1,62 +1,167 @@
-# Foundation DDD Constitution
+<!-- Sync Impact Report
+Version Change: 0.0.0 → 1.0.0 (MAJOR: Initial constitution establishment)
 
-Minimal, enforceable rules that enable developers to build on the Foundation framework with correct Domain-Driven Design practices and zero unnecessary boilerplate.
+Added Sections:
+- All core principles (I-VII) defined
+- Architecture Standards section
+- Development Workflow section
+- Governance section with amendment procedures
+
+Templates Requiring Updates:
+✅ /templates/plan-template.md (to be checked)
+✅ /templates/spec-template.md (to be checked)
+✅ /templates/tasks-template.md (to be checked)
+✅ /.claude/commands/*.md (to be checked)
+
+Follow-up TODOs:
+- RATIFICATION_DATE: To be confirmed by project owner (marked as TODO)
+-->
+
+# Wangkanai Foundation Constitution
 
 ## Core Principles
 
-### 1. Ubiquitous Language First
+### I. Domain-Driven Design Excellence
 
-Every module begins by defining the domain language (entities, value objects, invariants, flows) before implementation. Code, tests, documentation, and commit messages reflect the same vocabulary. No model is created without an explicit ubiquitous language agreement.
+Every architectural decision MUST align with DDD principles. Rich domain models with clear boundaries are non-negotiable.
+Entities, value objects, and aggregates MUST be properly defined with strongly-typed identifiers. Domain logic belongs in the
+domain layer, never in infrastructure or presentation layers. Each bounded context requires explicit definition and clear
+integration patterns.
 
-### 2. Explicit Boundaries & Aggregate Integrity
+**Rationale**: DDD provides the foundational architecture that ensures long-term maintainability, clear business logic
+representation, and scalability for enterprise applications.
 
-All domain changes flow through aggregate roots. Invariants are enforced inside aggregates only. Cross-aggregate access must use repositories or domain services. No leaking persistence concerns into the domain layer. Value objects are immutable and structurally comparable.
+### II. Test-First Development (NON-NEGOTIABLE)
 
-### 3. Test-Driven & Contract-Guarded
+TDD is mandatory for all feature development. The cycle MUST be: Write failing tests → Get approval → Implement → Refactor. Test
+coverage MUST maintain 80% minimum as enforced by SonarQube quality gates. Unit tests mirror the source structure exactly. All
+public APIs require comprehensive test coverage including edge cases.
 
-Write failing unit/spec tests for entities, value objects, and domain services before implementation. Add integration tests only for persistence behaviors and domain event publication. Red-Green-Refactor is mandatory; code merged without test coverage is rejected.
+**Rationale**: Test-first development ensures code correctness, provides living documentation, and enables confident refactoring
+while maintaining system stability.
 
-### 4. Templates Over Boilerplate
+### III. Clean Architecture Layers
 
-Scaffolding uses provided templates (entity, value object, repository, audit, domain event). Manual duplication of patterns is disallowed. New patterns must be codified into a template before adoption in more than one module.
+Strict separation of concerns across Domain, Application, and Infrastructure layers is required. Dependencies MUST flow inward (
+Infrastructure → Application → Domain). The Domain layer MUST have zero external dependencies. Cross-layer communication happens
+only through defined interfaces. Each layer maintains its own models without leakage.
 
-### 5. Auditability & Traceable Evolution
+**Rationale**: Clean architecture ensures the business logic remains independent of frameworks, databases, and external systems,
+enabling flexibility and testability.
 
-All auditable entities implement the auditing interfaces. Domain events are the authoritative record of state transitions. No silent mutation: every state change is traceable either via domain events or audit trails.
+### IV. Comprehensive Audit Trail
 
-## Platform & Architectural Constraints
+All entity modifications MUST be automatically tracked with user, timestamp, and change details. Soft deletes are preferred over
+hard deletes for data integrity. Audit records are immutable once written. Field-level change tracking captures both old and new
+values in optimized JSON format. User identity tracking is mandatory for all mutations.
 
-Runtime: .NET 9 only; nullable enabled; file-scoped namespaces; 3-space indentation.
-Keys: Entity keys implement `IEquatable<T>` and `IComparable<T>`; prefer strongly-typed IDs (wrappers) when ambiguity exists.
-Layers: Domain (pure), Application (orchestration + commands/queries), Infrastructure (EF, external systems). No Infrastructure reference inside Domain.
-Events: Domain events are synchronous in-process publication; external propagation handled by application/integration layer.
-Persistence: EF Core mappings never introduce business rules; only shape persistence.
-Guarding: Input validation performed at aggregate boundary using guard helpers; no defensive duplication downstream.
-Value Objects: Immutable, validated on construction, equality via component enumeration.
-Repositories: Return aggregates or value objects only—never raw data structures or anonymous types.
-Auditing: Any entity with business-relevant lifecycle must opt into auditing or document why excluded.
+**Rationale**: Complete audit trails ensure regulatory compliance, enable debugging of data issues, and provide accountability for
+all system changes.
+
+### V. Performance-First Design
+
+Every feature MUST include performance benchmarks in the benchmark/ directory. Caching strategies are required for frequently
+accessed data. Database queries MUST be optimized with proper indexing. Bulk operations are preferred over individual operations
+where applicable. Performance monitoring is built-in, not bolted-on.
+
+**Rationale**: Performance directly impacts user experience and system scalability. Early performance consideration prevents
+costly refactoring later.
+
+### VI. Extension Method Preference
+
+Code MUST strongly prefer extension methods over static utility methods for better readability and discoverability. Extension
+methods create fluent, chainable APIs that are intuitive through IntelliSense. Static utilities are only acceptable when extension
+methods are technically impossible.
+
+**Rationale**: Extension methods improve code readability, enhance developer experience through better IDE support, and create
+more maintainable codebases.
+
+### VII. Documentation as Code
+
+All Claude-generated documentation MUST be stored in the docs/ folder. Documentation is versioned alongside code. Public APIs
+require XML documentation comments. Complex algorithms need explanatory comments. Documentation must be kept current with code
+changes.
+
+**Rationale**: Documentation as code ensures documentation stays synchronized with implementation, provides immediate context for
+developers, and supports automated documentation generation.
+
+## Architecture Standards
+
+### Technology Requirements
+
+- **.NET 9.0** minimum for all projects
+- **Entity Framework Core 9.0** for database operations
+- **Generic constraints** with IEquatable<T> and IComparable<T> for all entity keys
+- **Nullable reference types** enabled throughout the solution
+- **Implicit usings** for simplified namespace management
+
+### Module Structure
+
+- **Wangkanai.Foundation.Domain**: Core DDD patterns and building blocks
+- **Wangkanai.Foundation.Application**: Application services and use cases
+- **Wangkanai.Foundation.Infrastructure**: External system integrations
+- Each module maintains clear boundaries and single responsibility
+- Cross-module dependencies follow the dependency rule (inward only)
+
+### Quality Standards
+
+- **SonarQube** quality gate MUST pass for all code
+- **Code coverage** minimum 80% enforced
+- **No code smells** or security vulnerabilities allowed in production
+- **Performance benchmarks** required for all critical paths
 
 ## Development Workflow
 
-1. Scaffold: Use template to create entity/value object/repository/event.
-2. Language: Capture or update ubiquitous language notes (kept near module README or docs/architecture section).
-3. Specify: Write unit tests for invariants + value object equality + domain service behavior.
-4. Implement: Make tests pass with minimal code; enforce invariants internally.
-5. Integrate: Add persistence mapping + repository + audit registration.
-6. Wire: Register application behaviors (commands/queries) and domain event handlers.
-7. Review: PR must show tests, invariant coverage, and no extraneous infrastructure leakage.
-8. Document: Update docs if new concepts introduced (INDEX or architecture subpage).
+### Code Review Requirements
 
-## Quality Gates (Minimum)
+- All code MUST be peer-reviewed before merging
+- Constitution compliance verification is mandatory
+- Test coverage reports are required with each PR
+- Performance impact must be assessed for significant changes
+- Breaking changes require explicit documentation and migration guides
 
-100% test coverage for value object equality and entity invariants.
-No public setters on entities except for ORM-required protected/private constructors.
-All new aggregates emit at least one domain event on meaningful state transitions.
-No TODO comments left unresolved in domain or application layers.
-Static analysis warnings related to nullability or accessibility resolved before merge.
+### Quality Gates
+
+1. **Pre-commit**: Local tests must pass
+2. **CI Pipeline**: Full test suite + SonarQube analysis
+3. **Review**: Peer review with constitution compliance check
+4. **Merge**: Only after all quality gates pass
+
+### Versioning Policy
+
+- Follow **Semantic Versioning** (MAJOR.MINOR.PATCH)
+- **MAJOR**: Breaking API changes or significant architectural shifts
+- **MINOR**: New features maintaining backward compatibility
+- **PATCH**: Bug fixes and minor improvements
+- All packages in the foundation maintain synchronized versions
 
 ## Governance
 
-This Constitution supersedes ad-hoc conventions. Non-compliant code must be refactored before feature acceptance unless a temporary exception is logged with an expiry date. Amendments require: (1) written proposal in `docs/architecture/` (2) justification + migration impact (3) approval via PR review by at least two maintainers. New recurring pattern → must become a template within two PRs or be rejected.
+This constitution supersedes all other development practices and guidelines. It serves as the ultimate source of truth for
+architectural decisions and development standards.
 
-**Version**: 1.0.0 | **Ratified**: 2025-09-14 | **Last Amended**: 2025-09-14
+### Amendment Procedure
+
+1. Proposed amendments MUST be documented with clear rationale
+2. Impact analysis on existing code and practices is required
+3. Team consensus through formal review process
+4. Migration plan for existing code if breaking changes
+5. Update all dependent templates and documentation
+6. Version increment following semantic versioning rules
+
+### Compliance and Enforcement
+
+- All pull requests MUST verify constitutional compliance
+- Complexity beyond constitution standards requires written justification
+- Use CLAUDE.md for runtime development guidance specific to AI assistance
+- Regular audits ensure ongoing compliance with all principles
+- Non-compliance blocks merge to main branch
+
+### Document Hierarchy
+
+1. **Constitution** (this document) - Supreme governance
+2. **CLAUDE.md** - AI assistant specific guidance
+3. **Templates** - Implementation patterns
+4. **Project Documentation** - Specific implementation details
+
+**Version**: 1.0.0 | **Ratified**: TODO(RATIFICATION_DATE): Requires project owner confirmation | **Last Amended**: 2025-09-22

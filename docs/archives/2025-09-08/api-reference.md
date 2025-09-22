@@ -1,6 +1,7 @@
 # Wangkanai Domain Library - API Reference
 
-This document provides comprehensive API documentation for the Wangkanai Domain library, a performance-optimized domain-driven design (DDD) framework for .NET applications.
+This document provides comprehensive API documentation for the Wangkanai Domain library, a performance-optimized domain-driven
+design (DDD) framework for .NET applications.
 
 ## Table of Contents
 
@@ -17,7 +18,7 @@ This document provides comprehensive API documentation for the Wangkanai Domain 
 The Wangkanai Domain library consists of three primary modules:
 
 - **Domain Module** (`Wangkanai.Domain`): Core DDD patterns including entities, value objects, domain events, and result patterns
-- **Audit Module** (`Wangkanai.Audit`): Comprehensive audit trail system with JSON-based storage and span operations  
+- **Audit Module** (`Wangkanai.Audit`): Comprehensive audit trail system with JSON-based storage and span operations
 - **EntityFramework Module** (`Wangkanai.EntityFramework`): EF Core integration with audit-aware contexts
 
 ### Key Features
@@ -47,9 +48,11 @@ public interface IEntity<T> where T : IComparable<T>, IEquatable<T>
 **Description**: Base contract for all domain entities with strongly-typed identifiers.
 
 **Generic Constraints**:
+
 - `T`: Must implement `IComparable<T>` and `IEquatable<T>`
 
 **Methods**:
+
 - `IsTransient()`: Returns `true` if the entity has not been persisted (ID equals default value)
 
 #### IAggregateRoot
@@ -57,13 +60,14 @@ public interface IEntity<T> where T : IComparable<T>, IEquatable<T>
 ```csharp
 public interface IAggregateRoot : IAggregateRoot<int>, IKeyIntEntity;
 
-public interface IAggregateRoot<T> : IEntity<T> 
+public interface IAggregateRoot<T> : IEntity<T>
     where T : IComparable<T>, IEquatable<T>;
 ```
 
 **Description**: Defines aggregate roots in DDD context, ensuring controlled access to aggregates.
 
 **Usage**:
+
 ```csharp
 public class Order : Entity<Guid>, IAggregateRoot<Guid>
 {
@@ -86,31 +90,36 @@ public interface IValueObject<T> where T : class;
 #### Entity&lt;T&gt;
 
 ```csharp
-public abstract class Entity<T> : IEntity<T> 
+public abstract class Entity<T> : IEntity<T>
     where T : IEquatable<T>, IComparable<T>
 ```
 
 **Description**: Abstract base class for domain entities with performance-optimized type caching.
 
 **Key Features**:
+
 - **Type Caching**: ~10% performance improvement with EF dynamic proxy detection
-- **Thread-Safe**: Concurrent caching with LRU eviction 
+- **Thread-Safe**: Concurrent caching with LRU eviction
 - **Memory Management**: Bounded cache prevents memory leaks
 
 **Properties**:
+
 - `Id`: The unique identifier of type `T`
 
 **Methods**:
+
 - `IsTransient()`: Checks if entity is not yet persisted
 - `GetPerformanceStats()`: Returns cache hit/miss statistics
 - `ClearTypeCache()`: Clears type cache for testing/memory management
 
 **Performance Characteristics**:
+
 - Cache hit ratio: >95% in typical applications
 - Memory usage: Bounded to 1000 cached type mappings
 - Thread safety: Lock-free concurrent operations
 
 **Usage Example**:
+
 ```csharp
 public class Product : Entity<Guid>
 {
@@ -135,22 +144,26 @@ public abstract class ValueObject : IValueObject, ICacheKey, ICloneable
 **Description**: Base class for value objects with performance-optimized equality comparisons.
 
 **Key Features**:
+
 - **Compiled Accessors**: 500-1000x performance improvement over reflection
 - **Automatic Fallback**: Degrades gracefully for complex scenarios
 - **Caching Support**: Built-in cache key generation
 
 **Methods**:
+
 - `GetCacheKey()`: Generates unique cache key based on object state
 - `Clone()`: Creates shallow copy using `MemberwiseClone()`
 - `GetProperties()`: Returns cached property information
 - `GetEqualityComponents()`: Virtual method for custom equality logic
 
 **Performance Optimizations**:
+
 - Pre-compiled property accessors eliminate reflection overhead
 - Intelligent type analysis determines optimization eligibility
 - Fallback to reflection for complex property types
 
 **Usage Example**:
+
 ```csharp
 public class Address : ValueObject
 {
@@ -173,13 +186,14 @@ The library provides convenience interfaces for common key types:
 
 ```csharp
 public interface IKeyIntEntity : IEntity<int>
-public interface IKeyLongEntity : IEntity<long>  
+public interface IKeyLongEntity : IEntity<long>
 public interface IKeyGuidEntity : IEntity<Guid>
 public interface IKeyStringEntity : IEntity<string>
 public interface IKeyByteEntity : IEntity<byte>
 ```
 
 Corresponding base classes:
+
 ```csharp
 public abstract class KeyIntEntity : Entity<int>, IKeyIntEntity
 public abstract class KeyLongEntity : Entity<long>, IKeyLongEntity
@@ -223,7 +237,7 @@ public interface IAsyncRepository<T> : IAsyncDisposable where T : class
 ```csharp
 public interface IDomainEvent : IKeyIntEntity, IDomainEvent<int>;
 
-public interface IDomainEvent<T> : IEntity<T>, IDomainMessage 
+public interface IDomainEvent<T> : IEntity<T>, IDomainMessage
     where T : IComparable<T>, IEquatable<T>
 {
     int Version { get; set; }
@@ -232,6 +246,7 @@ public interface IDomainEvent<T> : IEntity<T>, IDomainMessage
 ```
 
 **Usage Example**:
+
 ```csharp
 public class OrderCreatedEvent : DomainEvent
 {
@@ -251,7 +266,7 @@ public class Result
     public Error Error { get; }
     public bool IsSuccess { get; }
     public bool IsFailure { get; }
-    
+
     public static Result Success()
     public static Result<TValue> Success<TValue>(TValue value)
     public static Result Failure(Error error)
@@ -268,12 +283,13 @@ public class Result<T> : Result
 ```
 
 **Usage Example**:
+
 ```csharp
 public Result<Order> CreateOrder(OrderRequest request)
 {
     if (request.Items.Count == 0)
         return Result.Failure<Order>(OrderErrors.NoItems);
-        
+
     var order = new Order(request);
     return Result.Success(order);
 }
@@ -307,6 +323,7 @@ public class Audit<TKey, TUserType, TUserKey> : Entity<TKey>
 ```
 
 **Properties**:
+
 ```csharp
 public AuditTrailType TrailType { get; set; }      // Create, Update, Delete, None
 public TUserKey? UserId { get; set; }              // User who performed action
@@ -320,10 +337,11 @@ public string? NewValuesJson { get; set; }         // JSON of new values
 ```
 
 **Performance-Optimized Methods**:
+
 ```csharp
 // High-performance JSON operations
 public void SetValuesFromJson(string? oldValuesJson, string? newValuesJson)
-public void SetValuesFromSpan<T>(ReadOnlySpan<string> columnNames, 
+public void SetValuesFromSpan<T>(ReadOnlySpan<string> columnNames,
     ReadOnlySpan<T> oldValues, ReadOnlySpan<T> newValues)
 
 // Efficient single-value access without full deserialization
@@ -332,19 +350,22 @@ public object? GetNewValue(string columnName)
 ```
 
 **Backward Compatibility Properties**:
+
 ```csharp
 [JsonIgnore]
 public Dictionary<string, object> OldValues { get; set; }
-[JsonIgnore] 
+[JsonIgnore]
 public Dictionary<string, object> NewValues { get; set; }
 ```
 
 **Performance Characteristics**:
+
 - **Memory Efficiency**: Direct JSON storage reduces memory allocations by ~60%
 - **Span Operations**: Zero-allocation operations for small change sets (≤3 properties)
 - **Selective Access**: Individual value retrieval without full deserialization
 
 **Usage Example**:
+
 ```csharp
 // High-performance audit creation
 var audit = new Audit<Guid, ApplicationUser, string>
@@ -387,7 +408,7 @@ public abstract class AuditableEntity<T> : Entity<T>, IAuditable
     public virtual bool ShouldSerializeAuditableProperties { get; }
     public DateTime? Created { get; set; }
     public DateTime? Updated { get; set; }
-    
+
     public virtual bool ShouldSerializeCreatedDate()
     public virtual bool ShouldSerializeUpdatedDate()
 }
@@ -415,8 +436,9 @@ public interface IUserSoftDeleteAuditable<TUserKey> : IUserAuditable<TUserKey>, 
 ```
 
 **Component Interfaces**:
+
 ```csharp
-public interface ICreatedEntity 
+public interface ICreatedEntity
 {
     DateTime? Created { get; set; }
 }
@@ -444,29 +466,29 @@ public interface ISoftDeletable : IDeletedEntity
 ```csharp
 public interface IAuditStore<TKey, TUserType, TUserKey> : IDisposable
     where TKey : IEquatable<TKey>, IComparable<TKey>
-    where TUserType : IdentityUser<TUserKey>  
+    where TUserType : IdentityUser<TUserKey>
     where TUserKey : IEquatable<TUserKey>, IComparable<TUserKey>
 {
     // CRUD Operations
     Task<Result<Audit<TKey, TUserType, TUserKey>>> CreateAsync(
         Audit<TKey, TUserType, TUserKey> audit, CancellationToken cancellationToken);
-    
+
     Task<Result<Audit<TKey, TUserType, TUserKey>>> UpdateAsync(
         Audit<TKey, TUserType, TUserKey> auditTrail, CancellationToken cancellationToken);
-    
+
     Task<Result<Audit<TKey, TUserType, TUserKey>>> DeleteAsync(
         Audit<TKey, TUserType, TUserKey> auditTrail, CancellationToken cancellationToken);
 
-    // Query Operations  
+    // Query Operations
     Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByIdAsync(
         TKey id, CancellationToken cancellationToken);
-    
+
     Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByIdAsync(
         TKey id, TUserKey userId, CancellationToken cancellationToken);
-    
+
     Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByUserIdAsync(
         TUserKey userId, CancellationToken cancellationToken);
-    
+
     Task<Result<Audit<TKey, TUserType, TUserKey>?>> FindByUserIdAsync(
         TUserKey userId, TKey id, CancellationToken cancellationToken);
 }
@@ -475,7 +497,7 @@ public interface IAuditStore<TKey, TUserType, TUserKey> : IDisposable
 #### IQueryableAuditStore&lt;TKey, TUserType, TUserKey&gt;
 
 ```csharp
-public interface IQueryableAuditStore<TKey, TUserType, TUserKey> 
+public interface IQueryableAuditStore<TKey, TUserType, TUserKey>
     : IAuditStore<TKey, TUserType, TUserKey>
 {
     IQueryable<Audit<TKey, TUserType, TUserKey>> Audits { get; }
@@ -507,13 +529,14 @@ public interface IAuditDbContext
 ```
 
 **Usage Example**:
+
 ```csharp
 public class ApplicationDbContext : AuditDbContext
 {
     public DbSet<Product> Products { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<Audit<Guid, ApplicationUser, string>> AuditTrails { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configure audit entities
@@ -533,20 +556,21 @@ public static class DatabaseBuilderExtensions
     // Synchronous database operations
     public static IApplicationBuilder CreateDatabase<T>(this IApplicationBuilder app)
         where T : DbContext
-    
+
     public static IApplicationBuilder MigrateDatabase<T>(this IApplicationBuilder app)
         where T : DbContext
-    
+
     // Asynchronous database operations
     public static async Task<IApplicationBuilder> CreateDatabaseAsync<T>(this IApplicationBuilder app)
         where T : DbContext
-    
+
     public static async Task<IApplicationBuilder> MigrateDatabaseAsync<T>(this IApplicationBuilder app)
         where T : DbContext
 }
 ```
 
 **Usage Example**:
+
 ```csharp
 // In Program.cs or Startup.cs
 app.MigrateDatabase<ApplicationDbContext>();
@@ -578,6 +602,7 @@ public class DateTimeOffsetNowGenerator : ValueGenerator<DateTimeOffset>
 ```
 
 **Usage in Entity Configuration**:
+
 ```csharp
 public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
@@ -597,30 +622,32 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
 #### Entity&lt;T&gt; Performance
 
-| Operation | Performance Improvement | Details |
-|-----------|------------------------|---------|
-| Type Resolution | ~10% faster | Cached EF proxy type mapping |
-| Equality Comparison | Cache-optimized | >95% cache hit ratio |
-| Memory Usage | Bounded | LRU eviction at 1000 entries |
+| Operation           | Performance Improvement | Details                      |
+|---------------------|-------------------------|------------------------------|
+| Type Resolution     | ~10% faster             | Cached EF proxy type mapping |
+| Equality Comparison | Cache-optimized         | >95% cache hit ratio         |
+| Memory Usage        | Bounded                 | LRU eviction at 1000 entries |
 
 **Benchmark Results** (typical application):
+
 ```
 Cache Hit Ratio: 95.8%
-Memory Usage: ~50KB for 1000 cached types  
+Memory Usage: ~50KB for 1000 cached types
 Thread Safety: Lock-free concurrent operations
 ```
 
 #### ValueObject Performance
 
-| Operation | Performance Improvement | Details |
-|-----------|------------------------|---------|
-| Equality Comparison | 500-1000x faster | Compiled property accessors |
-| Property Access | Zero reflection | Pre-compiled expressions |
-| Fallback Mechanism | Automatic | Graceful degradation for complex types |
+| Operation           | Performance Improvement | Details                                |
+|---------------------|-------------------------|----------------------------------------|
+| Equality Comparison | 500-1000x faster        | Compiled property accessors            |
+| Property Access     | Zero reflection         | Pre-compiled expressions               |
+| Fallback Mechanism  | Automatic               | Graceful degradation for complex types |
 
 **Optimization Eligibility**:
+
 - ✅ Simple properties (primitives, strings, DateTime)
-- ✅ Value objects with public readable properties  
+- ✅ Value objects with public readable properties
 - ❌ Complex enumerables or interface properties
 - ❌ Properties requiring custom serialization
 
@@ -628,18 +655,19 @@ Thread Safety: Lock-free concurrent operations
 
 #### JSON-Based Storage
 
-| Metric | Improvement | Details |
-|--------|-------------|---------|
-| Memory Usage | ~60% reduction | Direct JSON vs Dictionary<string, object> |
-| Serialization | ~40% faster | Pre-serialized storage |
-| Small Changes | Zero allocation | Span-based operations (≤3 properties) |
+| Metric        | Improvement     | Details                                   |
+|---------------|-----------------|-------------------------------------------|
+| Memory Usage  | ~60% reduction  | Direct JSON vs Dictionary<string, object> |
+| Serialization | ~40% faster     | Pre-serialized storage                    |
+| Small Changes | Zero allocation | Span-based operations (≤3 properties)     |
 
 **Performance Profiles**:
+
 ```csharp
 // Small changes (≤3 properties): Span-based, zero allocation
 audit.SetValuesFromSpan(columns, oldValues, newValues);
 
-// Large changes (>3 properties): Dictionary fallback  
+// Large changes (>3 properties): Dictionary fallback
 audit.OldValues = oldValuesDictionary;
 
 // Single value access: No full deserialization
@@ -666,7 +694,7 @@ public class Product : AuditableEntity<Guid>, IAggregateRoot<Guid>
     public ProductCategory Category { get; set; } // Value Object
 }
 
-public class ProductCategory : ValueObject  
+public class ProductCategory : ValueObject
 {
     public string Name { get; init; }
     public string Description { get; init; }
@@ -694,12 +722,12 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         // Entity configuration
         builder.HasKey(p => p.Id);
-        
+
         // Audit configuration
         builder.Property(p => p.Created)
                .HasValueGenerator<DateTimeNowGenerator>();
-               
-        // Value object configuration  
+
+        // Value object configuration
         builder.OwnsOne(p => p.Category, category =>
         {
             category.Property(c => c.Name).HasMaxLength(100);
@@ -715,20 +743,20 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 public class ProductRepository : IAsyncRepository<Product>
 {
     private readonly ApplicationDbContext _context;
-    
+
     public ProductRepository(ApplicationDbContext context)
     {
         _context = context;
     }
-    
+
     public IUnitOfWorkAsync UnitOfWork => _context;
-    
+
     public async Task<Product> AddAsync(Product product)
     {
         var entry = await _context.Products.AddAsync(product);
         return entry.Entity;
     }
-    
+
     // Other CRUD operations...
 }
 ```
@@ -742,8 +770,9 @@ public class ProductRepository : IAsyncRepository<Product>
 #### Step 1: Update Entity Base Classes
 
 **Before**:
+
 ```csharp
-public class Product  
+public class Product
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
@@ -751,11 +780,12 @@ public class Product
 ```
 
 **After**:
+
 ```csharp
 public class Product : Entity<Guid>, IAggregateRoot<Guid>
 {
     public string Name { get; set; }
-    
+
     // Inherit: Id property, IsTransient(), equality operations
 }
 ```
@@ -763,13 +793,14 @@ public class Product : Entity<Guid>, IAggregateRoot<Guid>
 #### Step 2: Convert Value Objects
 
 **Before**:
+
 ```csharp
 public class Address
 {
     public string Street { get; set; }
     public string City { get; set; }
-    
-    public override bool Equals(object obj) 
+
+    public override bool Equals(object obj)
     {
         // Manual equality implementation
     }
@@ -777,12 +808,13 @@ public class Address
 ```
 
 **After**:
+
 ```csharp
 public class Address : ValueObject
 {
     public string Street { get; init; }  // Immutable
     public string City { get; init; }
-    
+
     // Inherit: Equals, GetHashCode, operators, caching
 }
 ```
@@ -790,6 +822,7 @@ public class Address : ValueObject
 #### Step 3: Add Audit Support
 
 **Before**:
+
 ```csharp
 public class Product : Entity<Guid>
 {
@@ -799,7 +832,8 @@ public class Product : Entity<Guid>
 ```
 
 **After**:
-```csharp  
+
+```csharp
 public class Product : AuditableEntity<Guid>, IAggregateRoot<Guid>
 {
     // Inherit: Created, Updated properties with serialization control
@@ -809,23 +843,25 @@ public class Product : AuditableEntity<Guid>, IAggregateRoot<Guid>
 #### Step 4: Implement Result Pattern
 
 **Before**:
+
 ```csharp
 public Product CreateProduct(string name)
 {
     if (string.IsNullOrEmpty(name))
         throw new ArgumentException("Name required");
-        
+
     return new Product { Name = name };
 }
 ```
 
 **After**:
+
 ```csharp
 public Result<Product> CreateProduct(string name)
 {
     if (string.IsNullOrEmpty(name))
         return Result.Failure<Product>(ProductErrors.NameRequired);
-        
+
     var product = new Product { Name = name };
     return Result.Success(product);
 }
@@ -884,4 +920,5 @@ When migrating from previous versions, be aware of:
    - Use span-based audit operations for high-throughput scenarios
    - Profile value object equality operations under load
 
-This API reference provides comprehensive guidance for using the Wangkanai Domain library effectively in your .NET applications. For additional examples and advanced scenarios, refer to the test projects and benchmark implementations in the repository.
+This API reference provides comprehensive guidance for using the Wangkanai Domain library effectively in your .NET applications.
+For additional examples and advanced scenarios, refer to the test projects and benchmark implementations in the repository.

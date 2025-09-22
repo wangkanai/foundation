@@ -1,6 +1,7 @@
 # Wangkanai Domain - Architecture Diagrams
 
 ## Table of Contents
+
 - [Overview](#overview)
 - [Solution Structure](#solution-structure)
 - [Module Dependencies](#module-dependencies)
@@ -10,7 +11,8 @@
 
 ## Overview
 
-This document provides visual representations of the Wangkanai Domain library architecture, helping developers understand the relationships between modules, components, and workflows.
+This document provides visual representations of the Wangkanai Domain library architecture, helping developers understand the
+relationships between modules, components, and workflows.
 
 ## Solution Structure
 
@@ -20,7 +22,7 @@ This document provides visual representations of the Wangkanai Domain library ar
 ├── ⚙️  .solutions/               # Build Configuration
 ├── 📦 src/                       # Production Code
 │   ├── 🏗️  Domain/              # Core DDD Module
-│   ├── 📋 Audit/                 # Audit Trail Module  
+│   ├── 📋 Audit/                 # Audit Trail Module
 │   └── 🗄️  EntityFramework/     # EF Integration Module
 ├── 🧪 tests/                     # Quality Assurance
 │   ├── 🏗️  Domain/              # Domain Tests
@@ -34,6 +36,7 @@ This document provides visual representations of the Wangkanai Domain library ar
 ```
 
 ### Directory Legend
+
 - 🎨 Assets & Branding
 - ⚙️ Configuration & Build
 - 🏗️ Core Domain Logic
@@ -80,6 +83,7 @@ This document provides visual representations of the Wangkanai Domain library ar
 ```
 
 ### Dependency Flow
+
 - **Upward Dependencies**: Each module depends only on modules below it
 - **Clean Architecture**: Domain is dependency-free, higher modules depend on lower ones
 - **Modular Design**: Each module can be used independently if needed
@@ -87,6 +91,7 @@ This document provides visual representations of the Wangkanai Domain library ar
 ## Entity Inheritance Hierarchy
 
 ### Domain Entities
+
 ```
                     Entity<T>
                   (Abstract Base)
@@ -100,6 +105,7 @@ This document provides visual representations of the Wangkanai Domain library ar
 ```
 
 ### Audit Entities
+
 ```
                  Entity<T>
                      │
@@ -115,6 +121,7 @@ SoftDeleteAuditableEntity    UserSoftDeleteAuditableEntity
 ```
 
 ### Audit Interfaces
+
 ```
              IAuditable
                 │
@@ -162,12 +169,14 @@ IUserAuditable  │  ISoftDeletable
 ```
 
 ### Audit Trail Types
+
 - **Create**: Entity creation with initial values
 - **Update**: Field-level change tracking
 - **Delete**: Logical or physical deletion
 - **None**: No audit trail (opt-out)
 
 ### Soft Delete Flow
+
 ```
 ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
 │   Delete    │    │  Set Flag   │    │   Query     │
@@ -217,6 +226,7 @@ IUserAuditable  │  ISoftDeletable
 ```
 
 ### Build Configuration Hierarchy
+
 ```
 Directory.Build.props (Global Properties)
 ├── TargetFramework: net9.0
