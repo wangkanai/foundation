@@ -1,6 +1,7 @@
 # Wangkanai Domain Library - Project Structure Guide
 
 ## Table of Contents
+
 - [Overview](#overview)
 - [Directory Structure](#directory-structure)
 - [Module Architecture](#module-architecture)
@@ -11,7 +12,8 @@
 
 ## Overview
 
-The Wangkanai Domain library is a comprehensive domain-driven design (DDD) foundation built on .NET 9.0. It provides three core modules following Clean Architecture principles with centralized package management and comprehensive testing infrastructure.
+The Wangkanai Domain library is a comprehensive domain-driven design (DDD) foundation built on .NET 9.0. It provides three core
+modules following Clean Architecture principles with centralized package management and comprehensive testing infrastructure.
 
 ### Key Architectural Principles
 
@@ -75,14 +77,14 @@ Wangkanai.Domain/
 
 ### Directory Responsibilities
 
-| Directory | Purpose | Key Files |
-|-----------|---------|-----------|
-| `Assets/` | Brand identity and visual assets | Logo files in multiple formats |
-| `src/` | Production source code | Core business logic and implementations |
-| `tests/` | Quality assurance | Unit tests mirroring src structure |
-| `benchmark/` | Performance validation | BenchmarkDotNet performance tests |
-| `docs/` | Documentation | Architecture guides and API references |
-| `.solutions/` | Build configuration | MSBuild props, package management |
+| Directory     | Purpose                          | Key Files                               |
+|---------------|----------------------------------|-----------------------------------------|
+| `Assets/`     | Brand identity and visual assets | Logo files in multiple formats          |
+| `src/`        | Production source code           | Core business logic and implementations |
+| `tests/`      | Quality assurance                | Unit tests mirroring src structure      |
+| `benchmark/`  | Performance validation           | BenchmarkDotNet performance tests       |
+| `docs/`       | Documentation                    | Architecture guides and API references  |
+| `.solutions/` | Build configuration              | MSBuild props, package management       |
 
 ## Module Architecture
 
@@ -108,6 +110,7 @@ The solution follows a modular architecture with three distinct modules, each wi
 **Dependencies**: Microsoft.EntityFrameworkCore, Wangkanai.System
 
 #### Structure
+
 ```
 Domain/
 ├── Entity.cs                        # Abstract entity base class
@@ -158,6 +161,7 @@ Domain/
 ```
 
 #### Key Features
+
 - **Generic Entity System**: Type-safe entities with `IEquatable<T>` and `IComparable<T>` constraints
 - **Value Objects**: Immutable objects with structural equality
 - **Domain Events**: Event-driven architecture with publisher/subscriber patterns
@@ -170,6 +174,7 @@ Domain/
 **Dependencies**: Domain module, Microsoft.EntityFrameworkCore
 
 #### Structure
+
 ```
 Audit/
 ├── Audit.cs                         # Generic audit entity
@@ -208,6 +213,7 @@ Audit/
 ```
 
 #### Key Features
+
 - **Generic Audit Trail**: `Audit<TKey, TUserType, TUserKey>` for flexible audit records
 - **Automatic Tracking**: Created, Updated, Deleted timestamps and users
 - **Soft Delete**: Logical deletion with full audit trail
@@ -220,6 +226,7 @@ Audit/
 **Dependencies**: Domain and Audit modules, Microsoft.EntityFrameworkCore
 
 #### Structure
+
 ```
 EntityFramework/
 ├── AuditDbContext.cs                # Audit-aware DbContext
@@ -232,6 +239,7 @@ EntityFramework/
 ```
 
 #### Key Features
+
 - **Audit Integration**: Automatic audit trail generation in DbContext
 - **Convention-Based Configuration**: Automated EF Core setup
 - **Value Generators**: Timestamp generation for audit fields
@@ -244,6 +252,7 @@ The project uses a sophisticated build system with centralized package managemen
 ### MSBuild Configuration
 
 #### Directory.Build.props
+
 ```xml
 <Project>
   <!-- Global Properties -->
@@ -252,14 +261,14 @@ The project uses a sophisticated build system with centralized package managemen
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-  
+
   <!-- Package Metadata -->
   <PropertyGroup>
     <Company>Wangkanai</Company>
     <Authors>Sarin Na Wangkanai</Authors>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
-  
+
   <!-- Source Linking -->
   <PropertyGroup>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -270,7 +279,9 @@ The project uses a sophisticated build system with centralized package managemen
 ```
 
 #### Directory.Packages.props
+
 Centralized package version management for:
+
 - **Microsoft.Extensions**: DI, Logging, Configuration (v9.0.0)
 - **Entity Framework Core**: ORM components (v9.0.0)
 - **Testing**: xUnit v3, FluentAssertions, Moq
@@ -280,6 +291,7 @@ Centralized package version management for:
 ### Build Scripts
 
 #### build.ps1
+
 ```powershell
 # Build automation with error handling
 dotnet --version
@@ -293,11 +305,13 @@ dotnet build   .\tests\ -c Release -tl
 ```
 
 #### sign.ps1
+
 Code signing automation for release packages.
 
 ### Package Structure
 
 Each source project follows consistent structure:
+
 - **VersionPrefix**: Semantic versioning (5.0.0)
 - **Product Name**: Descriptive package names
 - **PackageTags**: Searchable tags for NuGet discovery
@@ -336,6 +350,7 @@ tests/
 ### Test Configuration
 
 Each test project includes:
+
 - **xunit.runner.json**: Test execution configuration
 - **Mock Objects**: In-memory contexts and test doubles
 - **FluentAssertions**: Readable test assertions
@@ -406,14 +421,14 @@ benchmark/
 
 ### Key Configuration Files
 
-| File | Purpose | Scope |
-|------|---------|-------|
-| `Directory.Build.props` | Global MSBuild properties | All projects |
-| `Directory.Packages.props` | Centralized package versions | Solution-wide |
-| `Domain.slnx` | Solution structure (new format) | IDE integration |
-| `SonarQube.Analysis.xml` | Static analysis rules | Quality gates |
-| `repomix.config.json` | Repository packaging | Documentation |
-| `.editorconfig` | Code style rules | Cross-IDE consistency |
+| File                       | Purpose                         | Scope                 |
+|----------------------------|---------------------------------|-----------------------|
+| `Directory.Build.props`    | Global MSBuild properties       | All projects          |
+| `Directory.Packages.props` | Centralized package versions    | Solution-wide         |
+| `Domain.slnx`              | Solution structure (new format) | IDE integration       |
+| `SonarQube.Analysis.xml`   | Static analysis rules           | Quality gates         |
+| `repomix.config.json`      | Repository packaging            | Documentation         |
+| `.editorconfig`            | Code style rules                | Cross-IDE consistency |
 
 ### Package Management Strategy
 

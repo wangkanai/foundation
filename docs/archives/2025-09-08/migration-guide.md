@@ -8,17 +8,18 @@
 
 ### Migration Strategy Matrix
 
-| Current State | Target State | Migration Path | Complexity | Timeline |
-|---------------|--------------|----------------|------------|----------|
-| Plain POCO Entities | Wangkanai Domain Entities | [Gradual Entity Migration](#from-plain-poco-entities) | Low | 1-2 weeks |
-| Other DDD Frameworks | Wangkanai Domain | [Framework Migration](#from-other-ddd-frameworks) | Medium | 2-4 weeks |
-| Legacy EF Models | Domain + Audit Models | [Legacy EF Migration](#from-legacy-entity-framework) | High | 4-8 weeks |
-| Existing Audit Systems | Wangkanai Audit | [Audit System Migration](#audit-system-migration) | Medium | 2-3 weeks |
-| .NET Framework | .NET 9 + Domain | [Framework Upgrade](#net-framework-to-net-9) | High | 6-12 weeks |
+| Current State          | Target State              | Migration Path                                        | Complexity | Timeline   |
+|------------------------|---------------------------|-------------------------------------------------------|------------|------------|
+| Plain POCO Entities    | Wangkanai Domain Entities | [Gradual Entity Migration](#from-plain-poco-entities) | Low        | 1-2 weeks  |
+| Other DDD Frameworks   | Wangkanai Domain          | [Framework Migration](#from-other-ddd-frameworks)     | Medium     | 2-4 weeks  |
+| Legacy EF Models       | Domain + Audit Models     | [Legacy EF Migration](#from-legacy-entity-framework)  | High       | 4-8 weeks  |
+| Existing Audit Systems | Wangkanai Audit           | [Audit System Migration](#audit-system-migration)     | Medium     | 2-3 weeks  |
+| .NET Framework         | .NET 9 + Domain           | [Framework Upgrade](#net-framework-to-net-9)          | High       | 6-12 weeks |
 
 ### Pre-Migration Assessment
 
 **Compatibility Check**:
+
 ```csharp
 // Run this assessment script before migration
 public class MigrationAssessment
@@ -35,7 +36,7 @@ public class MigrationAssessment
             RecommendedPath = RecommendMigrationPath()
         };
     }
-    
+
     private MigrationPath RecommendMigrationPath()
     {
         // Logic to recommend best migration strategy
@@ -49,6 +50,7 @@ public class MigrationAssessment
 ## From Plain POCO Entities
 
 ### Current State Assessment
+
 ```csharp
 // Typical existing entity structure
 public class User
@@ -74,6 +76,7 @@ public class Product
 ### Phase 1: Foundation Setup (Week 1)
 
 **Step 1: Install Packages**
+
 ```xml
 <!-- Add to your project files -->
 <PackageReference Include="Wangkanai.Domain" Version="latest" />
@@ -82,6 +85,7 @@ public class Product
 ```
 
 **Step 2: Update DbContext**
+
 ```csharp
 // Before: Plain DbContext
 public class ApplicationDbContext : DbContext
@@ -95,11 +99,11 @@ public class ApplicationDbContext : AuditDbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<Product> Products { get; set; }
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder); // Apply domain conventions
-        
+
         // Maintain existing table/column mappings
         modelBuilder.Entity<User>(entity =>
         {
@@ -111,6 +115,7 @@ public class ApplicationDbContext : AuditDbContext
 ```
 
 **Step 3: Create Migration (Verify No Changes)**
+
 ```bash
 # Should generate empty migration if mappings are correct
 dotnet ef migrations add "AddDomainLibrary" --context ApplicationDbContext
@@ -121,6 +126,7 @@ dotnet ef database update
 ### Phase 2: Entity Migration (Week 1-2)
 
 **Step 1: Migrate Simple Entities**
+
 ```csharp
 // Before: Plain POCO
 public class User
@@ -137,7 +143,7 @@ public class User : AuditableEntity<int>
 {
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    
+
     // Map existing columns to inherited properties
     protected override void OnModelCreating(EntityTypeBuilder<User> builder)
     {
@@ -148,6 +154,7 @@ public class User : AuditableEntity<int>
 ```
 
 **Step 2: Handle Custom ID Types**
+
 ```csharp
 // For entities with Guid IDs
 public class Product : AuditableEntity<Guid>
@@ -166,6 +173,7 @@ modelBuilder.Entity<Product>(entity =>
 ```
 
 **Step 3: Update Existing Code**
+
 ```csharp
 // Before: Manual timestamp management
 public async Task<User> CreateUserAsync(CreateUserRequest request)
@@ -176,7 +184,7 @@ public async Task<User> CreateUserAsync(CreateUserRequest request)
         Email = request.Email,
         CreatedDate = DateTime.UtcNow // Manual timestamp
     };
-    
+
     _context.Users.Add(user);
     await _context.SaveChangesAsync();
     return user;
@@ -191,7 +199,7 @@ public async Task<User> CreateUserAsync(CreateUserRequest request)
         Email = request.Email
         // Created timestamp set automatically
     };
-    
+
     _context.Users.Add(user);
     await _context.SaveChangesAsync();
     return user;
@@ -201,6 +209,7 @@ public async Task<User> CreateUserAsync(CreateUserRequest request)
 ### Phase 3: Value Objects Introduction (Week 2)
 
 **Step 1: Identify Value Object Candidates**
+
 ```csharp
 // Before: Primitive properties
 public class Product : AuditableEntity<Guid>
@@ -221,27 +230,27 @@ public class Product : AuditableEntity<Guid>
 public class ProductName : ValueObject
 {
     public string Value { get; }
-    
+
     private ProductName(string value)
     {
         Value = value ?? throw new ArgumentNullException(nameof(value));
     }
-    
+
     public static ProductName Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
             throw new ArgumentException("Product name cannot be empty");
-        
+
         return new ProductName(value.Trim());
     }
-    
+
     public static ProductName Empty => new ProductName("");
-    
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
     }
-    
+
     public static implicit operator string(ProductName productName) => productName.Value;
     public static implicit operator ProductName(string value) => Create(value);
 }
@@ -250,23 +259,23 @@ public class Money : ValueObject
 {
     public decimal Amount { get; }
     public string Currency { get; }
-    
+
     public Money(decimal amount, string currency)
     {
         Amount = amount;
         Currency = currency ?? throw new ArgumentNullException(nameof(currency));
     }
-    
+
     public static Money Zero => new Money(0, "USD");
-    
+
     public Money Add(Money other)
     {
         if (Currency != other.Currency)
             throw new InvalidOperationException($"Cannot add {Currency} and {other.Currency}");
-        
+
         return new Money(Amount + other.Amount, Currency);
     }
-    
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Amount;
@@ -276,18 +285,19 @@ public class Money : ValueObject
 ```
 
 **Step 2: Configure EF Value Conversions**
+
 ```csharp
 protected override void OnModelCreating(ModelBuilder modelBuilder)
 {
     base.OnModelCreating(modelBuilder);
-    
+
     // ProductName value conversion
     modelBuilder.Entity<Product>()
         .Property(e => e.Name)
         .HasConversion(
             productName => productName.Value,
             value => ProductName.Create(value));
-    
+
     // Money value conversion (owned type)
     modelBuilder.Entity<Product>()
         .OwnsOne(p => p.Price, money =>
@@ -299,6 +309,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 ```
 
 ### Validation and Testing
+
 ```csharp
 [Test]
 public class MigrationValidationTests
@@ -308,15 +319,15 @@ public class MigrationValidationTests
     {
         // Arrange: Pre-migration data
         var originalUsers = await _originalContext.Users.ToListAsync();
-        
+
         // Act: Run migration
         await _context.Database.MigrateAsync();
-        
+
         // Assert: Verify data integrity
         var migratedUsers = await _context.Users.ToListAsync();
-        
+
         Assert.That(migratedUsers.Count, Is.EqualTo(originalUsers.Count));
-        
+
         foreach (var originalUser in originalUsers)
         {
             var migratedUser = migratedUsers.First(u => u.Id == originalUser.Id);
@@ -325,17 +336,17 @@ public class MigrationValidationTests
             Assert.That(migratedUser.Created, Is.EqualTo(originalUser.CreatedDate));
         }
     }
-    
+
     [Test]
     public void Should_Improve_Performance_After_Migration()
     {
         // Arrange
         var users = GenerateTestUsers(1000);
-        
+
         // Act & Assert: Performance comparison
         var beforeMigration = MeasurePerformance(() => CompareUsersReflection(users));
         var afterMigration = MeasurePerformance(() => CompareUsersDomain(users));
-        
+
         // Should see performance improvement
         Assert.That(afterMigration.TotalMilliseconds, Is.LessThan(beforeMigration.TotalMilliseconds * 0.5));
     }
@@ -351,6 +362,7 @@ public class MigrationValidationTests
 ### Common Framework Migration Scenarios
 
 #### From Enterprise Framework
+
 ```csharp
 // Before: Generic enterprise framework
 public class User : EntityBase<int>, IAuditableEntity
@@ -368,7 +380,7 @@ public class User : UserAuditableEntity<int, User, string>
 {
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    
+
     // Automatic audit functionality inherited
 }
 
@@ -383,19 +395,20 @@ modelBuilder.Entity<User>(entity =>
 ```
 
 #### From MediatR + Custom Base Classes
+
 ```csharp
 // Before: MediatR-based domain events
 public abstract class AggregateRoot<T> : Entity<T>
 {
     private readonly List<INotification> _domainEvents = new();
-    
+
     public IReadOnlyList<INotification> DomainEvents => _domainEvents.AsReadOnly();
-    
+
     protected void AddDomainEvent(INotification eventItem)
     {
         _domainEvents.Add(eventItem);
     }
-    
+
     public void ClearDomainEvents()
     {
         _domainEvents.Clear();
@@ -406,19 +419,19 @@ public abstract class AggregateRoot<T> : Entity<T>
 public class Order : Entity<Guid>, IAggregateRoot<Guid>
 {
     private readonly List<IDomainMessage> _domainEvents = new();
-    
+
     public IReadOnlyList<IDomainMessage> DomainEvents => _domainEvents.AsReadOnly();
-    
+
     protected void AddDomainEvent(IDomainMessage eventItem)
     {
         _domainEvents.Add(eventItem);
     }
-    
+
     public void ClearDomainEvents()
     {
         _domainEvents.Clear();
     }
-    
+
     // Business logic methods
     public void CompleteOrder()
     {
@@ -431,12 +444,12 @@ public class Order : Entity<Guid>, IAggregateRoot<Guid>
 public class MediatRDomainEventService
 {
     private readonly IMediator _mediator;
-    
+
     public async Task PublishDomainEventsAsync(IAggregateRoot aggregateRoot)
     {
         var domainEvents = aggregateRoot.DomainEvents;
         aggregateRoot.ClearDomainEvents();
-        
+
         foreach (var domainEvent in domainEvents)
         {
             // Convert to MediatR notification if needed
@@ -457,6 +470,7 @@ public class MediatRDomainEventService
 ### Migration Steps
 
 **Phase 1: Dependency Analysis**
+
 ```csharp
 // Create compatibility layer
 public static class MigrationCompatibility
@@ -466,7 +480,7 @@ public static class MigrationCompatibility
         // Bridge old interfaces to new ones
         services.AddScoped<IOldAuditService, NewAuditServiceAdapter>();
         services.AddScoped<IOldEntityService, NewEntityServiceAdapter>();
-        
+
         // Maintain existing service registrations during transition
         services.AddScoped(provider => (IOldRepository<User>)provider.GetService<IRepository<User>>());
     }
@@ -476,18 +490,18 @@ public static class MigrationCompatibility
 public class NewAuditServiceAdapter : IOldAuditService
 {
     private readonly IAuditService _newAuditService;
-    
+
     public NewAuditServiceAdapter(IAuditService newAuditService)
     {
         _newAuditService = newAuditService;
     }
-    
+
     public async Task<AuditRecord> CreateAuditRecordAsync(OldAuditInfo auditInfo)
     {
         // Convert old audit info to new format
         var newAuditInfo = ConvertAuditInfo(auditInfo);
         var result = await _newAuditService.CreateAuditAsync(newAuditInfo);
-        
+
         // Convert result back to old format
         return ConvertAuditResult(result);
     }
@@ -495,6 +509,7 @@ public class NewAuditServiceAdapter : IOldAuditService
 ```
 
 **Phase 2: Gradual Entity Migration**
+
 ```csharp
 // Migration strategy: One entity type at a time
 public class EntityMigrationPlan
@@ -528,6 +543,7 @@ public class MigrationTracker
 ```
 
 **Phase 3: Value Object Migration**
+
 ```csharp
 // Identify value object opportunities
 public class ValueObjectAnalyzer
@@ -535,17 +551,17 @@ public class ValueObjectAnalyzer
     public List<ValueObjectCandidate> AnalyzeEntities(Assembly assembly)
     {
         var candidates = new List<ValueObjectCandidate>();
-        
+
         foreach (var entityType in GetEntityTypes(assembly))
         {
             var properties = entityType.GetProperties();
-            
+
             // Look for value object patterns
-            var addressProperties = properties.Where(p => 
-                p.Name.Contains("Address") || 
-                p.Name.Contains("Street") || 
+            var addressProperties = properties.Where(p =>
+                p.Name.Contains("Address") ||
+                p.Name.Contains("Street") ||
                 p.Name.Contains("City")).ToList();
-            
+
             if (addressProperties.Count >= 3)
             {
                 candidates.Add(new ValueObjectCandidate
@@ -556,12 +572,12 @@ public class ValueObjectAnalyzer
                     Confidence = CalculateConfidence(addressProperties)
                 });
             }
-            
+
             // Look for money patterns
-            var moneyProperties = properties.Where(p => 
+            var moneyProperties = properties.Where(p =>
                 (p.Name.Contains("Price") || p.Name.Contains("Amount")) &&
                 properties.Any(cp => cp.Name.Contains("Currency"))).ToList();
-            
+
             if (moneyProperties.Count >= 2)
             {
                 candidates.Add(new ValueObjectCandidate
@@ -573,7 +589,7 @@ public class ValueObjectAnalyzer
                 });
             }
         }
-        
+
         return candidates.OrderByDescending(c => c.Confidence).ToList();
     }
 }
@@ -586,6 +602,7 @@ public class ValueObjectAnalyzer
 ## From Legacy Entity Framework
 
 ### Legacy Database Schema Assessment
+
 ```csharp
 // Analyze existing database schema
 public class LegacySchemaAnalyzer
@@ -594,11 +611,11 @@ public class LegacySchemaAnalyzer
     {
         using var connection = new SqlConnection(connectionString);
         await connection.OpenAsync();
-        
+
         var tables = await GetTablesAsync(connection);
         var relationships = await GetRelationshipsAsync(connection);
         var indexes = await GetIndexesAsync(connection);
-        
+
         return new SchemaAnalysisResult
         {
             Tables = tables,
@@ -609,11 +626,11 @@ public class LegacySchemaAnalyzer
             RecommendedApproach = RecommendMigrationApproach()
         };
     }
-    
+
     private List<Table> IdentifyAuditTables(List<Table> tables)
     {
-        return tables.Where(t => 
-            t.Name.EndsWith("_Audit") || 
+        return tables.Where(t =>
+            t.Name.EndsWith("_Audit") ||
             t.Name.EndsWith("History") ||
             t.Columns.Any(c => c.Name == "AuditAction" || c.Name == "ChangeType"))
             .ToList();
@@ -622,6 +639,7 @@ public class LegacySchemaAnalyzer
 ```
 
 ### Database-First Migration Strategy
+
 ```csharp
 // Step 1: Scaffold existing database
 // dotnet ef dbcontext scaffold "ConnectionString" Microsoft.EntityFrameworkCore.SqlServer -o Models
@@ -641,7 +659,7 @@ public class User : AuditableEntity<int>
 {
     public string Name { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;
-    
+
     // Constructor for migration from legacy
     public User(LegacyUserEntity legacy)
     {
@@ -651,7 +669,7 @@ public class User : AuditableEntity<int>
         Created = legacy.CreatedTimestamp;
         Updated = legacy.ModifiedTimestamp;
     }
-    
+
     // Implicit conversion for compatibility
     public static implicit operator User(LegacyUserEntity legacy) => new(legacy);
 }
@@ -662,7 +680,7 @@ public class LegacyApplicationDbContext : AuditDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("Users"); // Existing table name
@@ -677,6 +695,7 @@ public class LegacyApplicationDbContext : AuditDbContext
 ```
 
 ### Legacy Audit System Integration
+
 ```csharp
 // Handle existing audit tables
 public class LegacyAuditMigration
@@ -685,17 +704,17 @@ public class LegacyAuditMigration
     {
         // Step 1: Analyze existing audit structure
         var existingAudits = await _legacyContext.UserAudits.ToListAsync();
-        
+
         // Step 2: Convert to new audit format
         var newAudits = existingAudits.Select(ConvertLegacyAudit).ToList();
-        
+
         // Step 3: Bulk insert new audit records
         await _newContext.BulkInsertAsync(newAudits);
-        
+
         // Step 4: Verify data integrity
         await ValidateAuditMigration(existingAudits.Count, newAudits.Count);
     }
-    
+
     private Audit<int, User, string> ConvertLegacyAudit(LegacyUserAudit legacyAudit)
     {
         return new Audit<int, User, string>
@@ -710,7 +729,7 @@ public class LegacyAuditMigration
             ChangedColumns = ParseChangedColumns(legacyAudit.ChangedFields)
         };
     }
-    
+
     private string ConvertLegacyValues(string legacyFormat)
     {
         // Convert from legacy XML or pipe-delimited format to JSON
@@ -722,13 +741,14 @@ public class LegacyAuditMigration
         {
             return ConvertDelimitedToJson(legacyFormat);
         }
-        
+
         return legacyFormat; // Already JSON or simple string
     }
 }
 ```
 
 ### Data Migration Validation
+
 ```csharp
 [Test]
 public class DataMigrationValidationTests
@@ -739,17 +759,17 @@ public class DataMigrationValidationTests
         // Arrange
         var legacyUserCount = await _legacyContext.Users.CountAsync();
         var legacyAuditCount = await _legacyContext.UserAudits.CountAsync();
-        
+
         // Act
         await _migrationService.MigrateAllDataAsync();
-        
+
         // Assert
         var newUserCount = await _newContext.Users.CountAsync();
         var newAuditCount = await _newContext.Set<Audit<int, User, string>>().CountAsync();
-        
+
         Assert.That(newUserCount, Is.EqualTo(legacyUserCount));
         Assert.That(newAuditCount, Is.GreaterThanOrEqualTo(legacyAuditCount));
-        
+
         // Verify sample data integrity
         var sampleUsers = await _newContext.Users.Take(100).ToListAsync();
         foreach (var user in sampleUsers)
@@ -758,27 +778,29 @@ public class DataMigrationValidationTests
             AssertUserEquality(legacyUser, user);
         }
     }
-    
+
     [Test]
     public async Task Should_Maintain_Performance_Characteristics()
     {
         // Test performance before and after migration
         var beforeTime = await MeasureQueryPerformance(_legacyContext);
         var afterTime = await MeasureQueryPerformance(_newContext);
-        
+
         // New context should be same or better performance
         Assert.That(afterTime.TotalMilliseconds, Is.LessThanOrEqualTo(beforeTime.TotalMilliseconds * 1.1));
     }
 }
 ```
 
-**References**: [EF Integration Guide](ef-integration-guide.md) | [Troubleshooting Guide](troubleshooting-guide.md#migration-failures)
+**References
+**: [EF Integration Guide](ef-integration-guide.md) | [Troubleshooting Guide](troubleshooting-guide.md#migration-failures)
 
 ---
 
 ## Audit System Migration
 
 ### From Custom Audit Systems
+
 ```csharp
 // Typical custom audit implementation
 public class CustomAuditLog
@@ -799,7 +821,7 @@ public class AuditMigrationService
     public async Task MigrateCustomAuditsAsync()
     {
         var customAudits = await _legacyContext.CustomAuditLogs.ToListAsync();
-        
+
         var wangkanaiAudits = customAudits.Select(custom => new Audit<int, User, string>
         {
             EntityName = custom.TableName,
@@ -811,10 +833,10 @@ public class AuditMigrationService
             NewValuesJson = NormalizeJsonFormat(custom.NewData),
             ChangedColumns = ExtractChangedColumns(custom.OldData, custom.NewData)
         }).ToList();
-        
+
         await _context.BulkInsertAsync(wangkanaiAudits);
     }
-    
+
     private AuditTrailType MapAuditAction(string action)
     {
         return action.ToUpper() switch
@@ -825,11 +847,11 @@ public class AuditMigrationService
             _ => AuditTrailType.None
         };
     }
-    
+
     private string NormalizeJsonFormat(string data)
     {
         if (string.IsNullOrEmpty(data)) return null;
-        
+
         try
         {
             // Try to parse as JSON to validate format
@@ -846,6 +868,7 @@ public class AuditMigrationService
 ```
 
 ### From Temporal Tables (SQL Server)
+
 ```csharp
 // Migrate from SQL Server temporal tables
 public class TemporalTableMigrationService
@@ -855,7 +878,7 @@ public class TemporalTableMigrationService
         // Query temporal table history
         var temporalHistory = await _context.Database
             .SqlQueryRaw<TemporalHistoryRecord>(@"
-                SELECT 
+                SELECT
                     u.UserId,
                     u.UserName,
                     u.Email,
@@ -865,26 +888,26 @@ public class TemporalTableMigrationService
                 WHERE u.ValidTo < '9999-12-31 23:59:59.9999999'
                 ORDER BY u.UserId, u.ValidFrom")
             .ToListAsync();
-        
+
         // Group by entity and create audit records
         var auditRecords = temporalHistory
             .GroupBy(h => h.UserId)
             .SelectMany(group => CreateAuditRecordsFromHistory(group))
             .ToList();
-        
+
         await _context.BulkInsertAsync(auditRecords);
     }
-    
+
     private IEnumerable<Audit<int, User, string>> CreateAuditRecordsFromHistory(
         IGrouping<int, TemporalHistoryRecord> historyGroup)
     {
         var sortedHistory = historyGroup.OrderBy(h => h.ValidFrom).ToList();
-        
+
         for (int i = 0; i < sortedHistory.Count - 1; i++)
         {
             var current = sortedHistory[i];
             var next = sortedHistory[i + 1];
-            
+
             var changedColumns = CompareRecords(current, next);
             if (changedColumns.Any())
             {
@@ -905,6 +928,7 @@ public class TemporalTableMigrationService
 ```
 
 ### Audit Performance Migration
+
 ```csharp
 // Optimize audit performance during migration
 public class PerformantAuditMigration
@@ -914,39 +938,39 @@ public class PerformantAuditMigration
         const int batchSize = 10000;
         var totalRecords = await GetTotalAuditRecordCount();
         var batches = (int)Math.Ceiling(totalRecords / (double)batchSize);
-        
+
         for (int batch = 0; batch < batches; batch++)
         {
             var offset = batch * batchSize;
-            
+
             // Process batch with span-based operations for efficiency
             await ProcessAuditBatch(offset, batchSize);
-            
+
             // Progress reporting
             var progress = (batch + 1) / (double)batches;
             await ReportProgress(progress);
-            
+
             // Memory cleanup between batches
             GC.Collect();
             GC.WaitForPendingFinalizers();
         }
     }
-    
+
     private async Task ProcessAuditBatch(int offset, int batchSize)
     {
         var legacyAudits = await GetLegacyAuditBatch(offset, batchSize);
         var convertedAudits = new List<Audit<int, User, string>>(legacyAudits.Count);
-        
+
         // Use span-based operations for conversion
         Span<string> columnBuffer = stackalloc string[10]; // Pre-allocate for common case
         Span<object> valueBuffer = stackalloc object[10];
-        
+
         foreach (var legacyAudit in legacyAudits)
         {
             var converted = ConvertWithSpanOperations(legacyAudit, columnBuffer, valueBuffer);
             convertedAudits.Add(converted);
         }
-        
+
         // Bulk insert for performance
         await _context.BulkInsertAsync(convertedAudits);
     }
@@ -960,6 +984,7 @@ public class PerformantAuditMigration
 ## .NET Framework to .NET 9
 
 ### Framework Compatibility Assessment
+
 ```csharp
 // Compatibility analyzer tool
 public class FrameworkCompatibilityAnalyzer
@@ -967,7 +992,7 @@ public class FrameworkCompatibilityAnalyzer
     public async Task<CompatibilityReport> AnalyzeProjectAsync(string projectPath)
     {
         var project = await LoadProjectAsync(projectPath);
-        
+
         return new CompatibilityReport
         {
             FrameworkVersion = GetCurrentFramework(project),
@@ -978,22 +1003,23 @@ public class FrameworkCompatibilityAnalyzer
             RecommendedUpgradePath = RecommendUpgradePath()
         };
     }
-    
+
     private List<CompatibilityIssue> IdentifyBlockingIssues()
     {
         var issues = new List<CompatibilityIssue>();
-        
+
         // Check for .NET Framework-specific dependencies
         if (UsesWebForms()) issues.Add(new("Web Forms not supported", Severity.Blocking));
         if (UsesWcf()) issues.Add(new("WCF requires porting", Severity.High));
         if (UsesSystemWeb()) issues.Add(new("System.Web dependencies", Severity.Medium));
-        
+
         return issues;
     }
 }
 ```
 
 ### Phased Migration Strategy
+
 ```csharp
 // Phase 1: .NET Framework 4.8 → .NET 6/8 (preparation)
 public class Phase1FrameworkMigration
@@ -1002,17 +1028,17 @@ public class Phase1FrameworkMigration
     {
         // Step 1: Update to .NET Standard 2.0 compatible packages
         await UpdatePackagesToNetStandard();
-        
+
         // Step 2: Remove .NET Framework-specific code
         await RemoveFrameworkDependencies();
-        
+
         // Step 3: Add compatibility shims
         await AddCompatibilityShims();
-        
+
         // Step 4: Test on .NET Framework 4.8
         return await ValidateOnFramework48();
     }
-    
+
     private async Task UpdatePackagesToNetStandard()
     {
         var incompatiblePackages = new[]
@@ -1021,14 +1047,14 @@ public class Phase1FrameworkMigration
             "System.Web.WebPages",
             "EntityFramework" // Replace with EntityFrameworkCore
         };
-        
+
         var replacements = new Dictionary<string, string>
         {
             ["EntityFramework"] = "Microsoft.EntityFrameworkCore",
             ["System.Web.Mvc"] = "Microsoft.AspNetCore.Mvc",
             ["Newtonsoft.Json"] = "System.Text.Json" // Optional but recommended
         };
-        
+
         foreach (var package in incompatiblePackages)
         {
             if (replacements.ContainsKey(package))
@@ -1046,22 +1072,23 @@ public class Phase2DomainMigration
     {
         // Step 1: Install Wangkanai packages
         await InstallWangkanaiPackages();
-        
+
         // Step 2: Migrate Entity Framework
         await MigrateEntityFramework();
-        
+
         // Step 3: Introduce domain patterns
         await IntroduceDomainPatterns();
-        
+
         // Step 4: Enable performance optimizations
         await EnablePerformanceOptimizations();
-        
+
         return await ValidateMigration();
     }
 }
 ```
 
 ### Entity Framework Core Migration
+
 ```csharp
 // From Entity Framework 6.x to EF Core with Wangkanai Domain
 public class EFCoreMigrationHelper
@@ -1070,29 +1097,29 @@ public class EFCoreMigrationHelper
     {
         // Step 1: Generate EF Core context from existing database
         await ScaffoldExistingDatabase();
-        
+
         // Step 2: Replace scaffolded context with AuditDbContext
         await ReplaceWithAuditDbContext();
-        
+
         // Step 3: Migrate entities to domain patterns
         await MigrateEntitiesToDomainPatterns();
-        
+
         // Step 4: Handle EF6-specific features
         await HandleEF6SpecificFeatures();
     }
-    
+
     private async Task HandleEF6SpecificFeatures()
     {
         // Complex types → Owned entities
         await MigrateComplexTypes();
-        
+
         // Stored procedures → Raw SQL or functions
         await MigrateStoredProcedures();
-        
+
         // Custom conventions → EF Core conventions
         await MigrateConventions();
     }
-    
+
     private async Task MigrateComplexTypes()
     {
         // EF6 Complex Type
@@ -1108,20 +1135,20 @@ public class EFCoreMigrationHelper
         {
             public string Street { get; }
             public string City { get; }
-            
+
             public Address(string street, string city)
             {
                 Street = street;
                 City = city;
             }
-            
+
             protected override IEnumerable<object> GetEqualityComponents()
             {
                 yield return Street;
                 yield return City;
             }
         }
-        
+
         // Configuration
         modelBuilder.Entity<Customer>()
             .OwnsOne(c => c.Address);
@@ -1131,6 +1158,7 @@ public class EFCoreMigrationHelper
 ```
 
 ### Configuration Migration
+
 ```csharp
 // Migrate from web.config to appsettings.json
 public class ConfigurationMigrationService
@@ -1139,39 +1167,39 @@ public class ConfigurationMigrationService
     {
         var webConfig = LoadWebConfig();
         var appSettings = ConvertToAppSettings(webConfig);
-        
+
         // Database connections
-        appSettings["ConnectionStrings:DefaultConnection"] = 
+        appSettings["ConnectionStrings:DefaultConnection"] =
             webConfig.ConnectionStrings["DefaultConnection"].ConnectionString;
-        
+
         // App settings
         foreach (var setting in webConfig.AppSettings.AllKeys)
         {
             appSettings[$"AppSettings:{setting}"] = webConfig.AppSettings[setting];
         }
-        
+
         // Domain-specific configuration
         appSettings["Wangkanai:Domain:EnablePerformanceOptimization"] = "true";
         appSettings["Wangkanai:Audit:RetentionDays"] = "365";
         appSettings["Wangkanai:Audit:EnableUserAttribution"] = "true";
-        
+
         await SaveAppSettings(appSettings);
     }
-    
+
     // Startup configuration
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         // Database
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-        
+
         // Wangkanai Domain services
         services.AddWangkanaiDomain(options =>
         {
             options.EnablePerformanceOptimization = true;
             options.CacheMaxSize = 1000;
         });
-        
+
         // Audit services
         services.AddWangkanaiAudit(options =>
         {
@@ -1182,13 +1210,15 @@ public class ConfigurationMigrationService
 }
 ```
 
-**References**: [Integration Guide](integration-guide.md#net-core-migration) | [Performance Guide](performance-optimization-guide.md)
+**References
+**: [Integration Guide](integration-guide.md#net-core-migration) | [Performance Guide](performance-optimization-guide.md)
 
 ---
 
 ## Migration Testing Strategy
 
 ### Automated Migration Testing
+
 ```csharp
 [TestFixture]
 public class MigrationTestSuite
@@ -1198,46 +1228,46 @@ public class MigrationTestSuite
     {
         // Arrange: Baseline data
         var baselineData = await CaptureBaselineData();
-        
+
         // Act: Run migration
         await _migrationService.ExecuteMigrationAsync();
-        
+
         // Assert: Verify data integrity
         var migratedData = await CapturePostMigrationData();
         await AssertDataIntegrity(baselineData, migratedData);
     }
-    
+
     [Test]
     public async Task Should_Maintain_Performance_SLA()
     {
         // Arrange: Performance baseline
         var baseline = await MeasurePerformanceBaseline();
-        
+
         // Act: Run migration
         await _migrationService.ExecuteMigrationAsync();
-        
+
         // Assert: Performance should improve or remain same
         var postMigration = await MeasurePerformancePostMigration();
-        
-        Assert.That(postMigration.AverageResponseTime, 
+
+        Assert.That(postMigration.AverageResponseTime,
             Is.LessThanOrEqualTo(baseline.AverageResponseTime * 1.1)); // Allow 10% variance
         Assert.That(postMigration.ThroughputPerSecond,
             Is.GreaterThanOrEqualTo(baseline.ThroughputPerSecond * 0.9)); // Allow 10% variance
     }
-    
+
     [Test]
     public async Task Should_Enable_New_Domain_Features()
     {
         // Act: Run migration
         await _migrationService.ExecuteMigrationAsync();
-        
+
         // Assert: New features available
         var entityStats = Entity<Guid>.GetPerformanceStats();
         Assert.That(entityStats.HitRatio, Is.GreaterThan(0));
-        
+
         var auditService = _serviceProvider.GetService<IAuditService>();
         Assert.That(auditService, Is.Not.Null);
-        
+
         var domainEvents = _serviceProvider.GetService<IDomainHandler<TestDomainEvent>>();
         Assert.That(domainEvents, Is.Not.Null);
     }
@@ -1251,16 +1281,16 @@ public class PerformanceComparisonTests
     {
         // Test entity operations before migration (baseline)
         var beforeMigration = await BenchmarkEntityOperations(_legacyContext);
-        
+
         // Test entity operations after migration
         var afterMigration = await BenchmarkEntityOperations(_domainContext);
-        
+
         // Results should show improvement
         Assert.That(afterMigration.EqualsOperationsPerSecond,
             Is.GreaterThan(beforeMigration.EqualsOperationsPerSecond));
         Assert.That(afterMigration.HashCodeOperationsPerSecond,
             Is.GreaterThan(beforeMigration.HashCodeOperationsPerSecond));
-        
+
         _logger.LogInformation("Performance improvement: {ImprovementRatio:P2}",
             afterMigration.EqualsOperationsPerSecond / beforeMigration.EqualsOperationsPerSecond);
     }
@@ -1268,6 +1298,7 @@ public class PerformanceComparisonTests
 ```
 
 ### Rollback Strategy
+
 ```csharp
 public class MigrationRollbackService
 {
@@ -1282,23 +1313,23 @@ public class MigrationRollbackService
             RollbackSteps = GenerateRollbackSteps()
         };
     }
-    
+
     public async Task ExecuteRollbackAsync(RollbackPlan plan)
     {
         try
         {
             // Step 1: Restore database
             await RestoreDatabase(plan.DatabaseBackup);
-            
+
             // Step 2: Revert code changes
             await RevertCodeChanges(plan.CodeCommit);
-            
+
             // Step 3: Restore configuration
             await RestoreConfiguration(plan.ConfigurationBackup);
-            
+
             // Step 4: Downgrade dependencies
             await RestoreDependencyVersions(plan.DependencyVersions);
-            
+
             // Step 5: Validate rollback
             await ValidateRollback();
         }
@@ -1314,6 +1345,7 @@ public class MigrationRollbackService
 ## Migration Checklist
 
 ### Pre-Migration Checklist
+
 - [ ] **Backup Strategy**: Complete database and application backups
 - [ ] **Dependency Analysis**: Identify all dependencies and their migration requirements
 - [ ] **Performance Baseline**: Establish current performance metrics
@@ -1323,6 +1355,7 @@ public class MigrationRollbackService
 - [ ] **Migration Timeline**: Realistic timeline with buffer for issues
 
 ### During Migration Checklist
+
 - [ ] **Gradual Migration**: Migrate entities one at a time
 - [ ] **Data Validation**: Verify data integrity after each step
 - [ ] **Performance Monitoring**: Monitor performance throughout migration
@@ -1331,6 +1364,7 @@ public class MigrationRollbackService
 - [ ] **Communication**: Keep stakeholders informed of progress
 
 ### Post-Migration Checklist
+
 - [ ] **Functionality Testing**: Comprehensive testing of all features
 - [ ] **Performance Validation**: Confirm performance improvements
 - [ ] **Audit Trail Testing**: Verify audit functionality works correctly
@@ -1343,12 +1377,14 @@ public class MigrationRollbackService
 ## Support and Resources
 
 ### Migration Support
+
 - **[FAQ](faq.md#migration-support)**: Common migration questions
 - **[Troubleshooting Guide](troubleshooting-guide.md)**: Migration-specific issues
 - **[Integration Guide](integration-guide.md)**: Framework integration patterns
 - **[Performance Guide](performance-optimization-guide.md)**: Optimization strategies
 
 ### Professional Services
+
 - **Migration Assessment**: Professional evaluation of migration complexity
 - **Migration Planning**: Detailed migration roadmap and timeline
 - **Migration Execution**: Guided migration with expert support
