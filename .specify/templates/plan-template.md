@@ -47,18 +47,7 @@
 ## Constitution Check
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-### Principle Compliance
-- [ ] **I. Domain-Driven Design**: Entities, aggregates, and bounded contexts properly defined
-- [ ] **II. Test-First Development**: Tests written before implementation (80% coverage target)
-- [ ] **III. Clean Architecture**: Proper layer separation (Domain → Application → Infrastructure)
-- [ ] **IV. Audit Trail**: Change tracking implemented for all entity mutations
-- [ ] **V. Performance-First**: Benchmarks defined for critical paths
-- [ ] **VI. Extension Methods**: Using extension methods over static utilities
-- [ ] **VII. Documentation**: All docs will be placed in docs/ folder
-
-**Violations**: [List any principles that cannot be met]
-**Justification**: [Required if any violations exist]
-**Mitigation**: [How violations will be addressed]
+[Gates determined based on constitution file]
 
 ## Project Structure
 
