@@ -1,167 +1,50 @@
-<!-- Sync Impact Report
-Version Change: 0.0.0 → 1.0.0 (MAJOR: Initial constitution establishment)
-
-Added Sections:
-- All core principles (I-VII) defined
-- Architecture Standards section
-- Development Workflow section
-- Governance section with amendment procedures
-
-Templates Requiring Updates:
-✅ /templates/plan-template.md (to be checked)
-✅ /templates/spec-template.md (to be checked)
-✅ /templates/tasks-template.md (to be checked)
-✅ /.claude/commands/*.md (to be checked)
-
-Follow-up TODOs:
-- RATIFICATION_DATE: To be confirmed by project owner (marked as TODO)
--->
-
-# Wangkanai Foundation Constitution
+# [PROJECT_NAME] Constitution
+<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
 
 ## Core Principles
 
-### I. Domain-Driven Design Excellence
+### [PRINCIPLE_1_NAME]
+<!-- Example: I. Library-First -->
+[PRINCIPLE_1_DESCRIPTION]
+<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
 
-Every architectural decision MUST align with DDD principles. Rich domain models with clear boundaries are non-negotiable.
-Entities, value objects, and aggregates MUST be properly defined with strongly-typed identifiers. Domain logic belongs in the
-domain layer, never in infrastructure or presentation layers. Each bounded context requires explicit definition and clear
-integration patterns.
+### [PRINCIPLE_2_NAME]
+<!-- Example: II. CLI Interface -->
+[PRINCIPLE_2_DESCRIPTION]
+<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
 
-**Rationale**: DDD provides the foundational architecture that ensures long-term maintainability, clear business logic
-representation, and scalability for enterprise applications.
+### [PRINCIPLE_3_NAME]
+<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
+[PRINCIPLE_3_DESCRIPTION]
+<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
 
-### II. Test-First Development (NON-NEGOTIABLE)
+### [PRINCIPLE_4_NAME]
+<!-- Example: IV. Integration Testing -->
+[PRINCIPLE_4_DESCRIPTION]
+<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
 
-TDD is mandatory for all feature development. The cycle MUST be: Write failing tests → Get approval → Implement → Refactor. Test
-coverage MUST maintain 80% minimum as enforced by SonarQube quality gates. Unit tests mirror the source structure exactly. All
-public APIs require comprehensive test coverage including edge cases.
+### [PRINCIPLE_5_NAME]
+<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
+[PRINCIPLE_5_DESCRIPTION]
+<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
 
-**Rationale**: Test-first development ensures code correctness, provides living documentation, and enables confident refactoring
-while maintaining system stability.
+## [SECTION_2_NAME]
+<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
 
-### III. Clean Architecture Layers
+[SECTION_2_CONTENT]
+<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
 
-Strict separation of concerns across Domain, Application, and Infrastructure layers is required. Dependencies MUST flow inward (
-Infrastructure → Application → Domain). The Domain layer MUST have zero external dependencies. Cross-layer communication happens
-only through defined interfaces. Each layer maintains its own models without leakage.
+## [SECTION_3_NAME]
+<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
 
-**Rationale**: Clean architecture ensures the business logic remains independent of frameworks, databases, and external systems,
-enabling flexibility and testability.
-
-### IV. Comprehensive Audit Trail
-
-All entity modifications MUST be automatically tracked with user, timestamp, and change details. Soft deletes are preferred over
-hard deletes for data integrity. Audit records are immutable once written. Field-level change tracking captures both old and new
-values in optimized JSON format. User identity tracking is mandatory for all mutations.
-
-**Rationale**: Complete audit trails ensure regulatory compliance, enable debugging of data issues, and provide accountability for
-all system changes.
-
-### V. Performance-First Design
-
-Every feature MUST include performance benchmarks in the benchmark/ directory. Caching strategies are required for frequently
-accessed data. Database queries MUST be optimized with proper indexing. Bulk operations are preferred over individual operations
-where applicable. Performance monitoring is built-in, not bolted-on.
-
-**Rationale**: Performance directly impacts user experience and system scalability. Early performance consideration prevents
-costly refactoring later.
-
-### VI. Extension Method Preference
-
-Code MUST strongly prefer extension methods over static utility methods for better readability and discoverability. Extension
-methods create fluent, chainable APIs that are intuitive through IntelliSense. Static utilities are only acceptable when extension
-methods are technically impossible.
-
-**Rationale**: Extension methods improve code readability, enhance developer experience through better IDE support, and create
-more maintainable codebases.
-
-### VII. Documentation as Code
-
-All Claude-generated documentation MUST be stored in the docs/ folder. Documentation is versioned alongside code. Public APIs
-require XML documentation comments. Complex algorithms need explanatory comments. Documentation must be kept current with code
-changes.
-
-**Rationale**: Documentation as code ensures documentation stays synchronized with implementation, provides immediate context for
-developers, and supports automated documentation generation.
-
-## Architecture Standards
-
-### Technology Requirements
-
-- **.NET 9.0** minimum for all projects
-- **Entity Framework Core 9.0** for database operations
-- **Generic constraints** with IEquatable<T> and IComparable<T> for all entity keys
-- **Nullable reference types** enabled throughout the solution
-- **Implicit usings** for simplified namespace management
-
-### Module Structure
-
-- **Wangkanai.Foundation.Domain**: Core DDD patterns and building blocks
-- **Wangkanai.Foundation.Application**: Application services and use cases
-- **Wangkanai.Foundation.Infrastructure**: External system integrations
-- Each module maintains clear boundaries and single responsibility
-- Cross-module dependencies follow the dependency rule (inward only)
-
-### Quality Standards
-
-- **SonarQube** quality gate MUST pass for all code
-- **Code coverage** minimum 80% enforced
-- **No code smells** or security vulnerabilities allowed in production
-- **Performance benchmarks** required for all critical paths
-
-## Development Workflow
-
-### Code Review Requirements
-
-- All code MUST be peer-reviewed before merging
-- Constitution compliance verification is mandatory
-- Test coverage reports are required with each PR
-- Performance impact must be assessed for significant changes
-- Breaking changes require explicit documentation and migration guides
-
-### Quality Gates
-
-1. **Pre-commit**: Local tests must pass
-2. **CI Pipeline**: Full test suite + SonarQube analysis
-3. **Review**: Peer review with constitution compliance check
-4. **Merge**: Only after all quality gates pass
-
-### Versioning Policy
-
-- Follow **Semantic Versioning** (MAJOR.MINOR.PATCH)
-- **MAJOR**: Breaking API changes or significant architectural shifts
-- **MINOR**: New features maintaining backward compatibility
-- **PATCH**: Bug fixes and minor improvements
-- All packages in the foundation maintain synchronized versions
+[SECTION_3_CONTENT]
+<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
 
 ## Governance
+<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-This constitution supersedes all other development practices and guidelines. It serves as the ultimate source of truth for
-architectural decisions and development standards.
+[GOVERNANCE_RULES]
+<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
 
-### Amendment Procedure
-
-1. Proposed amendments MUST be documented with clear rationale
-2. Impact analysis on existing code and practices is required
-3. Team consensus through formal review process
-4. Migration plan for existing code if breaking changes
-5. Update all dependent templates and documentation
-6. Version increment following semantic versioning rules
-
-### Compliance and Enforcement
-
-- All pull requests MUST verify constitutional compliance
-- Complexity beyond constitution standards requires written justification
-- Use CLAUDE.md for runtime development guidance specific to AI assistance
-- Regular audits ensure ongoing compliance with all principles
-- Non-compliance blocks merge to main branch
-
-### Document Hierarchy
-
-1. **Constitution** (this document) - Supreme governance
-2. **CLAUDE.md** - AI assistant specific guidance
-3. **Templates** - Implementation patterns
-4. **Project Documentation** - Specific implementation details
-
-**Version**: 1.0.0 | **Ratified**: TODO(RATIFICATION_DATE): Requires project owner confirmation | **Last Amended**: 2025-09-22
+**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
+<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->

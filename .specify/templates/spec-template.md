@@ -95,16 +95,10 @@ When creating this spec from a user prompt:
 
 ### Requirement Completeness
 - [ ] No [NEEDS CLARIFICATION] markers remain
-- [ ] Requirements are testable and unambiguous
+- [ ] Requirements are testable and unambiguous  
 - [ ] Success criteria are measurable
 - [ ] Scope is clearly bounded
 - [ ] Dependencies and assumptions identified
-
-### Constitution Alignment
-- [ ] Domain boundaries are clear (Principle I: DDD)
-- [ ] Requirements support testability (Principle II: Test-First)
-- [ ] Audit requirements specified if data changes (Principle IV: Audit Trail)
-- [ ] Performance targets defined where applicable (Principle V: Performance-First)
 
 ---
 
